@@ -5,11 +5,11 @@ const destDir = 'dist';
 
 module.exports = {
     entry: {
-        "jest-mock-axios": srcDir+"jest-mock-axios.ts",
+        "index": srcDir+"jest-mock-axios.ts",
     },
     output: {
         path: path.resolve(__dirname + '/' + destDir),
-        filename: '[name].js',
+        filename: 'index.js',
         library: 'jest-mock-axios',
         libraryTarget: 'umd'
     },

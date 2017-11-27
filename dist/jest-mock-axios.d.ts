@@ -40,4 +40,4 @@ declare class JestMockAxios {
      */
     reset(): void;
 }
-export { JestMockAxios };
+export default JestMockAxios;

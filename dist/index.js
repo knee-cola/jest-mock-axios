@@ -79,7 +79,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JestMockAxios", function() { return JestMockAxios; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jest_mock_promise__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jest_mock_promise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jest_mock_promise__);
 /**
@@ -169,7 +168,7 @@ class JestMockAxios {
 }
 ;
 // this is a singletone object
-
+/* harmony default export */ __webpack_exports__["default"] = (JestMockAxios);
 
 
 /***/ }),
@@ -485,4 +484,4 @@ exports.default = JestMockPromise;
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=jest-mock-axios.js.map
+//# sourceMappingURL=index.js.map
