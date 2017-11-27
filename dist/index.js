@@ -79,7 +79,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jest_mock_promise__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jest_mock_axios__ = __webpack_require__(1);
+
+/* harmony default export */ __webpack_exports__["default"] = (new __WEBPACK_IMPORTED_MODULE_0__jest_mock_axios__["a" /* default */]());
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jest_mock_promise__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jest_mock_promise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jest_mock_promise__);
 /**
  * TypeScript version of Axios mock for unoit testing with [Jest](https://facebook.github.io/jest/).
@@ -168,11 +178,11 @@ class JestMockAxios {
 }
 ;
 // this is a singletone object
-/* harmony default export */ __webpack_exports__["default"] = (JestMockAxios);
+/* harmony default export */ __webpack_exports__["a"] = (JestMockAxios);
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
