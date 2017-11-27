@@ -5,7 +5,7 @@ const destDir = 'dist';
 
 module.exports = {
     entry: {
-        "index": srcDir+"jest-mock-axios.ts",
+        "index": srcDir+"index.ts",
     },
     output: {
         path: path.resolve(__dirname + '/' + destDir),
