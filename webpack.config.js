@@ -26,13 +26,13 @@ module.exports = {
             // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
             {
                 test: /\.ts$/,
-                loader: "awesome-typescript-loader",
-                exclude: /node_modules/,
-                options: {
-                    useBabel: true,
-                    declaration: true,
-                    declarationDir: "./dist"
-                }
+                loader: "ts-loader",
+                exclude: /node_modules/
+//                options: {
+//                    useBabel: true,
+//                    declaration: true,
+//                    declarationDir: "./dist"
+//                }
             },
         ]
     }

@@ -75,36 +75,23 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JestMockAxios", function() { return JestMockAxios; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jest_mock_promise__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jest_mock_promise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jest_mock_promise__);
+/**
+ * TypeScript version of Axios mock for unoit testing with [Jest](https://facebook.github.io/jest/).
+ * This file is based on https://gist.github.com/tux4/36006a1859323f779ab0
+ *
+ * @author   knee-cola <nikola.derezic@gmail.com>
+ * @license  @license MIT License, http://www.opensource.org/licenses/MIT
+ */
 
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * TypeScript version of Axios mock for unoit testing with [Jest](https://facebook.github.io/jest/).
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * This file is based on https://gist.github.com/tux4/36006a1859323f779ab0
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author   knee-cola <nikola.derezic@gmail.com>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @license  @license MIT License, http://www.opensource.org/licenses/MIT
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
-
-var _jestMockPromise = __webpack_require__(1);
-
-var _jestMockPromise2 = _interopRequireDefault(_jestMockPromise);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var AxiosMock = function () {
-    function AxiosMock() {
-        _classCallCheck(this, AxiosMock);
-
+class JestMockAxios {
+    constructor() {
         /** a FIFO queue of pending request */
         this.pending_promises = [];
         // mocking Axios methods
@@ -113,102 +100,77 @@ var AxiosMock = function () {
         this.put = jest.fn(this.newReq.bind(this));
         this.delete = jest.fn(this.newReq.bind(this));
     }
-
-    _createClass(AxiosMock, [{
-        key: 'newReq',
-        value: function newReq() {
-            var promise = new _jestMockPromise2.default();
-            this.pending_promises.push(promise);
-            return promise;
+    newReq() {
+        let promise = new __WEBPACK_IMPORTED_MODULE_0_jest_mock_promise___default.a();
+        this.pending_promises.push(promise);
+        return (promise);
+    }
+    /**
+     * Removes the give promise from the queue
+     * @param promise
+     */
+    popPromise(promise) {
+        if (promise) {
+            // remove the promise from pending queue
+            this.pending_promises.splice(this.pending_promises.indexOf(promise), 1);
         }
-        /**
-         * Removes the give promise from the queue
-         * @param promise
-         */
-
-    }, {
-        key: 'popPromise',
-        value: function popPromise(promise) {
-            if (promise) {
-                // remove the promise from pending queue
-                this.pending_promises.splice(this.pending_promises.indexOf(promise), 1);
-            } else {
-                // take the oldest promise
-                promise = this.pending_promises.shift();
-            }
-            return promise;
+        else {
+            // take the oldest promise
+            promise = this.pending_promises.shift();
         }
-        /**
-         * Simulate a server response, (optionally) with the given data
-         * @param response (optional) response returned by the server
-         * @param promise (optional) request promise for which response should be resolved
-         */
-
-    }, {
-        key: 'mockResponse',
-        value: function mockResponse(response) {
-            var promise = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-            // remove promise from the queue
-            promise = this.popPromise(promise);
-            // replacing missing data with default values
-            response = Object.assign({
-                data: {},
-                status: 200,
-                statusText: 'OK',
-                headers: {},
-                config: {}
-            }, response);
-            // resolving the Promise with the given response data
-            promise.resolve(response);
-        }
-        /**
-         * Simulate an error in server request
-         * @param error (optional) error object
-         */
-
-    }, {
-        key: 'mockError',
-        value: function mockError() {
-            var error = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-            var promise = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-            // remove promise from the queue
-            promise = this.popPromise(promise);
-            // resolving the Promise with the given response data
-            promise.reject(Object.assign({}, error));
-        }
-        /**
-         * Returns promise of the most recent request
-         */
-
-    }, {
-        key: 'lastReqGet',
-        value: function lastReqGet() {
-            return this.pending_promises[this.pending_promises.length - 1];
-        }
-        /**
-         * Clears all of the queued requests
-         */
-
-    }, {
-        key: 'reset',
-        value: function reset() {
-            this.pending_promises.splice(0, this.pending_promises.length);
-            // resets all information stored in the mockFn.mock.calls and mockFn.mock.instances arrays
-            this.get.mockClear();
-            this.post.mockClear();
-            this.put.mockClear();
-            this.delete.mockClear();
-        }
-    }]);
-
-    return AxiosMock;
-}();
-
+        return (promise);
+    }
+    /**
+     * Simulate a server response, (optionally) with the given data
+     * @param response (optional) response returned by the server
+     * @param promise (optional) request promise for which response should be resolved
+     */
+    mockResponse(response, promise = null) {
+        // remove promise from the queue
+        promise = this.popPromise(promise);
+        // replacing missing data with default values
+        response = Object.assign({
+            data: {},
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config: {},
+        }, response);
+        // resolving the Promise with the given response data
+        promise.resolve(response);
+    }
+    /**
+     * Simulate an error in server request
+     * @param error (optional) error object
+     */
+    mockError(error = {}, promise = null) {
+        // remove promise from the queue
+        promise = this.popPromise(promise);
+        // resolving the Promise with the given response data
+        promise.reject(Object.assign({}, error));
+    }
+    /**
+     * Returns promise of the most recent request
+     */
+    lastReqGet() {
+        return (this.pending_promises[this.pending_promises.length - 1]);
+    }
+    /**
+     * Clears all of the queued requests
+     */
+    reset() {
+        this.pending_promises.splice(0, this.pending_promises.length);
+        // resets all information stored in the mockFn.mock.calls and mockFn.mock.instances arrays
+        this.get.mockClear();
+        this.post.mockClear();
+        this.put.mockClear();
+        this.delete.mockClear();
+    }
+}
 ;
 // this is a singletone object
-exports.default = new AxiosMock();
+
+
 
 /***/ }),
 /* 1 */

@@ -7,21 +7,9 @@
  */
 
 import SyncPromise from 'jest-mock-promise';
+import {HttpResponse, AnyFunction, SpyFn} from './jest-mock-axios-types';
 
-type HttpResponse = {
-  data:object,
-  status?:number,
-  statusText?:string,
-  headers?:object,
-  config?:object,
-}
-
-type AnyFunction = (...args:any[]) => any;
-
-// spy is a function which extends an object (it has static methods and properties)
-type SpyFn = AnyFunction & { mockClear:AnyFunction };
-
-class AxiosMock {
+class JestMockAxios {
 
   /** a FIFO queue of pending request */
   private pending_promises:Array<SyncPromise> = [];
@@ -111,4 +99,4 @@ class AxiosMock {
 };
 
 // this is a singletone object
-export default new AxiosMock();
+export { JestMockAxios };
