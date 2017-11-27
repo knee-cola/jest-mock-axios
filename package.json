@@ -3,9 +3,7 @@
   "version": "1.0.2",
   "description": "Axios mock for Jest",
   "main": "dist/jest-mock-axios.js",
-  "types": [
-    "dist/index.d.ts"
-  ],
+  "types":"dist/index.d.ts",
   "scripts": {
     "build": "webpack -p"
   },
