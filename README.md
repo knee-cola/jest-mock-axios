@@ -24,7 +24,7 @@ import JestMockPromise from 'jest-mock-promise';
 export { JestMockPromise as Promise };
 ```
 
-We have just created a manual Jest mock for Axios (read about it in [Jest manual](https://facebook.github.io/jest/docs/en/manual-mocks.html))
+We have just created a manual Jest mock for *Axios* ans *es6-promise*, which is used by Axios. You can find out more about manual mocking in [Jest manual](https://facebook.github.io/jest/docs/en/manual-mocks.html).
 
 # Using it in your tests - An example
 
