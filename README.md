@@ -10,12 +10,18 @@ First you need to install this module:
 
     npm i --save-dev jest-mock-axios
 
-After it's installed create `__mocks__` directory in your project root. Inside this new directory create `axios.js` file and paste the following snippet inside:
-```javascript
-// ./__mock__/axios.js
+After it's installed create `__mocks__` directory in your project root. Inside this new directory create two files: `axios.js` and `es6-promise.js`. The following two snippets contain code which you need to paste into each of the two files:
 
+**File:** `./__mock__/axios.js`
+```javascript
 import AxiosMock from 'jest-mock-axios';
 export { AxiosMock as Promise };
+```
+
+**File:** `./__mock__/es6-promise.js`
+```javascript
+import JestMockPromise from 'jest-mock-promise';
+export { JestMockPromise as Promise };
 ```
 
 We have just created a manual Jest mock for Axios (read about it in [Jest manual](https://facebook.github.io/jest/docs/en/manual-mocks.html))
