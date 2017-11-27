@@ -99,4 +99,4 @@ class JestMockAxios {
 };
 
 // this is a singletone object
-export { JestMockAxios };
+export default JestMockAxios;

@@ -1,8 +1,8 @@
 {
   "name": "jest-mock-axios",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Axios mock for Jest",
-  "main": "dist/jest-mock-axios.js",
+  "main": "dist/index.js",
   "types":"dist/index.d.ts",
   "scripts": {
     "build": "webpack -p"
