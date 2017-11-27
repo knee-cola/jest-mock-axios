@@ -79,9 +79,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jest_mock_axios__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mock_axios__ = __webpack_require__(1);
 
-/* harmony default export */ __webpack_exports__["default"] = (new __WEBPACK_IMPORTED_MODULE_0__jest_mock_axios__["a" /* default */]());
+/* harmony default export */ __webpack_exports__["default"] = (new __WEBPACK_IMPORTED_MODULE_0__mock_axios__["a" /* default */]());
 
 
 /***/ }),
@@ -99,7 +99,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * @license  @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
-class JestMockAxios {
+class MockAxios {
     constructor() {
         /** a FIFO queue of pending request */
         this.pending_promises = [];
@@ -178,7 +178,7 @@ class JestMockAxios {
 }
 ;
 // this is a singletone object
-/* harmony default export */ __webpack_exports__["a"] = (JestMockAxios);
+/* harmony default export */ __webpack_exports__["a"] = (MockAxios);
 
 
 /***/ }),

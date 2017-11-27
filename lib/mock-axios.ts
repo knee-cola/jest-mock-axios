@@ -7,9 +7,9 @@
  */
 
 import SyncPromise from 'jest-mock-promise';
-import {HttpResponse, AnyFunction, SpyFn} from './jest-mock-axios-types';
+import {HttpResponse, AnyFunction, SpyFn} from './mock-axios-types';
 
-class JestMockAxios {
+class MockAxios {
 
   /** a FIFO queue of pending request */
   private pending_promises:Array<SyncPromise> = [];
@@ -99,4 +99,4 @@ class JestMockAxios {
 };
 
 // this is a singletone object
-export default JestMockAxios;
+export default MockAxios;

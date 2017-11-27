@@ -1,2 +1,2 @@
-import JestMockAxios from './jest-mock-axios';
+import JestMockAxios from './mock-axios';
 export default new JestMockAxios();

@@ -6,8 +6,8 @@
  * @license  @license MIT License, http://www.opensource.org/licenses/MIT
  */
 import SyncPromise from 'jest-mock-promise';
-import { HttpResponse, SpyFn } from './jest-mock-axios-types';
-declare class JestMockAxios {
+import { HttpResponse, SpyFn } from './mock-axios-types';
+declare class MockAxios {
     /** a FIFO queue of pending request */
     private pending_promises;
     get: SpyFn;
@@ -40,4 +40,4 @@ declare class JestMockAxios {
      */
     reset(): void;
 }
-export default JestMockAxios;
+export default MockAxios;
