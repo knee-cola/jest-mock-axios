@@ -1,0 +1,34 @@
+{
+  "name": "jest-mock-axios",
+  "version": "1.0.0",
+  "description": "Axios mock for Jest",
+  "main": "dist/jest-mock-axios.js",
+  "scripts": {
+    "build": "webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/knee-cola/jest-mock-axios.git"
+  },
+  "keywords": [
+    "axios",
+    "jest",
+    "mock"
+  ],
+  "author": "knee-cola <nikola.derezic@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/knee-cola/jest-mock-axios/issues"
+  },
+  "homepage": "https://github.com/knee-cola/jest-mock-axios#readme",
+  "devDependencies": {
+    "@types/jest": "^21.1.8",
+    "awesome-typescript-loader": "^3.4.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "jest": "^21.2.1",
+    "jest-mock-promise": "^1.0.12",
+    "typescript": "^2.6.1",
+    "webpack": "^3.8.1"
+  }
+}
