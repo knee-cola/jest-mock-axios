@@ -26,8 +26,8 @@ Installation is simple - just run:
 
 Next you need to setup a [manual Jest mock](https://facebook.github.io/jest/docs/en/manual-mocks.html) for *Axios* (we'll explain why a bit later):
 * create `__mocks__` directory in your project root
-* inside this new directory create two files: `axios.js` and `es6-promise.js`
-* copy & past the following two snippets to the appropriate file mock file
+* inside this new directory create a files named `axios.js`
+* copy & past the following snippets to `axios.js` file
 
 ```javascript
 // ./__mock__/axios.js
