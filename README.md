@@ -6,6 +6,19 @@ This is a light-weight, easy to use synchronous [Axios](https://github.com/axios
 
 Because it works synchronously, meaning that your tests will be easier to write, read and understand.
 
+# What's in this document?
+* [Installation](#installation)
+  * [Why do we need to manually create the mock?](#why-do-we-need-to-manually-create-the-mock)
+* [Basic example](#basic-example)
+* [Axios mock API](#axios-mock-api)
+  * [axios.mockResponse(response, promise)](#axiosmockresponseresponse-promise)
+  * [axios.mockError(err, promise)](#axiosmockerrorerr-promise)
+  * [axios.lastReqGet()](#axioslastreqget)
+  * [axios.reset()](#axiosreset)
+* [Additional examples](#additional-examples)
+  * [Using `lastReqGet` method](#using-lastreqget-method)
+* [Synchronous promise](#synchronous-promise)
+
 # Installation
 Installation is simple - just run:
 
