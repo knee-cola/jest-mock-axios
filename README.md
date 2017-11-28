@@ -37,7 +37,7 @@ export default mockAxios;
 
 ## Why do we need to manually create the mock?
 
-It's because Jest expects mocks to be placed in tre project root, while
+It's because Jest expects mocks to be placed in the project root, while
 packages installed via NPM get stored inside `node_modules` subdirectory.
 
 # Basic example
