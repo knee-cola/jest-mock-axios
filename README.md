@@ -11,7 +11,7 @@ Installation is simple - just run:
 
     npm i --save-dev jest-mock-axios
 
-Next you need to setup a [manual Jest mock](https://facebook.github.io/jest/docs/en/manual-mocks.html) for *Axios* and *es6-promise* (we'll explain why a bit later):
+Next you need to setup a [manual Jest mock](https://facebook.github.io/jest/docs/en/manual-mocks.html) for *Axios* (we'll explain why a bit later):
 * create `__mocks__` directory in your project root
 * inside this new directory create two files: `axios.js` and `es6-promise.js`
 * copy & past the following two snippets to the appropriate file mock file
@@ -181,7 +181,7 @@ Although this might not be the most realistic use-case of this functionality, It
 
 Tha magic which enables axio mock to work synchronousy is hidden away in [`jest-mock-promise`](https://www.npmjs.com/package/jest-mock-promise), which enables promises to be settled in synchronousy manner.
 
-The `jest-mock-promise` can be used to mock any asyc component which uses promises.
+The [`jest-mock-promise`](https://www.npmjs.com/package/jest-mock-promise) can be used to mock any asyc component which uses promises.
 
 # Inspiration
 
