@@ -1,62 +1,98 @@
 # What's this?
 
-This is a TypeScript version of [Axios](https://github.com/axios/axios) mock for unit testing with [Jest](https://facebook.github.io/jest/).
-This mock is based on https://gist.github.com/tux4/36006a1859323f779ab0.
+This is a light-weight, easy to use synchronous [Axios](https://github.com/axios/axios) mock for unit testing with [Jest](https://facebook.github.io/jest/).
 
-# How to use it?
+## Why would I use it?
 
-## Installation
-First you need to install this module:
+Because it works synchronously, meaning that your tests will be easier to write, read and understand.
+
+# Installation
+Installation is simple - just run:
 
     npm i --save-dev jest-mock-axios
 
-After it's installed create `__mocks__` directory in your project root. Inside this new directory create two files: `axios.js` and `es6-promise.js`. The following two snippets contain code which you need to paste into each of the two files:
+Next you need to setup a [manual Jest mock](https://facebook.github.io/jest/docs/en/manual-mocks.html) for *Axios* and *es6-promise* (we'll explain why a bit later):
+* create `__mocks__` directory in your project root
+* inside this new directory create two files: `axios.js` and `es6-promise.js`
+* copy & past the following two snippets to the appropriate file mock file
 
-**File:** `./__mock__/axios.js`
 ```javascript
-import AxiosMock from 'jest-mock-axios';
-export { AxiosMock as Promise };
+// ./__mock__/axios.js
+import mockAxios from 'jest-mock-axios';
+export default mockAxios;
 ```
 
-**File:** `./__mock__/es6-promise.js`
-```javascript
-import JestMockPromise from 'jest-mock-promise';
-export { JestMockPromise as Promise };
-```
+## Why do we need to manually create the mock?
 
-We have just created a manual Jest mock for *Axios* ans *es6-promise*, which is used by Axios. You can find out more about manual mocking in [Jest manual](https://facebook.github.io/jest/docs/en/manual-mocks.html).
+It's because Jest expects mocks to be placed in tre project root, while
+packages installed via NPM get stored inside `node_modules` subdirectory.
 
-# Using it in your tests - An example
+# Basic example
 
 Let's consider that we want to test a component which uses Axios. This component returns a promise, which will be resolved after Axios is done communicationg with the server.
 
 Here's a Jest snippet, which explains how we would test this component:
 ```javascript
+// ./src/__tests__/UppercaseProxy.spec.js
+import mockAxios from 'jest-mock-axios';
+
+afterEach(() => {
+    // cleaning up the mess left nehind the previous test
+    mockAxios.reset();
+});
+
 it('UppercaseProxy should get data from the server and convert it to UPPERCASE', () => {
 
     let catchFn = jest.fn(),
         thenFn = jest.fn();
 
     UppercaseProxy('client is saying hello!')
-        .then(catchFn)
+        .then(thenFn)
         .catch(catchFn);
 
-    let serverData = 'server says hello!';
+    // simulating a server response
+    mockAxios.mockResponse({ data: 'server says hello!' });
 
-    // simulating that the server has responded
-    axios.mockResponse({ data: serverData });
+    // since `post` method is a spy, we can check if it was called
+    expect(mockAxios.post).toHaveBeenCalled();
 
-    // just checking that Axios was used
-    expect(axios.post).toHaveBeenCalled();
+    // testing the `then` and `catch` spies have been called
+    expect(thenFn).toHaveBeenCalled();
+
+    // catch should not have been called
+    expect(catchFn).not.toHaveBeenCalled();
 
     let dataReceived:any = thenFn.mock.calls[0][0];
 
-    // checking if the test was converted to uppercase
+    // checking if the server response was converted to uppercase
     expect(dataReceived).toEqual('SERVER SAYS HELLO!');
 });
 ```
 
-## Axios mock API
+To make this example complete better understand how this example works, let's have a look at a (verbose) implementation of component we are testing:
+```javascript
+// ./src/UppercaseProxy.js
+
+import axios from 'axios';
+
+const UppercaseProxy = (clientMessage) => {
+
+    // requesting data from server
+    let axiosPromise = axios.post('/web-service-url/', { data: clientMessage });
+
+    // converting server response to upper case
+    axiosPromise = axiosPromise.then(serverData => serverData.toUpper());
+
+    // returning promise so that client code can attach `then` and `catch` handler
+    return(axiosPromise);
+};
+
+export default UppercaseProxy;
+```
+
+At the bottom of this page you can find additional examples.
+
+# Axios mock API
 
 In addition to standard Axios methods (get, post, put, delete), which are exposed as spyes, Axios mock has three additional public methods, which are intended to facilitate mocking:
 * `mockResponse` - simulates a server (web service) response
@@ -64,7 +100,7 @@ In addition to standard Axios methods (get, post, put, delete), which are expose
 * `lastReqGet` - returns a last promise which was given (usefull if multiple Axios requests are made within a single `it` block)
 * `reset` - reset the Axios mock - prepare it for the next test (typically used in `afterEach`)
 
-### axios.mockResponse
+## axios.mockResponse(response, promise)
 
 After a request request has been made to the server (web service), this method resolves that request by simulating a server response.
 
@@ -80,25 +116,76 @@ response = {
 ```
 The given response object will get passed to `then` even handler function.
 
-The second argument is a promise, which was given when the server request was made. This option is also optional - it defaults to the promise made when the last server request was made.
+The second argument is a promise, which was given when the server request was made. This argument is also optional - it defaults to the promise made when the last server request was made.
 
 We can use it to pinpoint an exact server request we wish to resolve, which is usefull only if we're making multiple server requests before calling `axios.reset`.
 
-### axios.mockError
+## axios.mockError(err, promise)
 
 This method simulates an error while making a server request (network error, server error, etc ...). It is in fact very similar to `mockResponse` method: it receives to optional parameters: error object and a promise.
 
 Error object will get passed to `catch` event handler function. If ommited it defaults to an empty object.
 
-The second argument is a promise object, which has the same function as the one in the `mockResponse` method.
+The second argument is a promise object, which works the same way as described part about the `mockResponse` method.
 
-### axios.lastReqGet
+## axios.lastReqGet()
 
 `lastReqGet` method returns a promise given when the most recent server request was made. We can use this method if we want to pass the promise object to `mockResponse` or `mockError` methods.
 
-### axios.reset
+## axios.reset()
 
 `reset` method clears state of the Axios mock to initial values. It should be called after each test, so that we can start fresh with our next test (i.e. from `afterEach` method).
+
+# Additional examples
+Since this is a simple mock, most of the functionality was covered in basic test, at the begining of this page. In this section we'll explore features not covered by that initial example.
+
+## Using `lastReqGet` method
+
+In the following example we'll have a look at use case for the `lastReqGet` method. In this example we'll create two consecutive requests before simulating a server response to the first.
+
+```javascript
+it('when resolving a request it should call the apropriate handler', () => {
+
+    let thenFn1 = jest.fn(),
+        thenFn2 = jest.fn();
+    
+    // creating the first server request
+    UppercaseProxy('client is saying hello!').then(thenFn1);
+    let firstReqPromise = mockAxios.lastReqGet();
+
+    // creating the second server request
+    // BEFORE the first had chance to be resolved
+    UppercaseProxy('client says bye bye!').then(thenFn2);
+
+    // simulating a server response to the FIRST request
+    mockAxios.mockResponse({ data: 'server says hello!' }, firstReqPromise);
+
+    // only the first handler should have been called
+    expect(thenFn1).toHaveBeenCalled();
+    expect(thenFn2).not.toHaveBeenCalled();
+
+    // simulating a server response to the SECOND request
+    // NOTE: here we don't need to provide the request object,
+    //       since we want to reolve the request which was made last
+    mockAxios.mockResponse({ data: 'server says bye bye!' });
+
+    // the first `then` handles should be called only once
+    expect(thenFn1).toHaveBeenCalledTimes(1);
+    // now the second `then` handler should be called
+    expect(thenFn2).toHaveBeenCalled();
+});
+```
+Although this might not be the most realistic use-case of this functionality, It's good enough to illustrate how `lastReqGet` method can be used.
+
+# Synchronous promise
+
+Tha magic which enables axio mock to work synchronousy is hidden away in [`jest-mock-promise`](https://www.npmjs.com/package/jest-mock-promise), which enables promises to be settled in synchronousy manner.
+
+The `jest-mock-promise` can be used to mock any asyc component which uses promises.
+
+# Inspiration
+
+This mock is loosely based on the following gist: [tux4/axios-test.js](https://gist.github.com/tux4/36006a1859323f779ab0)
 
 # License
 
