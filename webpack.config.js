@@ -28,12 +28,10 @@ module.exports = {
                 test: /\.ts$/,
                 loader: "ts-loader",
                 exclude: /node_modules/
-//                options: {
-//                    useBabel: true,
-//                    declaration: true,
-//                    declarationDir: "./dist"
-//                }
-            },
+            }
         ]
+    },
+    externals: {
+        'jest-mock-promise': 'jest-mock-promise'
     }
 };
