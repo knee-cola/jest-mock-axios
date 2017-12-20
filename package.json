@@ -1,12 +1,12 @@
 {
   "name": "jest-mock-axios",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "Axios mock for Jest",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "webpack -p",
-    "publish": "webpack -p && npm publish"
+    "deploy2npm": "npm run build && npm publish"
   },
   "repository": {
     "type": "git",
