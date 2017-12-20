@@ -1,4 +1,5 @@
 const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const srcDir = './lib/';
 const destDir = 'dist';
@@ -26,12 +27,23 @@ module.exports = {
             // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
             {
                 test: /\.ts$/,
-                loader: "ts-loader",
-                exclude: /node_modules/
+                exclude: /node_modules/,
+                use: [
+                        {
+                            loader: "babel-loader",
+                            options: {
+                                presets: ['@babel/preset-env']
+                            }
+                        },
+                    "ts-loader"
+                ]
             }
         ]
     },
     externals: {
         'jest-mock-promise': 'jest-mock-promise'
-    }
+    },
+    plugins: [
+        new CleanWebpackPlugin(destDir)
+    ]
 };
