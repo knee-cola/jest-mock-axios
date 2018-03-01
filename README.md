@@ -33,7 +33,7 @@ Next you need to setup a [manual Jest mock](https://facebook.github.io/jest/docs
 * copy & past the following snippets to `axios.js` file
 
 ```javascript
-// ./__mock__/axios.js
+// ./__mocks__/axios.js
 import mockAxios from 'jest-mock-axios';
 export default mockAxios;
 ```
