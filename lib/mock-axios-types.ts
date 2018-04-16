@@ -1,7 +1,7 @@
 import SyncPromise from 'jest-mock-promise';
 
 type HttpResponse = {
-    data:object,
+    data:any,
     status?:number,
     statusText?:string,
     headers?:object,

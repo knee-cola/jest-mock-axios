@@ -49,6 +49,7 @@ Here's a Jest snippet, which explains how we would test this component:
 ```javascript
 // ./src/__tests__/UppercaseProxy.spec.js
 import mockAxios from 'jest-mock-axios';
+import UppercaseProxy from './UppercaseProxy';
 
 afterEach(() => {
     // cleaning up the mess left behind the previous test
@@ -61,18 +62,21 @@ it('UppercaseProxy should get data from the server and convert it to UPPERCASE',
         thenFn = jest.fn();
 
     // using the component, which should make a server response
-    UppercaseProxy('client is saying hello!')
+    let clientMessage = 'client is saying hello!';
+
+    UppercaseProxy(clientMessage)
         .then(thenFn)
         .catch(catchFn);
-
-    // simulating a server response
-    mockAxios.mockResponse({ data: 'server says hello!' });
 
     // since `post` method is a spy, we can check if the server request was correct
     // a) the correct method was used (post)
     // b) went to the correct web service URL ('/web-service-url/')
     // c) if the payload was correct ('client is saying hello!')
-    expect(mockAxios.post).toHaveBeenCalledWith('/web-service-url/', 'client is saying hello!' );
+    expect(mockAxios.post).toHaveBeenCalledWith('/web-service-url/', {data: clientMessage });
+
+    // simulating a server response
+    let responseObj = { data: 'server says hello!' };
+    mockAxios.mockResponse(responseObj);
 
     // checking the `then` spy has been called and if the
     // response from the server was converted to upper case
@@ -86,7 +90,7 @@ it('UppercaseProxy should get data from the server and convert it to UPPERCASE',
 To make this example complete and easier to understand, let's have a look at a (verbose) implementation of component we are testing:
 ```javascript
 // ./src/UppercaseProxy.js
-import axios from 'axios';
+import axios from '../lib/index';
 
 const UppercaseProxy = (clientMessage) => {
 
@@ -94,7 +98,7 @@ const UppercaseProxy = (clientMessage) => {
     let axiosPromise = axios.post('/web-service-url/', { data: clientMessage });
 
     // converting server response to upper case
-    axiosPromise = axiosPromise.then(serverData => serverData.toUpper());
+    axiosPromise = axiosPromise.then(serverData => serverData.data.toUpperCase());
 
     // returning promise so that client code can attach `then` and `catch` handler
     return(axiosPromise);
