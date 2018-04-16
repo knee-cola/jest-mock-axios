@@ -14,8 +14,8 @@ However, if you look at the [source code](https://github.com/knee-cola/jest-mock
   * [Why do we need to manually create the mock?](#why-do-we-need-to-manually-create-the-mock)
 * [Basic example](#basic-example)
 * [Axios mock API](#axios-mock-api)
-  * [axios.mockResponse(response, promise)](#axiosmockresponseresponse-promise)
-  * [axios.mockError(err, promise)](#axiosmockerrorerr-promise)
+  * [axios.mockResponse(response, queueItem)](#axiosmockresponseresponse-promise)
+  * [axios.mockError(err, queueItem)](#axiosmockerrorerr-promise)
   * [axios.lastReqGet()](#axioslastreqget)
   * [axios.lastPromiseGet()](#axioslastpromiseget)
   * [axios.reset()](#axiosreset)
@@ -114,11 +114,11 @@ At the bottom of this page you can find additional examples.
 In addition to standard Axios methods (get, post, put, delete), which are exposed as spies, Axios mock has three additional public methods, which are intended to facilitate mocking:
 * `mockResponse` - simulates a server (web service) response
 * `mockError` - simulates a (network/server) error 
-* `lastReqGet` - returns a request object which was last submited which was given (useful if multiple Axios requests are made within a single `it` block)
-* `lastPromiseGet` - returns a last promise which was given (useful if multiple Axios requests are made within a single `it` block)
+* `lastReqGet` - returns the newest a request queue item, created when the most recent request was made (useful if multiple Axios requests are made within a single `it` block)
+* `lastPromiseGet` - returns the newest promise object, which was created when the most recent request was made (useful if multiple Axios requests are made within a single `it` block)
 * `reset` - reset the Axios mock - prepare it for the next test (typically used in `afterEach`)
 
-## axios.mockResponse(response, promise)
+## axios.mockResponse(response[, queueItem])
 After a request request has been made to the server (web service), this method resolves that request by simulating a server response.
 
 ### Arguments: `response`
@@ -134,26 +134,30 @@ response = {
 ```
 The given response object will get passed to `then` even handler function.
 
-### Arguments: `promise`
-The second argument is a promise, which was given when the server request was made. This argument is also optional - it defaults to the promise made when the last server request was made.
+### Arguments: (optional) `queueItem`
+The second argument indicates which request to resolve. We can use two different objects:
+* a `promise` returned when the server request was made
+* a request data object returned by `lastReqGet`
 
-We can use it to pinpoint an exact server request we wish to resolve, which is useful only if we're making multiple server requests before calling `axios.reset`.
+This argument is also optional - it defaults to the queue item created when the last server request was made.
+
+We can use it to pinpoint an exact server request we wish to resolve, which is useful if we're making multiple server requests and are planing to resolve them in a different order from the one in which they were made.
 
 At the end of this document you can find an example which demonstrates how this parameter can be used.
 
-## axios.mockError(err, promise)
-This method simulates an error while making a server request (network error, server error, etc ...). It is in fact very similar to `mockResponse` method: it receives to optional parameters: error object and a promise.
+## axios.mockError(err[, queueItem])
+This method simulates an error while making a server request (network error, server error, etc ...). It is in fact very similar to `mockResponse` method: it receives to optional parameters: error object and a `queueItem`.
 
 ### Arguments: `err`
 Error object will get passed to `catch` event handler function. If omitted it defaults to an empty object.
 
-### Arguments: `promise`
-The second argument is a promise object, which works the same way as described part about the `mockResponse` method.
+### Arguments: (optional) `queueItem`
+The second argument is a `queueItem` object, which works the same way as described part about the `mockResponse` method.
 
 ## axios.lastReqGet()
-`lastReqGet` method returns a request object, stored in a queue when the most recent server request was made. We can use this method if we want to pass the promise object to `mockResponse` or `mockError` methods.
+`lastReqGet` method returns the newest request object, which was created then the most recent server request was made.
 
-The returned request queue object has the following structure (an example):
+The returned request queue contains all the data relevant to the request. It has the following structure (an example):
 ```javascript
 
 let requestQueueObject = {
@@ -169,6 +173,8 @@ let requestQueueObject = {
     }
 }
 ```
+
+The request object can be used ad a second parameter of the `mockResponse` and `mockError` methods.
 
 ## axios.lastPromiseGet()
 `lastPromiseGet` method returns a promise given when the most recent server request was made. We can use this method if we want to pass the promise object to `mockResponse` or `mockError` methods.

@@ -3,9 +3,6 @@ import SyncPromise from 'jest-mock-promise';
 
 describe('MockAxios', () => {
 
-    beforeEach(() => {
-    });
-
     afterEach(() => {
         MockAxios.reset();
     });
