@@ -19,7 +19,7 @@ class MockAxios {
   public post:SpyFn = jest.fn(this.newReq.bind(this))
   public put:SpyFn = jest.fn(this.newReq.bind(this))
   public delete:SpyFn = jest.fn(this.newReq.bind(this))
-  public create:MockAxios = jest.fn(() => this)
+  public create:SpyFn = jest.fn(() => this)
 
   private newReq():any {
     let promise = new SyncPromise()
