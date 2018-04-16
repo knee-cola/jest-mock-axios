@@ -30,26 +30,44 @@ type AxiosMockAPI = {
      * @param response (optional) response returned by the server
      * @param promise (optional) request promise for which response should be resolved
      */
-    mockResponse?:((response?:HttpResponse, promise?:SyncPromise) => void);
+    mockResponse?:((response?:HttpResponse, queueItem?:SyncPromise|AxiosMockQueueItem) => void);
     /**
      * Simulate an error in server request
      * @param error (optional) error object
      */
-    mockError?:(error?:any, promise?:SyncPromise) => void;
+    mockError?:(error?:any, queueItem?:SyncPromise|AxiosMockQueueItem) => void;
     /**
      * Returns promise of the most recent request
      */
-    lastReqGet?:()=>SyncPromise;
-    /**
-     * Clears all of the queued requests
-     */
-    reset?:()=>void;
+    lastPromiseGet?:()=>SyncPromise;
     /**
      * Removes the give promise from the queue
      * @param promise 
      */
+
     popPromise?:(promise?:SyncPromise) => SyncPromise;
+    /**
+     * Returns promise of the most recent request
+     */
+    lastReqGet?:()=>AxiosMockQueueItem;
+    /**
+     * Removes the give request from the queue
+     * @param promise 
+     */
+    popRequest?:(promise?:AxiosMockQueueItem) => AxiosMockQueueItem;
+
+    /**
+     * Clears all of the queued requests
+     */
+    reset?:()=>void;
 }
+
+type AxiosMockQueueItem = {
+    promise:SyncPromise,
+    url:string,
+    data?:any,
+    config?:any
+};
 
 /**
  * Axios object can be called like a function,
@@ -57,4 +75,4 @@ type AxiosMockAPI = {
  */
 type AxiosMockType = AxiosFn & AxiosAPI & AxiosMockAPI;
 
-export { HttpResponse, AnyFunction, SpyFn, AxiosMockType, AxiosFn, AxiosAPI, AxiosMockAPI }
+export { HttpResponse, AnyFunction, SpyFn, AxiosMockType, AxiosFn, AxiosAPI, AxiosMockAPI, AxiosMockQueueItem }

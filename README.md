@@ -17,6 +17,7 @@ However, if you look at the [source code](https://github.com/knee-cola/jest-mock
   * [axios.mockResponse(response, promise)](#axiosmockresponseresponse-promise)
   * [axios.mockError(err, promise)](#axiosmockerrorerr-promise)
   * [axios.lastReqGet()](#axioslastreqget)
+  * [axios.lastPromiseGet()](#axioslastpromiseget)
   * [axios.reset()](#axiosreset)
 * [Additional examples](#additional-examples)
   * [Using `lastReqGet` method](#using-lastreqget-method)
@@ -113,7 +114,8 @@ At the bottom of this page you can find additional examples.
 In addition to standard Axios methods (get, post, put, delete), which are exposed as spies, Axios mock has three additional public methods, which are intended to facilitate mocking:
 * `mockResponse` - simulates a server (web service) response
 * `mockError` - simulates a (network/server) error 
-* `lastReqGet` - returns a last promise which was given (useful if multiple Axios requests are made within a single `it` block)
+* `lastReqGet` - returns a request object which was last submited which was given (useful if multiple Axios requests are made within a single `it` block)
+* `lastPromiseGet` - returns a last promise which was given (useful if multiple Axios requests are made within a single `it` block)
 * `reset` - reset the Axios mock - prepare it for the next test (typically used in `afterEach`)
 
 ## axios.mockResponse(response, promise)
@@ -149,7 +151,27 @@ Error object will get passed to `catch` event handler function. If omitted it de
 The second argument is a promise object, which works the same way as described part about the `mockResponse` method.
 
 ## axios.lastReqGet()
-`lastReqGet` method returns a promise given when the most recent server request was made. We can use this method if we want to pass the promise object to `mockResponse` or `mockError` methods.
+`lastReqGet` method returns a request object, stored in a queue when the most recent server request was made. We can use this method if we want to pass the promise object to `mockResponse` or `mockError` methods.
+
+The returned request queue object has the following structure (an example):
+```javascript
+
+let requestQueueObject = {
+    // promise created while
+    promise: SimplePromise,
+    // URL passed to the get/post/head/delete method
+    url: "https://github.com/",
+    // data which was pased to the get/post/head/delete method
+    data: { text: "this is payload sent to the server" },
+    // config which was pased to the get/post/head/delete method
+    config: {
+        ... something ...
+    }
+}
+```
+
+## axios.lastPromiseGet()
+`lastPromiseGet` method returns a promise given when the most recent server request was made. We can use this method if we want to pass the promise object to `mockResponse` or `mockError` methods.
 
 ## axios.reset()
 `reset` method clears state of the Axios mock to initial values. It should be called after each test, so that we can start fresh with our next test (i.e. from `afterEach` method).
@@ -168,14 +190,14 @@ it('when resolving a request it should call the appropriate handler', () => {
     
     // creating the first server request
     UppercaseProxy('client is saying hello!').then(thenFn1);
-    let firstReqPromise = mockAxios.lastReqGet();
+    let firstReqObj = mockAxios.lastReqGet();
 
     // creating the second server request
     // BEFORE the first had chance to be resolved
     UppercaseProxy('client says bye bye!').then(thenFn2);
 
     // simulating a server response to the FIRST request
-    mockAxios.mockResponse({ data: 'server says hello!' }, firstReqPromise);
+    mockAxios.mockResponse({ data: 'server says hello!' }, firstReqObj);
 
     // only the first handler should have been called
     expect(thenFn1).toHaveBeenCalled();

@@ -7,16 +7,22 @@
  */
 
 import SyncPromise from 'jest-mock-promise';
-import { HttpResponse, AnyFunction, SpyFn, AxiosMockType } from './mock-axios-types';
+import { HttpResponse, AnyFunction, SpyFn, AxiosMockType, AxiosMockQueueItem } from './mock-axios-types';
 
-const _newReq:()=>SyncPromise = () => {
-  let promise:SyncPromise = new SyncPromise()
-  _pending_promises.push(promise);
+/** a FIFO queue of pending request */
+const _pending_requests:Array<AxiosMockQueueItem> = [];
+
+const _newReq:(url:string,data?:any,config?:any)=>SyncPromise = (url:string,data?:any,config?:any) => {
+  let promise:SyncPromise = new SyncPromise();
+  _pending_requests.push({
+    promise:promise,
+    url:url,
+    data:data,
+    config:config
+  })
   return(promise);
 }
 
-/** a FIFO queue of pending request */
-const _pending_promises:Array<SyncPromise> = [];
 const MockAxios:AxiosMockType = <AxiosMockType>jest.fn(_newReq);
 
 // mocking Axios methods
@@ -30,19 +36,60 @@ MockAxios.popPromise = (promise?:SyncPromise) => {
 
   if(promise) {
     // remove the promise from pending queue
-    _pending_promises.splice(_pending_promises.indexOf(promise),1)
+    for (let ix = 0; ix < _pending_requests.length; ix++) {
+
+      let req:AxiosMockQueueItem = _pending_requests[ix];
+
+      if(req.promise === promise) {
+        _pending_requests.splice(ix, 1);
+        return(req.promise);
+      }
+    }
+    
   } else {
     // take the oldest promise
-    promise = _pending_promises.shift();
+    let req:AxiosMockQueueItem = _pending_requests.shift();
+    return(req ? req.promise : void 0);
   }
-
-  return(promise);
 }
 
-MockAxios.mockResponse = (response?:HttpResponse, promise:SyncPromise=null):void => {
-  
-  // remove promise from the queue
-  promise = MockAxios.popPromise(promise);
+
+MockAxios.popRequest = (request?:AxiosMockQueueItem) => {
+
+  if(request) {
+    const ix = _pending_requests.indexOf(request);
+    if(ix===-1) {
+      return(void 0);
+    }
+
+    _pending_requests.splice(ix, 1);
+    return(request);
+
+  } else {
+    return(_pending_requests.shift());
+  }
+}
+
+/**
+ * Removes an item form the queue, based on it's type
+ * @param queueItem 
+ */
+const popQueueItem = (queueItem:SyncPromise|AxiosMockQueueItem=null) => {
+  // first le't pretend the param is a queue item
+  let request:AxiosMockQueueItem = MockAxios.popRequest(<AxiosMockQueueItem>queueItem),
+      promise:SyncPromise;
+
+  if(request) {
+  // IF the request was found
+  // > set the promise
+    return(request.promise);
+  } else {
+  // ELSE maybe the `queueItem` is a promise (legacy mode)
+    return(MockAxios.popPromise(<SyncPromise>queueItem));
+  }
+}
+
+MockAxios.mockResponse = (response?:HttpResponse, queueItem:SyncPromise|AxiosMockQueueItem=null):void => {
 
   // replacing missing data with default values
   response = Object.assign({
@@ -54,22 +101,26 @@ MockAxios.mockResponse = (response?:HttpResponse, promise:SyncPromise=null):void
   }, response);
 
   // resolving the Promise with the given response data
-  promise.resolve(response);
+  popQueueItem(queueItem).resolve(response);
 }
 
-MockAxios.mockError = (error:any={}, promise:SyncPromise=null) => {
-  // remove promise from the queue
-  promise = MockAxios.popPromise(promise);
+MockAxios.mockError = (error:any={}, queueItem:SyncPromise|AxiosMockQueueItem=null) => {
   // resolving the Promise with the given response data
-  promise.reject(Object.assign({}, error));
+  popQueueItem(queueItem).reject(Object.assign({}, error));
 }
 
 MockAxios.lastReqGet = () => {
-  return(_pending_promises[_pending_promises.length-1]);
+  return(_pending_requests[_pending_requests.length-1]);
+}
+
+MockAxios.lastPromiseGet = () => {
+  const req = MockAxios.lastReqGet();
+  return(req ? req.promise : void 0);
 }
 
 MockAxios.reset = () => {
-  _pending_promises.splice(0, _pending_promises.length);
+  // remove all the requests
+  _pending_requests.splice(0, _pending_requests.length);
 
   // resets all information stored in the mockFn.mock.calls and mockFn.mock.instances arrays
   MockAxios.get.mockClear();

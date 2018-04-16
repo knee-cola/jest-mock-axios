@@ -42,7 +42,7 @@ describe('MockAxios', () => {
         expect(thenFn).toHaveBeenCalledWith(responseObj);    
     });
 
-    it("`mockResponse` should remove the promise from the queue", () => {
+    it("`mockResponse` should remove the last promise from the queue", () => {
         MockAxios.post();
         MockAxios.mockResponse();
         expect(MockAxios.popPromise()).toBeUndefined();
@@ -169,13 +169,22 @@ describe('MockAxios', () => {
         expect(thirdFn.mock.calls.length).toBe(1);
       });
     
-    // lastReqGet - Returns promise of the most recent request
-    it("`lastReqGet` should return the most recent promise", () => {
+    // lastReqGet - returns the most recent request
+    it("`lastReqGet` should return the most recent request", () => {
         let thenFn = jest.fn();
         let firstPromise = MockAxios.post();
         let lastPromise = MockAxios.post();
 
-        expect(MockAxios.lastReqGet()).toBe(lastPromise);
+        expect(MockAxios.lastReqGet().promise).toBe(lastPromise);
+    });
+    
+    // lastPromiseGet - Returns promise of the most recent request
+    it("`lastPromiseGet` should return the most recent promise", () => {
+        let thenFn = jest.fn();
+        let firstPromise = MockAxios.post();
+        let lastPromise = MockAxios.post();
+
+        expect(MockAxios.lastPromiseGet()).toBe(lastPromise);
     });
 
     // popPromise - Removes the give promise from the queue
@@ -189,6 +198,25 @@ describe('MockAxios', () => {
         expect(MockAxios.popPromise(firstPromise)).toBe(firstPromise);
         expect(MockAxios.popPromise(thirdPromise)).toBe(thirdPromise);
         expect(MockAxios.popPromise(secondPromise)).toBe(secondPromise);
+
+        // queue should be empty
+        expect(MockAxios.lastPromiseGet()).toBeUndefined();
+    });
+
+    // popPromise - Removes the give promise from the queue
+    it("`popRequest` should remove the given request from the queue", () => {
+        let thenFn = jest.fn();
+
+        MockAxios.post();
+        let firstReq = MockAxios.lastReqGet();
+        MockAxios.post();
+        let secondReq = MockAxios.lastReqGet();
+        MockAxios.post();
+        let thirdReq = MockAxios.lastReqGet();
+
+        expect(MockAxios.popRequest(firstReq)).toBe(firstReq);
+        expect(MockAxios.popRequest(thirdReq)).toBe(thirdReq);
+        expect(MockAxios.popRequest(secondReq)).toBe(secondReq);
 
         // queue should be empty
         expect(MockAxios.lastReqGet()).toBeUndefined();
