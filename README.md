@@ -155,7 +155,7 @@ Error object will get passed to `catch` event handler function. If omitted it de
 The second argument is a `queueItem` object, which works the same way as described part about the `mockResponse` method.
 
 ## axios.lastReqGet()
-`lastReqGet` method returns the newest request object, which was created then the most recent server request was made.
+`lastReqGet` method returns the newest request object, which was created when the most recent server request was made.
 
 The returned request queue contains all the data relevant to the request. It has the following structure (an example):
 ```javascript
@@ -174,10 +174,44 @@ let requestQueueObject = {
 }
 ```
 
-The request object can be used ad a second parameter of the `mockResponse` and `mockError` methods.
+The returned value can be used to pinpoint exact server request we wish to resolve (the value is passed as the second param of `mockResponse` or `mockError` methods).
+
+**NOTE:** This is a sibling method to the `lastPromiseGet`, which returns only the promise portion of this the request object.
 
 ## axios.lastPromiseGet()
-`lastPromiseGet` method returns a promise given when the most recent server request was made. We can use this method if we want to pass the promise object to `mockResponse` or `mockError` methods.
+`lastPromiseGet` method returns a promise given when the most recent server request was made.
+
+The promise returned by this function is equivalent to the one returned by calling `post`, `get`, `put`, `delete` methods. This is illustrated by in the following example:
+```javascript
+// ./src/MyComponent.js
+import axios from '../lib/index';
+
+class MyComponent {
+
+    CallServer () {
+        // we store the returned promise
+        this.axiosPromise = axios.post('/web-service-url/', { data: clientMessage });
+    }
+}
+
+export default MyComponent;
+```
+In our spec file we do the following:
+```javascript
+// ./test/MyComponent.spec.js
+    import MyComponent from '../src/SomeSourceFile';
+
+    let myComp = new MyComponent();
+    
+    myComp.CallServer();
+    
+    // the following expression will write `true` to the console
+    console.log(  myComp.axiosPromise === MockAxios.lastPromiseGet()  );
+```
+
+The returned value can be used to pinpoint exact server request we wish to resolve (the value is passed as the second param of `mockResponse` or `mockError` methods).
+
+**NOTE:** This is a sibling method to the `lastReqGet`, which in addition to promise returns other information about the request.
 
 ## axios.reset()
 `reset` method clears state of the Axios mock to initial values. It should be called after each test, so that we can start fresh with our next test (i.e. from `afterEach` method).
