@@ -7,97 +7,76 @@
  */
 
 import SyncPromise from 'jest-mock-promise';
-import {HttpResponse, AnyFunction, SpyFn} from './mock-axios-types';
+import { HttpResponse, AnyFunction, SpyFn, AxiosMockType } from './mock-axios-types';
 
-class MockAxios {
+const _newReq:()=>SyncPromise = () => {
+  let promise:SyncPromise = new SyncPromise()
+  _pending_promises.push(promise);
+  return(promise);
+}
 
-  /** a FIFO queue of pending request */
-  private pending_promises:Array<SyncPromise> = [];
+/** a FIFO queue of pending request */
+const _pending_promises:Array<SyncPromise> = [];
+const MockAxios:AxiosMockType = <AxiosMockType>jest.fn(_newReq);
 
-  // mocking Axios methods
-  public get:SpyFn = jest.fn(this.newReq.bind(this))
-  public post:SpyFn = jest.fn(this.newReq.bind(this))
-  public put:SpyFn = jest.fn(this.newReq.bind(this))
-  public delete:SpyFn = jest.fn(this.newReq.bind(this))
-  public create:SpyFn = jest.fn(() => this)
+// mocking Axios methods
+MockAxios.get = jest.fn(_newReq);
+MockAxios.post = jest.fn(_newReq);
+MockAxios.put = jest.fn(_newReq);
+MockAxios.delete = jest.fn(_newReq);
+MockAxios.create = jest.fn(() => MockAxios);
 
-  private newReq():any {
-    let promise = new SyncPromise()
-    this.pending_promises.push(promise);
-    return(promise);
+MockAxios.popPromise = (promise?:SyncPromise) => {
+
+  if(promise) {
+    // remove the promise from pending queue
+    _pending_promises.splice(_pending_promises.indexOf(promise),1)
+  } else {
+    // take the oldest promise
+    promise = _pending_promises.shift();
   }
 
-  /**
-   * Removes the give promise from the queue
-   * @param promise 
-   */
-  private popPromise(promise?:SyncPromise) {
+  return(promise);
+}
 
-    if(promise) {
-      // remove the promise from pending queue
-      this.pending_promises.splice(this.pending_promises.indexOf(promise),1)
-    } else {
-      // take the oldest promise
-      promise = this.pending_promises.shift();
-    }
-
-    return(promise);
-  }
-
-  /**
-   * Simulate a server response, (optionally) with the given data
-   * @param response (optional) response returned by the server
-   * @param promise (optional) request promise for which response should be resolved
-   */
-  public mockResponse(response?:HttpResponse, promise:SyncPromise=null):void {
-    
-    // remove promise from the queue
-    promise = this.popPromise(promise);
+MockAxios.mockResponse = (response?:HttpResponse, promise:SyncPromise=null):void => {
   
-    // replacing missing data with default values
-    response = Object.assign({
-      data: {},
-      status: 200,
-      statusText: 'OK',
-      headers: {},
-      config: {},
-    }, response);
-  
-    // resolving the Promise with the given response data
-    promise.resolve(response);
-  }
+  // remove promise from the queue
+  promise = MockAxios.popPromise(promise);
 
-  /**
-   * Simulate an error in server request
-   * @param error (optional) error object
-   */
-  public mockError(error:any={}, promise:SyncPromise=null):void {
-    // remove promise from the queue
-    promise = this.popPromise(promise);
-    // resolving the Promise with the given response data
-    promise.reject(Object.assign({}, error));
-  }
+  // replacing missing data with default values
+  response = Object.assign({
+    data: {},
+    status: 200,
+    statusText: 'OK',
+    headers: {},
+    config: {},
+  }, response);
 
-  /**
-   * Returns promise of the most recent request
-   */
-  public lastReqGet():SyncPromise {
-    return(this.pending_promises[this.pending_promises.length-1]);
-  }
+  // resolving the Promise with the given response data
+  promise.resolve(response);
+}
 
-  /**
-   * Clears all of the queued requests
-   */
-  public reset() {
-    this.pending_promises.splice(0, this.pending_promises.length);
+MockAxios.mockError = (error:any={}, promise:SyncPromise=null) => {
+  // remove promise from the queue
+  promise = MockAxios.popPromise(promise);
+  // resolving the Promise with the given response data
+  promise.reject(Object.assign({}, error));
+}
 
-    // resets all information stored in the mockFn.mock.calls and mockFn.mock.instances arrays
-    this.get.mockClear();
-    this.post.mockClear();
-    this.put.mockClear();
-    this.delete.mockClear();
-  }
-};
+MockAxios.lastReqGet = () => {
+  return(_pending_promises[_pending_promises.length-1]);
+}
+
+MockAxios.reset = () => {
+  _pending_promises.splice(0, _pending_promises.length);
+
+  // resets all information stored in the mockFn.mock.calls and mockFn.mock.instances arrays
+  MockAxios.get.mockClear();
+  MockAxios.post.mockClear();
+  MockAxios.put.mockClear();
+  MockAxios.delete.mockClear();
+}
 
 // this is a singletone object
 export default MockAxios;

@@ -1,12 +1,13 @@
 {
   "name": "jest-mock-axios",
-  "version": "1.0.23",
+  "version": "2.0.0",
   "description": "Axios mock for Jest",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "webpack -p",
-    "deploy2npm": "npm run build && npm publish"
+    "deploy2npm": "npm run build && npm publish",
+    "test": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,8 @@
     "@types/jest": "^21.1.8",
     "babel-loader": "^8.0.0-beta.0",
     "clean-webpack-plugin": "^0.1.17",
+    "jest": "^22.4.3",
+    "ts-jest": "^22.4.3",
     "ts-loader": "^3.1.1",
     "typescript": "^2.6.1",
     "webpack": "^3.10.0"
