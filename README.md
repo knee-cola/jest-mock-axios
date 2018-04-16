@@ -154,30 +154,6 @@ Error object will get passed to `catch` event handler function. If omitted it de
 ### Arguments: (optional) `queueItem`
 The second argument is a `queueItem` object, which works the same way as described part about the `mockResponse` method.
 
-## axios.lastReqGet()
-`lastReqGet` method returns the newest request object, which was created when the most recent server request was made.
-
-The returned request queue contains all the data relevant to the request. It has the following structure (an example):
-```javascript
-
-let requestQueueObject = {
-    // promise created while
-    promise: SimplePromise,
-    // URL passed to the get/post/head/delete method
-    url: "https://github.com/",
-    // data which was pased to the get/post/head/delete method
-    data: { text: "this is payload sent to the server" },
-    // config which was pased to the get/post/head/delete method
-    config: {
-        ... something ...
-    }
-}
-```
-
-The returned value can be used to pinpoint exact server request we wish to resolve (the value is passed as the second param of `mockResponse` or `mockError` methods).
-
-**NOTE:** This is a sibling method to the `lastPromiseGet`, which returns only the promise portion of this the request object.
-
 ## axios.lastPromiseGet()
 `lastPromiseGet` method returns a promise given when the most recent server request was made.
 
@@ -211,7 +187,29 @@ In our spec file we do the following:
 
 The returned value can be used to pinpoint exact server request we wish to resolve (the value is passed as the second param of `mockResponse` or `mockError` methods).
 
-**NOTE:** This is a sibling method to the `lastReqGet`, which in addition to promise returns other information about the request.
+**NOTE:** This is a sibling method to the `lastReqGet`, which in addition to promise returns object containing extended info about the request.
+
+## axios.lastReqGet()
+`lastReqGet` method returns extended info about the most recent request. This is a sibling method to the `lastPromiseGet`, which returns only the promise portion of this the request object.
+
+The returned info contains all the data relevant to the request. It has the following structure (an example):
+```javascript
+
+let requestInfo = {
+    // promise created while
+    promise: SimplePromise,
+    // URL passed to the get/post/head/delete method
+    url: "https://github.com/",
+    // data which was pased to the get/post/head/delete method
+    data: { text: "this is payload sent to the server" },
+    // config which was pased to the get/post/head/delete method
+    config: {
+        ... something ...
+    }
+}
+```
+
+The returned value can also be used to pinpoint exact server request we wish to resolve (the value is passed as the second param of `mockResponse` or `mockError` methods).
 
 ## axios.reset()
 `reset` method clears state of the Axios mock to initial values. It should be called after each test, so that we can start fresh with our next test (i.e. from `afterEach` method).
