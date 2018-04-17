@@ -14,8 +14,8 @@ However, if you look at the [source code](https://github.com/knee-cola/jest-mock
   * [Why do we need to manually create the mock?](#why-do-we-need-to-manually-create-the-mock)
 * [Basic example](#basic-example)
 * [Axios mock API](#axios-mock-api)
-  * [axios.mockResponse(response, queueItem)](#axiosmockresponseresponse-promise)
-  * [axios.mockError(err, queueItem)](#axiosmockerrorerr-promise)
+  * [axios.mockResponse(response, requestInfo)](#axiosmockresponseresponse-promise)
+  * [axios.mockError(err, requestInfo)](#axiosmockerrorerr-promise)
   * [axios.lastReqGet()](#axioslastreqget)
   * [axios.lastPromiseGet()](#axioslastpromiseget)
   * [axios.reset()](#axiosreset)
@@ -48,9 +48,9 @@ Let's consider that we want to test a component which uses Axios. This component
 
 Here's a Jest snippet, which explains how we would test this component:
 ```javascript
-// ./src/__tests__/UppercaseProxy.spec.js
+// ./test/UppercaseProxy.spec.js
 import mockAxios from 'jest-mock-axios';
-import UppercaseProxy from './UppercaseProxy';
+import UppercaseProxy from '../src/UppercaseProxy';
 
 afterEach(() => {
     // cleaning up the mess left behind the previous test
@@ -91,7 +91,7 @@ it('UppercaseProxy should get data from the server and convert it to UPPERCASE',
 To make this example complete and easier to understand, let's have a look at a (verbose) implementation of component we are testing:
 ```javascript
 // ./src/UppercaseProxy.js
-import axios from '../lib/index';
+import axios from 'axios';
 
 const UppercaseProxy = (clientMessage) => {
 
@@ -114,11 +114,11 @@ At the bottom of this page you can find additional examples.
 In addition to standard Axios methods (get, post, put, delete), which are exposed as spies, Axios mock has three additional public methods, which are intended to facilitate mocking:
 * `mockResponse` - simulates a server (web service) response
 * `mockError` - simulates a (network/server) error 
-* `lastReqGet` - returns the newest a request queue item, created when the most recent request was made (useful if multiple Axios requests are made within a single `it` block)
-* `lastPromiseGet` - returns the newest promise object, which was created when the most recent request was made (useful if multiple Axios requests are made within a single `it` block)
+* `lastReqGet` - returns extended info about the latest request added to the queue - the one created when the most recent request was made
+* `lastPromiseGet` - returns promise created when the latest request added to the queue
 * `reset` - reset the Axios mock - prepare it for the next test (typically used in `afterEach`)
 
-## axios.mockResponse(response[, queueItem])
+## axios.mockResponse(response[, requestInfo])
 After a request request has been made to the server (web service), this method resolves that request by simulating a server response.
 
 ### Arguments: `response`
@@ -134,25 +134,47 @@ response = {
 ```
 The given response object will get passed to `then` even handler function.
 
-### Arguments: (optional) `queueItem`
-The second argument indicates which request to resolve. We can use two different objects:
-* a `promise` returned when the server request was made
-* a request data object returned by `lastReqGet`
+### Arguments: (optional) `requestInfo`
+The second argument indicates which request to resolve. We can use it to pinpoint an exact server request we wish to resolve, which is useful if we're making multiple server requests and are planing to resolve them in a different order from the one in which they were made.
 
-This argument is also optional - it defaults to the queue item created when the last server request was made.
+We supply two different objects:
+* a extended request info object, which can be accessed by calling `lastReqGet` method
+* a `promise` object, which can be accessed by calling the `lastPromiseGet` method
 
-We can use it to pinpoint an exact server request we wish to resolve, which is useful if we're making multiple server requests and are planing to resolve them in a different order from the one in which they were made.
+If this argument is ommited it defaults to the latest request made (internally the `lastReqGet` method is called)
 
 At the end of this document you can find an example which demonstrates how this parameter can be used.
 
-## axios.mockError(err[, queueItem])
-This method simulates an error while making a server request (network error, server error, etc ...). It is in fact very similar to `mockResponse` method: it receives to optional parameters: error object and a `queueItem`.
+## axios.mockError(err[, requestInfo])
+This method simulates an error while making a server request (network error, server error, etc ...).
 
 ### Arguments: `err`
 Error object will get passed to `catch` event handler function. If omitted it defaults to an empty object.
 
-### Arguments: (optional) `queueItem`
-The second argument is a `queueItem` object, which works the same way as described part about the `mockResponse` method.
+### Arguments: (optional) `requestInfo`
+The second argument is a `requestInfo` object, which works the same way as described part about the `mockResponse` method.
+
+## axios.lastReqGet()
+`lastReqGet` method returns extended info about the most recent request. The returned value can also be used to pinpoint exact server request we wish to resolve (the value is passed as the second param of `mockResponse` or `mockError` methods).
+
+The returned info contains all the data relevant to the request. It has the following structure (an example):
+```javascript
+
+let requestInfo = {
+    // promise created while
+    promise: SimplePromise,
+    // URL passed to the get/post/head/delete method
+    url: "https://github.com/",
+    // data which was pased to the get/post/head/delete method
+    data: { text: "this is payload sent to the server" },
+    // config which was pased to the get/post/head/delete method
+    config: {
+        ... something ...
+    }
+}
+```
+
+**NOTE:** this is a sibling method to the `lastPromiseGet` (which returns only the promise portion of this the request object).
 
 ## axios.lastPromiseGet()
 `lastPromiseGet` method returns a promise given when the most recent server request was made.
@@ -189,61 +211,45 @@ The returned value can be used to pinpoint exact server request we wish to resol
 
 **NOTE:** This is a sibling method to the `lastReqGet`, which in addition to promise returns object containing extended info about the request.
 
-## axios.lastReqGet()
-`lastReqGet` method returns extended info about the most recent request. This is a sibling method to the `lastPromiseGet`, which returns only the promise portion of this the request object.
-
-The returned info contains all the data relevant to the request. It has the following structure (an example):
-```javascript
-
-let requestInfo = {
-    // promise created while
-    promise: SimplePromise,
-    // URL passed to the get/post/head/delete method
-    url: "https://github.com/",
-    // data which was pased to the get/post/head/delete method
-    data: { text: "this is payload sent to the server" },
-    // config which was pased to the get/post/head/delete method
-    config: {
-        ... something ...
-    }
-}
-```
-
-The returned value can also be used to pinpoint exact server request we wish to resolve (the value is passed as the second param of `mockResponse` or `mockError` methods).
-
 ## axios.reset()
 `reset` method clears state of the Axios mock to initial values. It should be called after each test, so that we can start fresh with our next test (i.e. from `afterEach` method).
 
 # Additional examples
 Since this is a simple mock, most of the functionality was covered in basic test, at the begining of this page. In this section we'll explore features not covered by that initial example.
 
-## Using `lastReqGet` method
-In the following example we'll have a look at use case for the `lastReqGet` method. In this example we'll create two consecutive requests before simulating a server response to the first.
+## Using `lastReqGet` methods
+In the following example we'll have a look at use case for the [`lastReqGet`](#axioslastreqget) method. In this example we'll create two consecutive requests before simulating a server response to the first one.
 
 ```javascript
-it('when resolving a request it should call the appropriate handler', () => {
+it('when resolving a request an appropriate handler should be called', () => {
 
     let thenFn1 = jest.fn(),
         thenFn2 = jest.fn();
     
-    // creating the first server request
+    // creating the FIRST server request
     UppercaseProxy('client is saying hello!').then(thenFn1);
-    let firstReqObj = mockAxios.lastReqGet();
+    // storing the request info - we'll need it later to pinpoint the request
+    let firstRequestInfo = mockAxios.lastReqGet();
 
-    // creating the second server request
+    // creating the SECOND server request
     // BEFORE the first had chance to be resolved
     UppercaseProxy('client says bye bye!').then(thenFn2);
 
-    // simulating a server response to the FIRST request
-    mockAxios.mockResponse({ data: 'server says hello!' }, firstReqObj);
+    // Simulating a server response to the FIRST request
+    // -> we're using request info object to pinpoint the request
+    // ... IF the info object ommited, the method would automatically
+    // resolve to the newest request from the internal queue (the SECOND one)
+    mockAxios.mockResponse({ data: 'server says hello!' }, firstRequestInfo);
 
     // only the first handler should have been called
     expect(thenFn1).toHaveBeenCalled();
     expect(thenFn2).not.toHaveBeenCalled();
 
-    // simulating a server response to the SECOND request
-    // NOTE: here we don't need to provide the request object,
-    //       since we want to reolve the request which was made last
+    // Simulating a server response to the SECOND request
+    // NOTE: here we don't need to provide the request info,
+    // since there is only one unresolved request left
+    // -> `mockResponse` resolves the last request in the
+    //     queue if request info is ommited
     mockAxios.mockResponse({ data: 'server says bye bye!' });
 
     // the first `then` handles should be called only once
@@ -252,7 +258,9 @@ it('when resolving a request it should call the appropriate handler', () => {
     expect(thenFn2).toHaveBeenCalled();
 });
 ```
-Although this might not be the most realistic use-case of this functionality, It's good enough to illustrate how `lastReqGet` method can be used.
+Although this might not be the most realistic use-case of this functionality, it does illustrate how `lastReqGet` method can be used to alter the default behaviour of the `mockResponse` method.
+
+**NOTE:** the identical effect can be achived by using the [`lastPromiseGet`](#axioslastpromiseget) method. These two methods perform a similar task, as described in the corresponding documentation.
 
 # Synchronous promise
 Tha magic which enables axio mock to work synchronously is hidden away in [`jest-mock-promise`](https://www.npmjs.com/package/jest-mock-promise), which enables promises to be settled in synchronous manner.
