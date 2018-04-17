@@ -21,6 +21,8 @@ However, if you look at the [source code](https://github.com/knee-cola/jest-mock
   * [axios.reset()](#axiosreset)
 * [Additional examples](#additional-examples)
   * [Using `lastReqGet` method](#using-lastreqget-method)
+  * [Values returned by `lastReqGet` and `lastPromiseGet` methods](#values-returned-by-lastReqGet-and-lastPromiseGet-methods)
+* [Missing features](#missing-features)
 * [Synchronous promise](#synchronous-promise)
 
 # Installation
@@ -194,9 +196,9 @@ The promise object returned by this function corresponds to the one returned by 
 # Additional examples
 Since AxiosMock is relatively simple, most of its functionality was covered in [basic example](#basic-example) at the begining of this document. In this section we'll explore features not covered by that initial example.
 
-## Return value of `lastReqGet` and `lastPromiseGet` methods
+## Values returned by `lastReqGet` and `lastPromiseGet` methods
 
-The following example illustrates the meaning of the value values returned by `lastReqGet` and `lastPromiseGet` methods.
+The following example illustrates the meaning of the values returned by `lastReqGet` and `lastPromiseGet` methods.
 
 The first snippet shows a component which will be tested. The component makes a `post` request to the server and stores the promise returned by Axios.
 
@@ -291,6 +293,13 @@ it('when resolving a request an appropriate handler should be called', () => {
 Although this might not be the most realistic use-case of this functionality, it does illustrate how `lastReqGet` method can be used to alter the default behaviour of the `mockResponse` method.
 
 **NOTE:** the identical effect can be achived by using the [`lastPromiseGet`](#axioslastpromiseget) method. These two methods perform a similar task, as described in the corresponding documentation.
+
+# Missing features
+AxiosMock coveres the most popular parts of Axios API, meaning that some of the features are not missing (i.e. interceptors).
+
+If you need an additional feature, you can request it by creating a new issue on [project's GitHub page](https://github.com/knee-cola/jest-mock-axios/issues/).
+
+Also you are welcome to implement the missing feature yourself and make a pull request :)
 
 # Synchronous promise
 Tha magic which enables axio mock to work synchronously is hidden away in [`jest-mock-promise`](https://www.npmjs.com/package/jest-mock-promise), which enables promises to be settled in synchronous manner.
