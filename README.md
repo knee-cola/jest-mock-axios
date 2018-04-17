@@ -7,7 +7,7 @@ Because it works synchronously, meaning that your tests will be easier to write,
 ## Can it be used with Jasmine/Mocha?
 Unfortunately *out of the box* this mock works only with [Jest](https://facebook.github.io/jest/).
 
-However, if you look at the [source code](https://github.com/knee-cola/jest-mock-axios/blob/master/lib/mock-axios.ts), you can see that it uses Jest only to define spies (for methods `post`, `get`, `put`, `delete`). This means that it can easily be modified to use any other testing framework - go to [GitHub](https://github.com/knee-cola/jest-mock-axios), clone it, modify it, play with it :)
+However, if you look at the [source code](https://github.com/knee-cola/jest-mock-axios/blob/master/lib/mock-axios.ts), you can see that it uses Jest only to define spies (for methods `post`, `get`, `put`, `delete`, `create`). This means that it can easily be modified to use any other testing framework - go to [GitHub](https://github.com/knee-cola/jest-mock-axios), clone it, modify it, play with it :)
 
 # What's in this document?
 * [Installation](#installation)
@@ -111,18 +111,18 @@ export default UppercaseProxy;
 At the bottom of this page you can find additional examples.
 
 # Axios mock API
-In addition to standard Axios methods (get, post, put, delete), which are exposed as spies, Axios mock has three additional public methods, which are intended to facilitate mocking:
+In addition to standard Axios methods (`post`, `get`, `put`, `delete`, `create`), which are exposed as spies, Axios mock has three additional public methods, which are intended to facilitate mocking:
 * `mockResponse` - simulates a server (web service) response
 * `mockError` - simulates a (network/server) error 
-* `lastReqGet` - returns extended info about the latest request added to the queue - the one created when the most recent request was made
-* `lastPromiseGet` - returns promise created when the latest request added to the queue
-* `reset` - reset the Axios mock - prepare it for the next test (typically used in `afterEach`)
+* `lastReqGet` - returns extended info about the most recent request
+* `lastPromiseGet` - returns promise created when the most recent request was made
+* `reset` - resets the Axios mock object - prepare it for the next test (typically used in `afterEach`)
 
 ## axios.mockResponse(response[, requestInfo])
 After a request request has been made to the server (web service), this method resolves that request by simulating a server response.
 
 ### Arguments: `response`
-The first argument of this method is the a **response object** returned by the server, with a structure illustrated by the snippet below. Each of the properties is optional, meaning that if missing it will be replaced by the a default value (defaults are shown in the snippet).
+The first argument of this method is the a **response object** returned by the server, with a structure illustrated by the snippet below. All the properties are optional, meaning that if a property is ommitted it will be replaced by a default value (defaults are shown in the snippet).
 ```javascript
 response = {
     data: {},
@@ -135,15 +135,15 @@ response = {
 The given response object will get passed to `then` even handler function.
 
 ### Arguments: (optional) `requestInfo`
-The second argument indicates which request to resolve. We can use it to pinpoint an exact server request we wish to resolve, which is useful if we're making multiple server requests and are planing to resolve them in a different order from the one in which they were made.
+The second argument enables us to pinpoint an exact server request we wish to resolve. This can be useful if we're making multiple server requests and are planing to resolve them in a different order from the one in which they were made.
 
 We supply two different objects:
 * a extended request info object, which can be accessed by calling `lastReqGet` method
 * a `promise` object, which can be accessed by calling the `lastPromiseGet` method
 
-If this argument is ommited it defaults to the latest request made (internally the `lastReqGet` method is called)
+If ommited this argument defaults to the latest request made (internally the `lastReqGet` method is called).
 
-At the end of this document you can find an example which demonstrates how this parameter can be used.
+At the end of this document you can find [an example](#using-lastreqget-methods) which demonstrates how this parameter can be used.
 
 ## axios.mockError(err[, requestInfo])
 This method simulates an error while making a server request (network error, server error, etc ...).
@@ -237,7 +237,7 @@ it('when resolving a request an appropriate handler should be called', () => {
 
     // Simulating a server response to the FIRST request
     // -> we're using request info object to pinpoint the request
-    // ... IF the info object ommited, the method would automatically
+    // ... IF the info object is ommited, the method would automatically
     // resolve to the newest request from the internal queue (the SECOND one)
     mockAxios.mockResponse({ data: 'server says hello!' }, firstRequestInfo);
 
