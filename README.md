@@ -20,8 +20,8 @@ However, if you look at the [source code](https://github.com/knee-cola/jest-mock
   * [axios.lastPromiseGet()](#axioslastpromiseget)
   * [axios.reset()](#axiosreset)
 * [Additional examples](#additional-examples)
-  * [Using `lastReqGet` method](#using-lastreqget-method)
-  * [Values returned by `lastReqGet` and `lastPromiseGet` methods](#values-returned-by-lastReqGet-and-lastPromiseGet-methods)
+  * [Values returned by `lastReqGet` and `lastPromiseGet` methods](#values-returned-by-lastreqget-and-lastpromiseget-methods)
+  * [Resolving requests out of order](#resolving-requests-out-of-order)
 * [Missing features](#missing-features)
 * [Synchronous promise](#synchronous-promise)
 
