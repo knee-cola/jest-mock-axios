@@ -26,7 +26,7 @@ type AxiosAPI = {
 
 type AxiosMockAPI = {
     /**
-     * Simulate a server response, (optionaly) with the given data
+     * Simulate a server response, (optionally) with the given data
      * @param response (optional) response returned by the server
      * @param promise (optional) request promise for which response should be resolved
      */
