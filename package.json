@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "webpack -p",
+    "build": "rimraf ./dist && tsc -p ./tsconfig.build.json",
     "deploy2npm": "npm run build && npm publish",
     "test": "jest --watch"
   },
@@ -25,15 +25,10 @@
   },
   "homepage": "https://github.com/knee-cola/jest-mock-axios#readme",
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.35",
-    "@babel/preset-env": "^7.0.0-beta.35",
-    "@types/jest": "^21.1.8",
-    "babel-loader": "^8.0.0-beta.0",
-    "clean-webpack-plugin": "^0.1.17",
     "@types/jest": "^22.2.3",
     "jest": "^22.4.3",
+    "rimraf": "^2.6.2",
     "ts-jest": "^22.4.3",
-    "ts-loader": "^3.1.1",
     "typescript": "^2.6.1",
     "webpack": "^3.10.0"
   },

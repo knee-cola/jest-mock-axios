@@ -1,5 +1,7 @@
 {
     "compilerOptions": {
+        // Redirect output structure to the directory.
+        "outDir": "./dist/",
         // module resolution strategy ('node','classic')
         "moduleResolution": "node",
         //  ECMAScript target version ('ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT')
@@ -7,8 +9,7 @@
         // module code generation ('commonjs', 'amd', 'system', 'umd' or 'es2015')
         "module": "commonjs",
         "sourceMap": true,
-        "declaration": true,
-        "declarationDir": "./"
+        "declaration": true
     },
     "exclude": [
         "node_modules",
