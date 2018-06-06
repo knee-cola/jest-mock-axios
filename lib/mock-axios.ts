@@ -29,6 +29,7 @@ const MockAxios:AxiosMockType = <AxiosMockType>jest.fn(_newReq);
 MockAxios.get = jest.fn(_newReq);
 MockAxios.post = jest.fn(_newReq);
 MockAxios.put = jest.fn(_newReq);
+MockAxios.patch = jest.fn(_newReq);
 MockAxios.delete = jest.fn(_newReq);
 MockAxios.create = jest.fn(() => MockAxios);
 
@@ -126,6 +127,7 @@ MockAxios.reset = () => {
   MockAxios.get.mockClear();
   MockAxios.post.mockClear();
   MockAxios.put.mockClear();
+  MockAxios.patch.mockClear();
   MockAxios.delete.mockClear();
 }
 
