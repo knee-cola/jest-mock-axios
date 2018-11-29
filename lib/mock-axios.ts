@@ -30,6 +30,7 @@ MockAxios.get = jest.fn(_newReq);
 MockAxios.post = jest.fn(_newReq);
 MockAxios.put = jest.fn(_newReq);
 MockAxios.delete = jest.fn(_newReq);
+MockAxios.all = jest.fn(_newReq);
 MockAxios.create = jest.fn(() => MockAxios);
 
 MockAxios.popPromise = (promise?:SyncPromise) => {
@@ -127,6 +128,7 @@ MockAxios.reset = () => {
   MockAxios.post.mockClear();
   MockAxios.put.mockClear();
   MockAxios.delete.mockClear();
+  MockAxios.all.mockClear();
 }
 
 // this is a singletone object
