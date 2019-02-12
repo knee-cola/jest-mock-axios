@@ -1,7 +1,7 @@
 /**
  * TypeScript version of Axios mock for unoit testing with [Jest](https://facebook.github.io/jest/).
  * This file is based on https://gist.github.com/tux4/36006a1859323f779ab0
- * 
+ *
  * @author   knee-cola <nikola.derezic@gmail.com>
  * @license  @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -23,7 +23,7 @@ const _newReq:(url:string,data?:any,config?:any)=>SyncPromise = (url:string,data
   return(promise);
 }
 
-const MockAxios:AxiosMockType = <AxiosMockType>jest.fn(_newReq);
+const MockAxios:AxiosMockType = <AxiosMockType> <unknown> jest.fn(_newReq);
 
 // mocking Axios methods
 MockAxios.get = jest.fn(_newReq);
@@ -45,7 +45,7 @@ MockAxios.popPromise = (promise?:SyncPromise) => {
         return(req.promise);
       }
     }
-    
+
   } else {
     // take the oldest promise
     let req:AxiosMockQueueItem = _pending_requests.shift();
@@ -72,7 +72,7 @@ MockAxios.popRequest = (request?:AxiosMockQueueItem) => {
 
 /**
  * Removes an item form the queue, based on it's type
- * @param queueItem 
+ * @param queueItem
  */
 const popQueueItem = (queueItem:SyncPromise|AxiosMockQueueItem=null) => {
   // first le't pretend the param is a queue item
