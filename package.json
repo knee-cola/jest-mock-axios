@@ -7,7 +7,7 @@
   "scripts": {
     "build": "webpack -p",
     "deploy2npm": "npm run build && npm publish",
-    "test:type": "jest -c jest.tsc.config.js",
+    "test:type": "jest -c ./jest.tsc.config.js",
     "test:coverage": "jest --coverage",
     "test": "npm run test:type && npm run test:coverage"
   },
@@ -56,5 +56,12 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "jest": {
+    "projects": [
+      "jest.config.js",
+      "jest.tsc.config.js"
+    ]
   }
+
 }
