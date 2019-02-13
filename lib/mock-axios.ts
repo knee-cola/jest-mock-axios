@@ -78,7 +78,7 @@ MockAxios.popRequest = (request?: AxiosMockQueueItem) => {
  * Removes an item form the queue, based on it's type
  * @param queueItem
  */
-const popQueueItem = (queueItem: SyncPromise | AxiosMockQueueItem = null) => {
+const popQueueItem = (queueItem: SyncPromise | AxiosMockQueueItem) => {
   // first le't pretend the param is a queue item
   let request: AxiosMockQueueItem = MockAxios.popRequest(<AxiosMockQueueItem>(
       queueItem

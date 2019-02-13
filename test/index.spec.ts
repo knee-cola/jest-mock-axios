@@ -1,5 +1,6 @@
-import MockAxios from '../lib/index'
 import SyncPromise from 'jest-mock-promise'
+
+import MockAxios from '../lib/index'
 
 describe('MockAxios', () => {
   afterEach(() => {
@@ -211,6 +212,12 @@ describe('MockAxios', () => {
 
     // queue should be empty
     expect(MockAxios.lastPromiseGet()).toBeUndefined()
+  })
+
+  it('`popPromise` should remove the last promise from the queue if no parameter', () => {
+    const target = MockAxios.post()
+    MockAxios.post()
+    expect(MockAxios.popPromise()).toBe(target)
   })
 
   // popPromise - Removes the give promise from the queue
