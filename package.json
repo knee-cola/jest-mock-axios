@@ -50,5 +50,9 @@
   },
   "lint-staged": {
     "*.ts": ["prettier --write", "git add"]
+  },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   }
 }
