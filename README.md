@@ -1,3 +1,11 @@
+Badges:
+
+
+[![codecov](https://codecov.io/gh/zhuangya/jest-mock-axios/branch/master/graph/badge.svg)](https://codecov.io/gh/zhuangya/jest-mock-axios)
+[![Build Status](https://travis-ci.org/zhuangya/jest-mock-axios.svg?branch=master)](https://travis-ci.org/zhuangya/jest-mock-axios)
+
+<hr />
+
 # What's this?
 This is a light-weight, easy to use synchronous [Axios](https://github.com/axios/axios) mock for unit testing with [Jest](https://facebook.github.io/jest/).
 
