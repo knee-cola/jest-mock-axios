@@ -121,7 +121,7 @@ In addition to standard Axios methods (`post`, `get`, `put`, `delete`, `create`)
 * `reset` - resets the Axios mock object - prepare it for the next test (typically used in `afterEach`)
 
 ## axios.mockResponse(response[, requestInfo])
-After a request request has been made to the server (web service), this method resolves that request by simulating a server response.
+After a request has been made to the server (web service), this method resolves that request by simulating a server response.
 
 ### Arguments: `response`
 The first argument of this method is the a **response object** returned by the server, with a structure illustrated by the snippet below. All the properties are optional, meaning that if a property is ommitted it will be replaced by a default value (defaults are shown in the snippet).
