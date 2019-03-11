@@ -120,6 +120,8 @@ In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, 
 * `lastPromiseGet` - returns promise created when the most recent request was made
 * `reset` - resets the Axios mock object - prepare it for the next test (typically used in `afterEach`)
 
+**Note: `all` is just an alias to Promise.all (as it is in axios). Thus you can use it with mockResponse, but you can still retrieve statistics for it. Mock the requests used in all instead. **
+
 ## axios.mockResponse(response[, requestInfo])
 After a request has been made to the server (web service), this method resolves that request by simulating a server response.
 

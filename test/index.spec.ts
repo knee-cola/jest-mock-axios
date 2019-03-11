@@ -27,7 +27,8 @@ describe('MockAxios', () => {
         expect(MockAxios.delete()).toEqual(new SyncPromise());
     });
     it("`all` should return a promise", () => {
-        expect(MockAxios.all()).toEqual(new SyncPromise());
+        const promise = Promise.resolve('');
+        expect(MockAxios.all([promise])).toBeInstanceOf(Promise);
     });
     it("`create` should return reference to MockAxios itself", () => {
         expect(MockAxios.create()).toBe(MockAxios);
@@ -244,7 +245,7 @@ describe('MockAxios', () => {
         MockAxios.put();
         MockAxios.patch();
         MockAxios.delete();
-        MockAxios.all();
+        MockAxios.all([]);
 
         expect(MockAxios.post).toHaveBeenCalled();
         expect(MockAxios.get).toHaveBeenCalled();
