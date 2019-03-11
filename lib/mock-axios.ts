@@ -1,29 +1,29 @@
 /**
  * TypeScript version of Axios mock for unit testing with [Jest](https://facebook.github.io/jest/).
  * This file is based on https://gist.github.com/tux4/36006a1859323f779ab0
- * 
+ *
  * @author   knee-cola <nikola.derezic@gmail.com>
  * @license  @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
-import SyncPromise from 'jest-mock-promise';
-import { HttpResponse, AnyFunction, SpyFn, AxiosMockType, AxiosMockQueueItem } from './mock-axios-types';
+import SyncPromise from "jest-mock-promise";
+import { AnyFunction, AxiosMockQueueItem, AxiosMockType, HttpResponse, SpyFn } from "./mock-axios-types";
 
 /** a FIFO queue of pending request */
-const _pending_requests:Array<AxiosMockQueueItem> = [];
+const _pending_requests: AxiosMockQueueItem[] = [];
 
-const _newReq:(url:string,data?:any,config?:any)=>SyncPromise = (url:string,data?:any,config?:any) => {
-  let promise:SyncPromise = new SyncPromise();
+const _newReq: (url: string, data?: any, config?: any) => SyncPromise = (url: string, data?: any, config?: any) => {
+  const promise: SyncPromise = new SyncPromise();
   _pending_requests.push({
-    promise:promise,
-    url:url,
-    data:data,
-    config:config
-  })
+    config,
+    data,
+    promise,
+    url,
+  });
   return(promise);
-}
+};
 
-const MockAxios:AxiosMockType = <AxiosMockType><unknown>jest.fn(_newReq);
+const MockAxios: AxiosMockType = jest.fn(_newReq) as unknown as AxiosMockType;
 
 // mocking Axios methods
 MockAxios.get = jest.fn(_newReq);
@@ -36,33 +36,32 @@ MockAxios.head = jest.fn(_newReq);
 MockAxios.options = jest.fn(_newReq);
 MockAxios.create = jest.fn(() => MockAxios);
 
-MockAxios.popPromise = (promise?:SyncPromise) => {
+MockAxios.popPromise = (promise?: SyncPromise) => {
 
-  if(promise) {
+  if (promise) {
     // remove the promise from pending queue
     for (let ix = 0; ix < _pending_requests.length; ix++) {
 
-      let req:AxiosMockQueueItem = _pending_requests[ix];
+      const req: AxiosMockQueueItem = _pending_requests[ix];
 
-      if(req.promise === promise) {
+      if (req.promise === promise) {
         _pending_requests.splice(ix, 1);
         return(req.promise);
       }
     }
-    
+
   } else {
     // take the oldest promise
-    let req:AxiosMockQueueItem = _pending_requests.shift();
+    const req: AxiosMockQueueItem = _pending_requests.shift();
     return(req ? req.promise : void 0);
   }
-}
+};
 
+MockAxios.popRequest = (request?: AxiosMockQueueItem) => {
 
-MockAxios.popRequest = (request?:AxiosMockQueueItem) => {
-
-  if(request) {
+  if (request) {
     const ix = _pending_requests.indexOf(request);
-    if(ix===-1) {
+    if (ix === -1) {
       return(void 0);
     }
 
@@ -72,55 +71,54 @@ MockAxios.popRequest = (request?:AxiosMockQueueItem) => {
   } else {
     return(_pending_requests.shift());
   }
-}
+};
 
 /**
  * Removes an item form the queue, based on it's type
- * @param queueItem 
+ * @param queueItem
  */
-const popQueueItem = (queueItem:SyncPromise|AxiosMockQueueItem=null) => {
+const popQueueItem = (queueItem: SyncPromise|AxiosMockQueueItem= null) => {
   // first le't pretend the param is a queue item
-  let request:AxiosMockQueueItem = MockAxios.popRequest(<AxiosMockQueueItem>queueItem),
-      promise:SyncPromise;
+  const request: AxiosMockQueueItem = MockAxios.popRequest(queueItem as AxiosMockQueueItem);
 
-  if(request) {
+  if (request) {
   // IF the request was found
   // > set the promise
     return(request.promise);
   } else {
   // ELSE maybe the `queueItem` is a promise (legacy mode)
-    return(MockAxios.popPromise(<SyncPromise>queueItem));
+    return(MockAxios.popPromise(queueItem as SyncPromise));
   }
-}
+};
 
-MockAxios.mockResponse = (response?:HttpResponse, queueItem:SyncPromise|AxiosMockQueueItem=null):void => {
+MockAxios.mockResponse = (response?: HttpResponse, queueItem: SyncPromise|AxiosMockQueueItem= null): void => {
 
   // replacing missing data with default values
   response = Object.assign({
-    data: {},
-    status: 200,
-    statusText: 'OK',
-    headers: {},
     config: {},
+    data: {},
+    headers: {},
+    status: 200,
+    statusText: "OK",
   }, response);
 
   // resolving the Promise with the given response data
   popQueueItem(queueItem).resolve(response);
-}
+};
 
-MockAxios.mockError = (error:any={}, queueItem:SyncPromise|AxiosMockQueueItem=null) => {
+MockAxios.mockError = (error: any= {}, queueItem: SyncPromise|AxiosMockQueueItem= null) => {
   // resolving the Promise with the given response data
   popQueueItem(queueItem).reject(Object.assign({}, error));
-}
+};
 
 MockAxios.lastReqGet = () => {
-  return(_pending_requests[_pending_requests.length-1]);
-}
+  return(_pending_requests[_pending_requests.length - 1]);
+};
 
 MockAxios.lastPromiseGet = () => {
   const req = MockAxios.lastReqGet();
   return(req ? req.promise : void 0);
-}
+};
 
 MockAxios.reset = () => {
   // remove all the requests
@@ -135,7 +133,7 @@ MockAxios.reset = () => {
   MockAxios.head.mockClear();
   MockAxios.options.mockClear();
   MockAxios.all.mockClear();
-}
+};
 
 // this is a singleton object
 export default MockAxios;

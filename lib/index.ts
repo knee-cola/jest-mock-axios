@@ -1,2 +1,2 @@
-import MockAxios from './mock-axios';
+import MockAxios from "./mock-axios";
 export default MockAxios;
