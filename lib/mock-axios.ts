@@ -23,7 +23,7 @@ const _newReq:(url:string,data?:any,config?:any)=>SyncPromise = (url:string,data
   return(promise);
 }
 
-const MockAxios:AxiosMockType = <AxiosMockType>jest.fn(_newReq);
+const MockAxios:AxiosMockType = <AxiosMockType><unknown>jest.fn(_newReq);
 
 // mocking Axios methods
 MockAxios.get = jest.fn(_newReq);
