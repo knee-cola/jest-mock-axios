@@ -20,6 +20,7 @@ type AxiosAPI = {
     get?:SpyFn;
     post?:SpyFn;
     put?:SpyFn;
+    patch?:SpyFn;
     delete?:SpyFn;
     create?:SpyFn;
 };

@@ -17,6 +17,9 @@ describe('MockAxios', () => {
     it("`put` should return a promise", () => {
         expect(MockAxios.put()).toEqual(new SyncPromise());
     });
+    it("`patch` should return a promise", () => {
+        expect(MockAxios.patch()).toEqual(new SyncPromise());
+    });
     it("`post` should return a promise", () => {
         expect(MockAxios.post()).toEqual(new SyncPromise());
     });
@@ -236,11 +239,13 @@ describe('MockAxios', () => {
         MockAxios.post();
         MockAxios.get();
         MockAxios.put();
+        MockAxios.patch();
         MockAxios.delete();
 
         expect(MockAxios.post).toHaveBeenCalled();
         expect(MockAxios.get).toHaveBeenCalled();
         expect(MockAxios.put).toHaveBeenCalled();
+        expect(MockAxios.patch).toHaveBeenCalled();
         expect(MockAxios.delete).toHaveBeenCalled();
 
         MockAxios.reset();
@@ -248,6 +253,7 @@ describe('MockAxios', () => {
         expect(MockAxios.post).not.toHaveBeenCalled();
         expect(MockAxios.get).not.toHaveBeenCalled();
         expect(MockAxios.put).not.toHaveBeenCalled();
+        expect(MockAxios.patch).not.toHaveBeenCalled();
         expect(MockAxios.delete).not.toHaveBeenCalled();
     });
 });
