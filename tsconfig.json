@@ -8,7 +8,7 @@
         "module": "commonjs",
         "sourceMap": true,
         "declaration": true,
-        "declarationDir": "./dist"
+        "outDir": "./dist/"
     },
     "exclude": [
         "node_modules",

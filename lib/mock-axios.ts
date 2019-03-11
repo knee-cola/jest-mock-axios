@@ -1,5 +1,5 @@
 /**
- * TypeScript version of Axios mock for unoit testing with [Jest](https://facebook.github.io/jest/).
+ * TypeScript version of Axios mock for unit testing with [Jest](https://facebook.github.io/jest/).
  * This file is based on https://gist.github.com/tux4/36006a1859323f779ab0
  * 
  * @author   knee-cola <nikola.derezic@gmail.com>
@@ -137,5 +137,5 @@ MockAxios.reset = () => {
   MockAxios.all.mockClear();
 }
 
-// this is a singletone object
+// this is a singleton object
 export default MockAxios;
