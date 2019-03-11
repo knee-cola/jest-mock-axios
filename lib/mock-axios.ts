@@ -23,12 +23,13 @@ const _newReq:(url:string,data?:any,config?:any)=>SyncPromise = (url:string,data
   return(promise);
 }
 
-const MockAxios:AxiosMockType = <AxiosMockType>jest.fn(_newReq);
+const MockAxios:AxiosMockType = <AxiosMockType><unknown>jest.fn(_newReq);
 
 // mocking Axios methods
 MockAxios.get = jest.fn(_newReq);
 MockAxios.post = jest.fn(_newReq);
 MockAxios.put = jest.fn(_newReq);
+MockAxios.patch = jest.fn(_newReq);
 MockAxios.delete = jest.fn(_newReq);
 MockAxios.all = jest.fn(_newReq);
 MockAxios.create = jest.fn(() => MockAxios);
@@ -127,6 +128,7 @@ MockAxios.reset = () => {
   MockAxios.get.mockClear();
   MockAxios.post.mockClear();
   MockAxios.put.mockClear();
+  MockAxios.patch.mockClear();
   MockAxios.delete.mockClear();
   MockAxios.all.mockClear();
 }

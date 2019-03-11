@@ -44,6 +44,6 @@ module.exports = {
         'jest-mock-promise': 'jest-mock-promise'
     },
     plugins: [
-        new CleanWebpackPlugin(destDir)
+        new CleanWebpackPlugin()
     ]
 };
