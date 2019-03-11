@@ -26,11 +26,11 @@ describe('MockAxios', () => {
     it("`delete` should return a promise", () => {
         expect(MockAxios.delete()).toEqual(new SyncPromise());
     });
+    it("`all` should return a promise", () => {
+        expect(MockAxios.all()).toEqual(new SyncPromise());
+    });
     it("`create` should return reference to MockAxios itself", () => {
         expect(MockAxios.create()).toBe(MockAxios);
-    });
-    it("`all` should return reference to MockAxios itself", () => {
-        expect(MockAxios.all()).toBe(MockAxios);
     });
 
     // mockResponse - Simulate a server response, (optionaly) with the given data
