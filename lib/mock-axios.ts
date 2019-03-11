@@ -36,6 +36,12 @@ MockAxios.head = jest.fn(_newReq);
 MockAxios.options = jest.fn(_newReq);
 MockAxios.create = jest.fn(() => MockAxios);
 
+MockAxios.defaults = {
+  headers: {
+    common: []
+  }
+};
+
 MockAxios.popPromise = (promise?:SyncPromise) => {
 
   if(promise) {

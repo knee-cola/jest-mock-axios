@@ -16,6 +16,8 @@ type SpyFn = AnyFunction & { mockClear:AnyFunction };
 type AxiosFn = (...args:any[]) => SpyFn;
 
 type AxiosAPI = {
+    // mocking Axios fields
+    defaults: any;
     // mocking Axios methods
     get?:SpyFn;
     post?:SpyFn;
