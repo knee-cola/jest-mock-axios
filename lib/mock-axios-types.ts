@@ -22,6 +22,8 @@ type AxiosAPI = {
     put?:SpyFn;
     patch?:SpyFn;
     delete?:SpyFn;
+    head?:SpyFn;
+    options?:SpyFn;
     all?:SpyFn;
     create?:SpyFn;
 };

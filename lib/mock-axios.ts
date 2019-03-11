@@ -32,6 +32,8 @@ MockAxios.put = jest.fn(_newReq);
 MockAxios.patch = jest.fn(_newReq);
 MockAxios.delete = jest.fn(_newReq);
 MockAxios.all = jest.fn(_newReq);
+MockAxios.head = jest.fn(_newReq);
+MockAxios.options = jest.fn(_newReq);
 MockAxios.create = jest.fn(() => MockAxios);
 
 MockAxios.popPromise = (promise?:SyncPromise) => {
@@ -130,6 +132,8 @@ MockAxios.reset = () => {
   MockAxios.put.mockClear();
   MockAxios.patch.mockClear();
   MockAxios.delete.mockClear();
+  MockAxios.head.mockClear();
+  MockAxios.options.mockClear();
   MockAxios.all.mockClear();
 }
 
