@@ -32,7 +32,7 @@ type AxiosMockAPI = {
      * @param response (optional) response returned by the server
      * @param promise (optional) request promise for which response should be resolved
      */
-    mockResponse?:((response?:HttpResponse, queueItem?:SyncPromise|AxiosMockQueueItem) => void);
+    mockResponse:((response?:HttpResponse, queueItem?:SyncPromise|AxiosMockQueueItem) => void);
     /**
      * Simulate an error in server request
      * @param error (optional) error object
@@ -61,7 +61,7 @@ type AxiosMockAPI = {
     /**
      * Clears all of the queued requests
      */
-    reset?:()=>void;
+    reset:()=>void;
 }
 
 type AxiosMockQueueItem = {

@@ -3,7 +3,7 @@
   "version": "2.2.0",
   "description": "Axios mock for Jest",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/lib/index.d.ts",
   "scripts": {
     "build": "webpack -p",
     "deploy2npm": "npm run build && npm publish",
