@@ -29,6 +29,9 @@ describe('MockAxios', () => {
     it("`create` should return reference to MockAxios itself", () => {
         expect(MockAxios.create()).toBe(MockAxios);
     });
+    it("`all` should return reference to MockAxios itself", () => {
+        expect(MockAxios.all()).toBe(MockAxios);
+    });
 
     // mockResponse - Simulate a server response, (optionaly) with the given data
     it("`mockResponse` should resolve the given promise with the provided response", () => {
@@ -241,12 +244,14 @@ describe('MockAxios', () => {
         MockAxios.put();
         MockAxios.patch();
         MockAxios.delete();
+        MockAxios.all();
 
         expect(MockAxios.post).toHaveBeenCalled();
         expect(MockAxios.get).toHaveBeenCalled();
         expect(MockAxios.put).toHaveBeenCalled();
         expect(MockAxios.patch).toHaveBeenCalled();
         expect(MockAxios.delete).toHaveBeenCalled();
+        expect(MockAxios.all).toHaveBeenCalled();
 
         MockAxios.reset();
 
@@ -255,5 +260,6 @@ describe('MockAxios', () => {
         expect(MockAxios.put).not.toHaveBeenCalled();
         expect(MockAxios.patch).not.toHaveBeenCalled();
         expect(MockAxios.delete).not.toHaveBeenCalled();
+        expect(MockAxios.all).not.toHaveBeenCalled();
     });
 });
