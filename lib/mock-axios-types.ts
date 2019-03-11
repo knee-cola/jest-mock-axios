@@ -1,6 +1,6 @@
 import SyncPromise from 'jest-mock-promise';
 
-type HttpResponse = {
+export type HttpResponse = {
     data:any,
     status?:number,
     statusText?:string,
@@ -8,14 +8,14 @@ type HttpResponse = {
     config?:object,
 }
 
-type AnyFunction = (...args:any[]) => any;
+export type AnyFunction = (...args:any[]) => any;
 
 // spy is a function which extends an object (it has static methods and properties)
-type SpyFn = AnyFunction & { mockClear:AnyFunction };
+export type SpyFn = AnyFunction & { mockClear:AnyFunction };
 
-type AxiosFn = (...args:any[]) => SpyFn;
+export type AxiosFn = (...args:any[]) => SpyFn;
 
-type AxiosAPI = {
+export type AxiosAPI = {
     // mocking Axios methods
     get?:SpyFn;
     post?:SpyFn;
@@ -28,7 +28,7 @@ type AxiosAPI = {
     create?:SpyFn;
 };
 
-type AxiosMockAPI = {
+export type AxiosMockAPI = {
     /**
      * Simulate a server response, (optionally) with the given data
      * @param response (optional) response returned by the server
@@ -66,7 +66,7 @@ type AxiosMockAPI = {
     reset:()=>void;
 }
 
-type AxiosMockQueueItem = {
+export type AxiosMockQueueItem = {
     promise:SyncPromise,
     url:string,
     data?:any,
@@ -77,6 +77,4 @@ type AxiosMockQueueItem = {
  * Axios object can be called like a function,
  * that's why we're defining it as a spy
  */
-type AxiosMockType = AxiosFn & AxiosAPI & AxiosMockAPI;
-
-export { HttpResponse, AnyFunction, SpyFn, AxiosMockType, AxiosFn, AxiosAPI, AxiosMockAPI, AxiosMockQueueItem }
+export type AxiosMockType = AxiosFn & AxiosAPI & AxiosMockAPI;

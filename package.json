@@ -5,7 +5,13 @@
   "main": "dist/index.js",
   "types": "dist/lib/index.d.ts",
   "scripts": {
-    "build": "webpack -p",
+    "clean": "rimraf ./dist",
+    "lint": "tslint -c tslint.json 'lib/**/*.ts'",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch",
+    "build": "npm run build:types && npm run build:js",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "babel lib --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
     "deploy2npm": "npm run build && npm publish",
     "test": "jest --watch"
   },
@@ -25,17 +31,17 @@
   },
   "homepage": "https://github.com/knee-cola/jest-mock-axios#readme",
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
+    "@babel/preset-typescript": "^7.3.3",
     "@types/jest": "^24.0.11",
     "babel-loader": "^8.0.5",
-    "clean-webpack-plugin": "^2.0.0",
     "jest": "^24.4.0",
+    "rimraf": "^2.6.3",
     "ts-jest": "^24.0.0",
-    "ts-loader": "^5.3.3",
-    "typescript": "^3.3.3333",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.2.3"
+    "tslint": "^5.13.1",
+    "typescript": "^3.3.3333"
   },
   "dependencies": {
     "jest-mock-promise": "^1.0.23"
