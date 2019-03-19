@@ -2,6 +2,9 @@ import axios from '../lib/index';
 
 const UppercaseProxy = (clientMessage) => {
 
+    axios.interceptors.request.use((config) => config);
+    axios.interceptors.response.use((config) => config);
+
     // requesting data from server
     let axiosPromise = axios.post('/web-service-url/', { data: clientMessage });
 
