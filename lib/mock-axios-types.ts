@@ -17,15 +17,15 @@ export type AxiosFn = (...args: any[]) => SpyFn;
 
 export interface AxiosAPI {
     // mocking Axios methods
-    get?: SpyFn;
-    post?: SpyFn;
-    put?: SpyFn;
-    patch?: SpyFn;
-    delete?: SpyFn;
-    head?: SpyFn;
-    options?: SpyFn;
-    all?: SpyFn;
-    create?: SpyFn;
+    get: SpyFn;
+    post: SpyFn;
+    put: SpyFn;
+    patch: SpyFn;
+    delete: SpyFn;
+    head: SpyFn;
+    options: SpyFn;
+    all: SpyFn;
+    create: SpyFn;
 }
 
 export interface AxiosMockAPI {
