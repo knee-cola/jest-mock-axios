@@ -30,15 +30,15 @@ type AxiosDefaults = {
 
 export interface AxiosAPI {
     // mocking Axios methods
-    get: SpyFn;
-    post: SpyFn;
-    put: SpyFn;
-    patch: SpyFn;
-    delete: SpyFn;
-    head: SpyFn;
-    options: SpyFn;
+    get: jest.Mock<SyncPromise, [string?, any?, any?]>;
+    post: jest.Mock<SyncPromise, [string?, any?, any?]>;
+    put: jest.Mock<SyncPromise, [string?, any?, any?]>;
+    patch: jest.Mock<SyncPromise, [string?, any?, any?]>;
+    delete: jest.Mock<SyncPromise, [string?, any?, any?]>;
+    head: jest.Mock<SyncPromise, [string?, any?, any?]>;
+    options: jest.Mock<SyncPromise, [string?, any?, any?]>;
     all: SpyFn;
-    create: SpyFn;
+    create: jest.Mock<AxiosMockType, []>;
     interceptors: Interceptors;
     defaults: AxiosDefaults;
 }
