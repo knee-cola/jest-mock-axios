@@ -297,7 +297,7 @@ Although this might not be the most realistic use-case of this functionality, it
 **NOTE:** the identical effect can be achived by using the [`lastPromiseGet`](#axioslastpromiseget) method. These two methods perform a similar task, as described in the corresponding documentation.
 
 # Missing features
-AxiosMock coveres the most popular parts of Axios API, meaning that some of the features are not missing (i.e. interceptors).
+AxiosMock coveres the most popular parts of Axios API, meaning that some of the features are missing (i.e. interceptors).
 
 If you need an additional feature, you can request it by creating a new issue on [project's GitHub page](https://github.com/knee-cola/jest-mock-axios/issues/).
 
