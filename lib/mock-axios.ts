@@ -36,6 +36,15 @@ MockAxios.head = jest.fn(_newReq);
 MockAxios.options = jest.fn(_newReq);
 MockAxios.create = jest.fn(() => MockAxios);
 
+MockAxios.interceptors = {
+  request: {
+    use: jest.fn()
+  },
+  response: {
+    use: jest.fn()
+  }
+}
+
 MockAxios.popPromise = (promise?: SyncPromise) => {
 
   if (promise) {
