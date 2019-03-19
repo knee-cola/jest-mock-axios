@@ -196,7 +196,7 @@ The promise object returned by this function corresponds to the one returned by 
 `reset` method clears state of the Axios mock to initial values. It should be called after each test, so that we can start fresh with our next test (i.e. from `afterEach` method).
 
 # Additional examples
-Since AxiosMock is relatively simple, most of its functionality was covered in [basic example](#basic-example) at the begining of this document. In this section we'll explore features not covered by that initial example.
+Since AxiosMock is relatively simple, most of its functionality was covered in [basic example](#basic-example) at the beginning of this document. In this section we'll explore features not covered by that initial example.
 
 ## Values returned by `lastReqGet` and `lastPromiseGet` methods
 
@@ -294,17 +294,21 @@ it('when resolving a request an appropriate handler should be called', () => {
 ```
 Although this might not be the most realistic use-case of this functionality, it does illustrate how `lastReqGet` method can be used to alter the default behaviour of the `mockResponse` method.
 
-**NOTE:** the identical effect can be achived by using the [`lastPromiseGet`](#axioslastpromiseget) method. These two methods perform a similar task, as described in the corresponding documentation.
+**NOTE:** the identical effect can be achieved by using the [`lastPromiseGet`](#axioslastpromiseget) method. These two methods perform a similar task, as described in the corresponding documentation.
+
+## Interceptors
+
+AxiosMock offers basic support for interceptors (i.e. it does not break when interceptors are used in tested code). However, interceptors are not applied to the mocked requests / responses at the moment. 
 
 # Missing features
-AxiosMock coveres the most popular parts of Axios API, meaning that some of the features are not missing (i.e. interceptors).
+AxiosMock covers the most popular parts of Axios API, meaning that some of the features are not missing or only partially implemented (i.e. interceptors).
 
 If you need an additional feature, you can request it by creating a new issue on [project's GitHub page](https://github.com/knee-cola/jest-mock-axios/issues/).
 
 Also you are welcome to implement the missing feature yourself and make a pull request :)
 
 # Synchronous promise
-Tha magic which enables axio mock to work synchronously is hidden away in [`jest-mock-promise`](https://www.npmjs.com/package/jest-mock-promise), which enables promises to be settled in synchronous manner.
+Tha magic which enables axios mock to work synchronously is hidden away in [`jest-mock-promise`](https://www.npmjs.com/package/jest-mock-promise), which enables promises to be settled in synchronous manner.
 
 The [`jest-mock-promise`](https://www.npmjs.com/package/jest-mock-promise) can be used to mock any asyc component which uses promises.
 
