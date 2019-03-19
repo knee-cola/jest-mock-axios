@@ -15,13 +15,17 @@ export type SpyFn = AnyFunction & { mockClear: AnyFunction };
 
 export type AxiosFn = (...args: any[]) => SpyFn;
 
-export type Interceptors = {
+type Interceptors = {
     request: {
         use: SpyFn
     },
     response: {
         use: SpyFn
     }
+};
+
+type AxiosDefaults = {
+    headers: any
 };
 
 export interface AxiosAPI {
@@ -35,7 +39,8 @@ export interface AxiosAPI {
     options: SpyFn;
     all: SpyFn;
     create: SpyFn;
-    interceptors: Interceptors
+    interceptors: Interceptors;
+    defaults: AxiosDefaults;
 }
 
 export interface AxiosMockAPI {

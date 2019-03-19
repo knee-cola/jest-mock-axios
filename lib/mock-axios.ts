@@ -43,6 +43,12 @@ MockAxios.interceptors = {
   response: {
     use: jest.fn()
   }
+};
+
+MockAxios.defaults = {
+  headers: {
+    common: []
+  }
 }
 
 MockAxios.popPromise = (promise?: SyncPromise) => {
