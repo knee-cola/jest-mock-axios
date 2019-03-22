@@ -123,7 +123,8 @@ In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, 
 **Note: `all` is just an alias to Promise.all (as it is in axios). Thus you can use it with mockResponse, but you can still retrieve statistics for it. Mock the requests used in all instead. **
 
 ## axios.mockResponse(response[, requestInfo])
-After a request has been made to the server (web service), this method resolves that request by simulating a server response.
+After a request has been made to the server (web service), this method resolves that request by simulating a server response. 
+**NOTE:** This method should be called _after_ the axios call in your test for the promise to resolve properly.
 
 ### Arguments: `response`
 The first argument of this method is the a **response object** returned by the server, with a structure illustrated by the snippet below. All the properties are optional, meaning that if a property is ommitted it will be replaced by a default value (defaults are shown in the snippet).
@@ -150,7 +151,8 @@ If ommited this argument defaults to the latest request made (internally the `la
 At the end of this document you can find [an example](#resolving-requests-out-of-order) which demonstrates how this parameter can be used.
 
 ## axios.mockError(err[, requestInfo])
-This method simulates an error while making a server request (network error, server error, etc ...).
+This method simulates an error while making a server request (network error, server error, etc ...). 
+**NOTE:** This method should be called _after_ the axios call in your test for the promise to resolve properly.
 
 ### Arguments: `err`
 Error object will get passed to `catch` event handler function. If omitted it defaults to an empty object.
