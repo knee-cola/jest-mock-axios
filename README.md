@@ -120,10 +120,11 @@ In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, 
 * `lastPromiseGet` - returns promise created when the most recent request was made
 * `reset` - resets the Axios mock object - prepare it for the next test (typically used in `afterEach`)
 
-**Note: `all` is just an alias to Promise.all (as it is in axios). Thus you can use it with mockResponse, but you can still retrieve statistics for it. Mock the requests used in all instead.**
+*Note: `all` is just an alias to Promise.all (as it is in axios). Thus you can use it with mockResponse, but you can still retrieve statistics for it. Mock the requests used in all instead.*
 
-## axios.mockResponse(response[, requestInfo], [silentMode])
-After a request has been made to the server (web service), this method resolves that request by simulating a server response.
+## axios.mockResponse(response[, requestInfo])
+After a request has been made to the server (web service), this method resolves that request by simulating a server response. 
+**NOTE:** This method should be called _after_ the axios call in your test for the promise to resolve properly.
 
 ### Arguments: `response`
 The first argument of this method is the a **response object** returned by the server, with a structure illustrated by the snippet below. All the properties are optional, meaning that if a property is ommitted it will be replaced by a default value (defaults are shown in the snippet).
@@ -154,7 +155,8 @@ Both `mockResponse` and `mockError` will throw an error if you're trying to resp
 You can change this behavior by passing `true` as third argument, activating the so-called `silentMode`. With `silentMode` activated, the methods will just do nothing.
 
 ## axios.mockError(err[, requestInfo])
-This method simulates an error while making a server request (network error, server error, etc ...).
+This method simulates an error while making a server request (network error, server error, etc ...). 
+**NOTE:** This method should be called _after_ the axios call in your test for the promise to resolve properly.
 
 ### Arguments: `err`
 Error object will get passed to `catch` event handler function. If omitted it defaults to an empty object.
