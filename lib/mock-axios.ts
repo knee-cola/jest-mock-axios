@@ -151,6 +151,11 @@ MockAxios.lastPromiseGet = () => {
   return(req ? req.promise : void 0);
 };
 
+MockAxios.getReqByUrl = (url: string) => {
+  return _pending_requests.slice().reverse() // reverse cloned array to return most recent req
+     .find((x: AxiosMockQueueItem) => x.url === url);
+}
+
 MockAxios.reset = () => {
   // remove all the requests
   _pending_requests.splice(0, _pending_requests.length);

@@ -213,6 +213,21 @@ describe('MockAxios', () => {
         expect(MockAxios.lastPromiseGet()).toBe(lastPromise);
     });
 
+    it("`getReqByUrl should return the most recent request matching the url", () => {
+        const url = 'url';
+        MockAxios.post(url);
+        const lastPromise = MockAxios.post(url);
+
+        expect(MockAxios.getReqByUrl(url).promise).toBe(lastPromise);
+    });
+
+    it("`getReqByUrl should return undefined if no matching request can be found", () => {
+        const url = 'url';
+        MockAxios.post();
+
+        expect(MockAxios.getReqByUrl(url)).toBeUndefined();
+    });
+
     // popPromise - Removes the give promise from the queue
     it("`popPromise` should remove the given promise from the queue", () => {
         let thenFn = jest.fn();

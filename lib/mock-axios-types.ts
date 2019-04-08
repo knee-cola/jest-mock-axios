@@ -69,9 +69,19 @@ export interface AxiosMockAPI {
 
     popPromise?: (promise?: SyncPromise) => SyncPromise;
     /**
-     * Returns promise of the most recent request
+     * Returns request item of the most recent request
      */
     lastReqGet?: () => AxiosMockQueueItem;
+    /**
+     * Returns request item of the most recent request with the given url
+     * The url must equal the url given in the 1st parameter when the request was made
+     * Returns undefined if no matching request could be found
+     * 
+     * THe result can then be used with @see mockResponse
+     * 
+     * @param url the url of the request to be found
+     */
+    getReqByUrl: (url: string) => AxiosMockQueueItem;
     /**
      * Removes the give request from the queue
      * @param promise
