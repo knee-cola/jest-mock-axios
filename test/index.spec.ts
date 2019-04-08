@@ -109,6 +109,14 @@ describe('MockAxios', () => {
         expect(secondThen.mock.calls.length).toBe(1);
         expect(thirdThen.mock.calls.length).toBe(1);
     });
+
+    it("`mockResponse` should throw a specific error if no request can be resolved", () => {
+        expect(() => MockAxios.mockResponse()).toThrowError('No request to respond to!');
+    });
+
+    it("`mockResponse` should not throw a specific error if no request can be resolved but silentMode is true", () => {
+        expect(() => MockAxios.mockResponse(undefined, undefined, true)).not.toThrow()
+    });
     
     // mockError - Simulate an error in server request
     it("`mockError` should fail the given promise with the provided response", () => {
@@ -127,9 +135,9 @@ describe('MockAxios', () => {
         MockAxios.post();
         MockAxios.mockError();
         expect(MockAxios.popPromise()).toBeUndefined();
-      });
+    });
       
-      it("`mockError` fail the provided promise", () => {
+    it("`mockError` fail the provided promise", () => {
         let firstFn = jest.fn();
         let secondFn = jest.fn();
         let thirdFn = jest.fn();
@@ -178,6 +186,14 @@ describe('MockAxios', () => {
         expect(secondFn.mock.calls.length).toBe(1);
         expect(thirdFn.mock.calls.length).toBe(1);
       });
+
+    it("`mockError` should throw a specific error if no request can be resolved", () => {
+        expect(() => MockAxios.mockError()).toThrowError('No request to respond to!');
+    });
+
+    it("`mockError` should not throw a specific error if no request can be resolved but silentMode is true", () => {
+        expect(() => MockAxios.mockError(undefined, undefined, true)).not.toThrow()
+    });
     
     // lastReqGet - returns the most recent request
     it("`lastReqGet` should return the most recent request", () => {

@@ -47,14 +47,17 @@ export interface AxiosMockAPI {
     /**
      * Simulate a server response, (optionally) with the given data
      * @param response (optional) response returned by the server
-     * @param promise (optional) request promise for which response should be resolved
+     * @param queueItem (optional) request promise for which response should be resolved
+     * @param silentMode (optional) specifies whether the call should throw an error or only fail quietly if no matching request is found.
      */
-    mockResponse: ((response?: HttpResponse, queueItem?: SyncPromise|AxiosMockQueueItem) => void);
+    mockResponse: ((response?: HttpResponse, queueItem?: SyncPromise|AxiosMockQueueItem, silentMode?: boolean) => void);
     /**
      * Simulate an error in server request
      * @param error (optional) error object
+     * @param queueItem (optional) request promise for which response should be resolved
+     * @param silentMode (optional) specifies whether the call should throw an error or only fail quietly if no matching request is found.
      */
-    mockError?: (error?: any, queueItem?: SyncPromise|AxiosMockQueueItem) => void;
+    mockError?: (error?: any, queueItem?: SyncPromise|AxiosMockQueueItem, silentMode?: boolean) => void;
     /**
      * Returns promise of the most recent request
      */

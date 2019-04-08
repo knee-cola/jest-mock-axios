@@ -106,7 +106,7 @@ const popQueueItem = (queueItem: SyncPromise|AxiosMockQueueItem= null) => {
   }
 };
 
-MockAxios.mockResponse = (response?: HttpResponse, queueItem: SyncPromise|AxiosMockQueueItem= null): void => {
+MockAxios.mockResponse = (response?: HttpResponse, queueItem: SyncPromise|AxiosMockQueueItem= null, silentMode: boolean = false): void => {
 
   // replacing missing data with default values
   response = Object.assign({
@@ -117,13 +117,29 @@ MockAxios.mockResponse = (response?: HttpResponse, queueItem: SyncPromise|AxiosM
     statusText: "OK",
   }, response);
 
+  const promise = popQueueItem(queueItem);
+
+  if(!promise && !silentMode) {
+    throw new Error('No request to respond to!')
+  } else if(!promise) {
+    return;
+  }
+
   // resolving the Promise with the given response data
-  popQueueItem(queueItem).resolve(response);
+  promise.resolve(response);
 };
 
-MockAxios.mockError = (error: any= {}, queueItem: SyncPromise|AxiosMockQueueItem= null) => {
+MockAxios.mockError = (error: any= {}, queueItem: SyncPromise|AxiosMockQueueItem= null, silentMode: boolean = false) => {
+  const promise = popQueueItem(queueItem);
+
+  if(!promise && !silentMode) {
+    throw new Error('No request to respond to!')
+  } else if(!promise) {
+    return;
+  }
+
   // resolving the Promise with the given response data
-  popQueueItem(queueItem).reject(Object.assign({}, error));
+  promise.reject(Object.assign({}, error));
 };
 
 MockAxios.lastReqGet = () => {
