@@ -38,18 +38,18 @@ MockAxios.create = jest.fn(() => MockAxios);
 
 MockAxios.interceptors = {
   request: {
-    use: jest.fn()
+    use: jest.fn(),
   },
   response: {
-    use: jest.fn()
-  }
+    use: jest.fn(),
+  },
 };
 
 MockAxios.defaults = {
   headers: {
-    common: []
-  }
-}
+    common: [],
+  },
+};
 
 MockAxios.popPromise = (promise?: SyncPromise) => {
 
@@ -93,7 +93,7 @@ MockAxios.popRequest = (request?: AxiosMockQueueItem) => {
  * @param queueItem
  */
 const popQueueItem = (queueItem: SyncPromise|AxiosMockQueueItem= null) => {
-  // first le't pretend the param is a queue item
+  // first let pretend the param is a queue item
   const request: AxiosMockQueueItem = MockAxios.popRequest(queueItem as AxiosMockQueueItem);
 
   if (request) {
@@ -106,7 +106,8 @@ const popQueueItem = (queueItem: SyncPromise|AxiosMockQueueItem= null) => {
   }
 };
 
-MockAxios.mockResponse = (response?: HttpResponse, queueItem: SyncPromise|AxiosMockQueueItem= null, silentMode: boolean = false): void => {
+MockAxios.mockResponse = (response?: HttpResponse, queueItem: SyncPromise|AxiosMockQueueItem= null,
+                          silentMode: boolean = false): void => {
 
   // replacing missing data with default values
   response = Object.assign({
@@ -119,9 +120,9 @@ MockAxios.mockResponse = (response?: HttpResponse, queueItem: SyncPromise|AxiosM
 
   const promise = popQueueItem(queueItem);
 
-  if(!promise && !silentMode) {
-    throw new Error('No request to respond to!')
-  } else if(!promise) {
+  if (!promise && !silentMode) {
+    throw new Error("No request to respond to!");
+  } else if (!promise) {
     return;
   }
 
@@ -129,12 +130,13 @@ MockAxios.mockResponse = (response?: HttpResponse, queueItem: SyncPromise|AxiosM
   promise.resolve(response);
 };
 
-MockAxios.mockError = (error: any= {}, queueItem: SyncPromise|AxiosMockQueueItem= null, silentMode: boolean = false) => {
+MockAxios.mockError = (error: any= {}, queueItem: SyncPromise|AxiosMockQueueItem= null,
+                       silentMode: boolean = false) => {
   const promise = popQueueItem(queueItem);
 
-  if(!promise && !silentMode) {
-    throw new Error('No request to respond to!')
-  } else if(!promise) {
+  if (!promise && !silentMode) {
+    throw new Error("No request to respond to!");
+  } else if (!promise) {
     return;
   }
 

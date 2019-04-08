@@ -15,18 +15,18 @@ export type SpyFn = AnyFunction & { mockClear: AnyFunction };
 
 export type AxiosFn = (...args: any[]) => SpyFn;
 
-type Interceptors = {
+interface Interceptors {
     request: {
-        use: SpyFn
-    },
+        use: SpyFn,
+    };
     response: {
-        use: SpyFn
-    }
-};
+        use: SpyFn,
+    };
+}
 
-type AxiosDefaults = {
-    headers: any
-};
+interface AxiosDefaults {
+    headers: any;
+}
 
 export interface AxiosAPI {
     // mocking Axios methods
@@ -48,14 +48,16 @@ export interface AxiosMockAPI {
      * Simulate a server response, (optionally) with the given data
      * @param response (optional) response returned by the server
      * @param queueItem (optional) request promise for which response should be resolved
-     * @param silentMode (optional) specifies whether the call should throw an error or only fail quietly if no matching request is found.
+     * @param silentMode (optional) specifies whether the call should throw an error or
+     *   only fail quietly if no matching request is found.
      */
     mockResponse: ((response?: HttpResponse, queueItem?: SyncPromise|AxiosMockQueueItem, silentMode?: boolean) => void);
     /**
      * Simulate an error in server request
      * @param error (optional) error object
      * @param queueItem (optional) request promise for which response should be resolved
-     * @param silentMode (optional) specifies whether the call should throw an error or only fail quietly if no matching request is found.
+     * @param silentMode (optional) specifies whether the call should throw an error or
+     *   only fail quietly if no matching request is found.
      */
     mockError?: (error?: any, queueItem?: SyncPromise|AxiosMockQueueItem, silentMode?: boolean) => void;
     /**
