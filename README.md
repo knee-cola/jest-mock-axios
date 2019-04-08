@@ -14,7 +14,7 @@ However, if you look at the [source code](https://github.com/knee-cola/jest-mock
   * [Why do we need to manually create the mock?](#why-do-we-need-to-manually-create-the-mock)
 * [Basic example](#basic-example)
 * [Axios mock API](#axios-mock-api)
-  * [axios.mockResponse](#axiosmockresponseresponse-requestinfo)
+  * [axios.mockResponse](#axiosmockresponseresponse-requestinfo-silentmode)
   * [axios.mockError](#axiosmockerrorerr-requestinfo)
   * [axios.lastReqGet](#axioslastreqget)
   * [axios.lastPromiseGet](#axioslastpromiseget)
@@ -120,7 +120,7 @@ In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, 
 * `lastPromiseGet` - returns promise created when the most recent request was made
 * `reset` - resets the Axios mock object - prepare it for the next test (typically used in `afterEach`)
 
-**Note: `all` is just an alias to Promise.all (as it is in axios). Thus you can use it with mockResponse, but you can still retrieve statistics for it. Mock the requests used in all instead. **
+**Note: `all` is just an alias to Promise.all (as it is in axios). Thus you can use it with mockResponse, but you can still retrieve statistics for it. Mock the requests used in all instead.**
 
 ## axios.mockResponse(response[, requestInfo], [silentMode])
 After a request has been made to the server (web service), this method resolves that request by simulating a server response.
