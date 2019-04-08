@@ -151,9 +151,9 @@ describe('MockAxios', () => {
         expect(firstFn).not.toHaveBeenCalled();
         expect(secondFn).toHaveBeenCalled();
         expect(thirdFn).not.toHaveBeenCalled();
-      });
+    });
       
-      it("`mockError` should fail the last given promise if none was provided", () => {
+    it("`mockError` should fail the last given promise if none was provided", () => {
         let firstPromise = MockAxios.post();
         let secondPromise = MockAxios.post();
         let thirdPromise = MockAxios.post();
@@ -185,7 +185,7 @@ describe('MockAxios', () => {
         expect(firstFn.mock.calls.length).toBe(1);
         expect(secondFn.mock.calls.length).toBe(1);
         expect(thirdFn.mock.calls.length).toBe(1);
-      });
+    });
 
     it("`mockError` should throw a specific error if no request can be resolved", () => {
         expect(() => MockAxios.mockError()).toThrowError('No request to respond to!');
