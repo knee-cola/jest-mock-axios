@@ -122,7 +122,7 @@ In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, 
 
 **Note: `all` is just an alias to Promise.all (as it is in axios). Thus you can use it with mockResponse, but you can still retrieve statistics for it. Mock the requests used in all instead. **
 
-## axios.mockResponse(response[, requestInfo])
+## axios.mockResponse(response[, requestInfo], [silentMode])
 After a request has been made to the server (web service), this method resolves that request by simulating a server response.
 
 ### Arguments: `response`
@@ -149,6 +149,10 @@ If ommited this argument defaults to the latest request made (internally the `la
 
 At the end of this document you can find [an example](#resolving-requests-out-of-order) which demonstrates how this parameter can be used.
 
+### Arguments: (optional) `silentMode`
+Both `mockResponse` and `mockError` will throw an error if you're trying to respond to no request, as this usually means you're doing something wrong.
+You can change this behavior by passing `true` as third argument, activating the so-called `silentMode`. With `silentMode` activated, the methods will just do nothing.
+
 ## axios.mockError(err[, requestInfo])
 This method simulates an error while making a server request (network error, server error, etc ...).
 
@@ -157,6 +161,9 @@ Error object will get passed to `catch` event handler function. If omitted it de
 
 ### Arguments: (optional) `requestInfo`
 The second argument is a `requestInfo` object, which works the same way as described part about the `mockResponse` method.
+
+### Arguments: (optional) `silentMode`
+The third argument is the `silentMode` flag, which works the same way as described part about the `mockResponse` method.
 
 ## axios.lastReqGet()
 `lastReqGet` method returns extended info about the most recent request. The returned value can be used to pinpoint exact server request we wish to resolve (the value is passed as the second param of `mockResponse` or `mockError` methods).
