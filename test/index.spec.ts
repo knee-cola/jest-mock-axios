@@ -118,6 +118,17 @@ describe('MockAxios', () => {
         expect(() => MockAxios.mockResponse(undefined, undefined, true)).not.toThrow();
     });
 
+    it("`mockResponse` should work when used with async / await", async () => {
+        const thenFn = jest.fn();
+        const promise = MockAxios.post().then(thenFn);
+
+        const responseData = { data: {text:"some data" } };
+        MockAxios.mockResponse(responseData);
+
+        await promise;
+        expect(thenFn).toHaveBeenCalled();
+    });
+
     // mockError - Simulate an error in server request
     it("`mockError` should fail the given promise with the provided response", () => {
         const thenFn = jest.fn();
