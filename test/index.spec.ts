@@ -1,14 +1,14 @@
-import MockAxios from '../lib/index';
-import SyncPromise from 'jest-mock-promise';
+import SyncPromise from "jest-mock-promise";
+import MockAxios from "../lib/index";
 
-describe('MockAxios', () => {
+describe("MockAxios", () => {
 
     afterEach(() => {
         MockAxios.reset();
     });
 
     it(`should return a promise when called directly`, () => {
-        expect(typeof MockAxios).toBe('function');
+        expect(typeof MockAxios).toBe("function");
         expect(MockAxios()).toEqual(new SyncPromise());
     });
     it("`get` should return a promise", () => {
@@ -36,7 +36,7 @@ describe('MockAxios', () => {
         expect(MockAxios.request()).toEqual(new SyncPromise());
     });
     it("`all` should return a promise", () => {
-        const promise = Promise.resolve('');
+        const promise = Promise.resolve("");
         expect(MockAxios.all([promise])).toBeInstanceOf(Promise);
     });
     it("`create` should return reference to MockAxios itself", () => {
@@ -48,7 +48,7 @@ describe('MockAxios', () => {
         const thenFn = jest.fn();
         MockAxios.post().then(thenFn);
 
-        const responseData = { data: {text:"some data" } };
+        const responseData = { data: {text: "some data" } };
         const responseObj = {config: {}, data: responseData.data, headers: {}, status: 200, statusText: "OK"};
         MockAxios.mockResponse(responseObj);
 
@@ -125,7 +125,7 @@ describe('MockAxios', () => {
         const thenFn = jest.fn();
         const promise = MockAxios.post().then(thenFn);
 
-        const responseData = { data: {text:"some data" } };
+        const responseData = { data: {text: "some data" } };
         MockAxios.mockResponse(responseData);
 
         await promise;
@@ -138,7 +138,7 @@ describe('MockAxios', () => {
         const catchFn = jest.fn();
         const promise = MockAxios.post().then(thenFn).catch(catchFn);
 
-        const errorObj = { n:"this is an error" };
+        const errorObj = { n: "this is an error" };
 
         MockAxios.mockError(errorObj, promise);
         expect(catchFn).toHaveBeenCalledWith(errorObj);
@@ -152,9 +152,9 @@ describe('MockAxios', () => {
     });
 
     it("`mockError` fail the provided promise", () => {
-        let firstFn = jest.fn();
-        let secondFn = jest.fn();
-        let thirdFn = jest.fn();
+        const firstFn = jest.fn();
+        const secondFn = jest.fn();
+        const thirdFn = jest.fn();
 
         MockAxios.post().catch(firstFn);
         const secondPromise = MockAxios.post().catch(secondFn);
