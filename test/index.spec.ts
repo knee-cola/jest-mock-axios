@@ -32,6 +32,9 @@ describe('MockAxios', () => {
     it("`options` should return a promise", () => {
         expect(MockAxios.options()).toEqual(new SyncPromise());
     });
+    it("`request` should return a promise", () => {
+        expect(MockAxios.request()).toEqual(new SyncPromise());
+    });
     it("`all` should return a promise", () => {
         const promise = Promise.resolve('');
         expect(MockAxios.all([promise])).toBeInstanceOf(Promise);
@@ -270,6 +273,7 @@ describe('MockAxios', () => {
         MockAxios.put();
         MockAxios.patch();
         MockAxios.delete();
+        MockAxios.request();
         MockAxios.all([]);
         MockAxios.head();
         MockAxios.options();
@@ -279,6 +283,7 @@ describe('MockAxios', () => {
         expect(MockAxios.put).toHaveBeenCalled();
         expect(MockAxios.patch).toHaveBeenCalled();
         expect(MockAxios.delete).toHaveBeenCalled();
+        expect(MockAxios.request).toHaveBeenCalled();
         expect(MockAxios.all).toHaveBeenCalled();
         expect(MockAxios.head).toHaveBeenCalled();
         expect(MockAxios.options).toHaveBeenCalled();
@@ -290,6 +295,7 @@ describe('MockAxios', () => {
         expect(MockAxios.put).not.toHaveBeenCalled();
         expect(MockAxios.patch).not.toHaveBeenCalled();
         expect(MockAxios.delete).not.toHaveBeenCalled();
+        expect(MockAxios.request).not.toHaveBeenCalled();
         expect(MockAxios.all).not.toHaveBeenCalled();
         expect(MockAxios.head).not.toHaveBeenCalled();
         expect(MockAxios.options).not.toHaveBeenCalled();

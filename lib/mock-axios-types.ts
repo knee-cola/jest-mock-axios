@@ -37,6 +37,7 @@ export interface AxiosAPI {
     delete: jest.Mock<SyncPromise, [string?, any?, any?]>;
     head: jest.Mock<SyncPromise, [string?, any?, any?]>;
     options: jest.Mock<SyncPromise, [string?, any?, any?]>;
+    request: jest.Mock<SyncPromise, [any?]>;
     all: SpyFn;
     create: jest.Mock<AxiosMockType, []>;
     interceptors: Interceptors;
