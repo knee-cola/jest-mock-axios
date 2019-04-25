@@ -7,7 +7,9 @@
  */
 
 import SyncPromise from "jest-mock-promise";
-import { AxiosMockQueueItem, AxiosMockType, Canceler, HttpResponse } from "./mock-axios-types";
+import Cancel from "./cancel/Cancel";
+import CancelToken from "./cancel/CancelToken";
+import { AxiosMockQueueItem, AxiosMockType, HttpResponse } from "./mock-axios-types";
 
 /** a FIFO queue of pending request */
 const _pending_requests: AxiosMockQueueItem[] = [];
@@ -178,41 +180,6 @@ MockAxios.reset = () => {
   MockAxios.request.mockClear();
   MockAxios.all.mockClear();
 };
-
-// fake cancel token interface
-
-class Cancel {
-    public __CANCEL__: boolean;
-
-    constructor(public message = "Cancel") {}
-
-    public toString() {
-        return this.message;
-    }
-}
-Cancel.prototype.__CANCEL__ = true;
-
-class CancelToken {
-    public static source() {
-        let cancel;
-        const token = new CancelToken((c) => cancel = c);
-
-        return {
-            cancel,
-            token,
-        };
-    }
-
-    constructor(executor: (cancel: Canceler) => void) {
-        executor(function cancel(message) {
-            return;
-        });
-    }
-
-    public throwIfRequested() {
-        return;
-    }
-}
 
 MockAxios.Cancel = Cancel;
 MockAxios.CancelToken = CancelToken;
