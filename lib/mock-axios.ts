@@ -179,5 +179,55 @@ MockAxios.reset = () => {
   MockAxios.all.mockClear();
 };
 
+// fake cancel token interface
+
+interface CancelToken {
+    promise: Promise<Cancel>;
+    reason?: Cancel;
+    throwIfRequested(): void;
+}
+interface Canceler {
+    (message?: string): void;
+}
+
+class Cancel {
+    public __CANCEL__: boolean;
+
+    constructor(public message = "Cancel") {}
+
+    public toString() {
+        return this.message;
+    }
+}
+Cancel.prototype.__CANCEL__ = true;
+
+class CancelToken {
+    public static source() {
+        let cancel;
+        const token = new CancelToken((c) => cancel = c);
+
+        return {
+            cancel,
+            token,
+        };
+    }
+
+    constructor(executor: (cancel: Canceler) => void) {
+        executor(function cancel(message) {
+            return;
+        });
+    }
+
+    public throwIfRequested() {
+        return;
+    }
+}
+
+MockAxios.Cancel = Cancel;
+MockAxios.CancelToken = CancelToken;
+MockAxios.isCancel = (u): u is Cancel => {
+    return !!(u && u.__CANCEL__);
+};
+
 // this is a singleton object
 export default MockAxios;

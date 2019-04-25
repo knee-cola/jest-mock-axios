@@ -44,6 +44,30 @@ export interface AxiosAPI {
     defaults: AxiosDefaults;
 }
 
+interface Cancel {
+  message: string;
+}
+
+interface CancelStatic {
+  new (message?: string): Cancel;
+}
+interface CancelToken {
+      promise: Promise<Cancel>;
+      reason?: Cancel;
+      throwIfRequested(): void;
+}
+interface Canceler {
+      (message?: string): void;
+}
+interface CancelTokenSource {
+      token: CancelToken;
+      cancel: Canceler;
+}
+interface CancelTokenStatic {
+    new (executor: (cancel: Canceler) => void): CancelToken;
+    source(): CancelTokenSource;
+}
+
 export interface AxiosMockAPI {
     /**
      * Simulate a server response, (optionally) with the given data
@@ -83,6 +107,10 @@ export interface AxiosMockAPI {
      * Clears all of the queued requests
      */
     reset: () => void;
+
+    Cancel: CancelStatic;
+    CancelToken: CancelTokenStatic;
+    isCancel(value: any): boolean;
 }
 
 export interface AxiosMockQueueItem {
