@@ -48,17 +48,13 @@ interface Cancel {
   message: string;
 }
 
-interface CancelStatic {
-  new (message?: string): Cancel;
-}
+type CancelStatic = new (message?: string) => Cancel;
 interface CancelToken {
       promise: Promise<Cancel>;
       reason?: Cancel;
       throwIfRequested(): void;
 }
-interface Canceler {
-      (message?: string): void;
-}
+export type Canceler = (message?: string) => void;
 interface CancelTokenSource {
       token: CancelToken;
       cancel: Canceler;

@@ -7,7 +7,7 @@
  */
 
 import SyncPromise from "jest-mock-promise";
-import { AnyFunction, AxiosMockQueueItem, AxiosMockType, HttpResponse, SpyFn } from "./mock-axios-types";
+import { AxiosMockQueueItem, AxiosMockType, Canceler, HttpResponse } from "./mock-axios-types";
 
 /** a FIFO queue of pending request */
 const _pending_requests: AxiosMockQueueItem[] = [];
@@ -180,15 +180,6 @@ MockAxios.reset = () => {
 };
 
 // fake cancel token interface
-
-interface CancelToken {
-    promise: Promise<Cancel>;
-    reason?: Cancel;
-    throwIfRequested(): void;
-}
-interface Canceler {
-    (message?: string): void;
-}
 
 class Cancel {
     public __CANCEL__: boolean;
