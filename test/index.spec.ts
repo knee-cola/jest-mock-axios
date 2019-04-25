@@ -2,7 +2,6 @@ import SyncPromise from "jest-mock-promise";
 import MockAxios from "../lib/index";
 
 describe("MockAxios", () => {
-
     afterEach(() => {
         MockAxios.reset();
     });
@@ -48,8 +47,14 @@ describe("MockAxios", () => {
         const thenFn = jest.fn();
         MockAxios.post().then(thenFn);
 
-        const responseData = { data: {text: "some data" } };
-        const responseObj = {config: {}, data: responseData.data, headers: {}, status: 200, statusText: "OK"};
+        const responseData = { data: { text: "some data" } };
+        const responseObj = {
+            config: {},
+            data: responseData.data,
+            headers: {},
+            status: 200,
+            statusText: "OK",
+        };
         MockAxios.mockResponse(responseObj);
 
         expect(thenFn).toHaveBeenCalledWith(responseObj);
@@ -70,8 +75,14 @@ describe("MockAxios", () => {
         const secondPromise = MockAxios.post().then(secondFn);
         MockAxios.post().then(thirdFn);
 
-        const responseData = { data: {text: "some data" } };
-        const responseObj = {config: {}, data: responseData.data, headers: {}, status: 200, statusText: "OK"};
+        const responseData = { data: { text: "some data" } };
+        const responseObj = {
+            config: {},
+            data: responseData.data,
+            headers: {},
+            status: 200,
+            statusText: "OK",
+        };
         MockAxios.mockResponse(responseObj, secondPromise);
 
         expect(firstFn).not.toHaveBeenCalled();
@@ -114,18 +125,22 @@ describe("MockAxios", () => {
     });
 
     it("`mockResponse` should throw a specific error if no request can be resolved", () => {
-        expect(() => MockAxios.mockResponse()).toThrowError("No request to respond to!");
+        expect(() => MockAxios.mockResponse()).toThrowError(
+            "No request to respond to!",
+        );
     });
 
     it("`mockResponse` should not throw a specific error if no request can be resolved but silentMode is true", () => {
-        expect(() => MockAxios.mockResponse(undefined, undefined, true)).not.toThrow();
+        expect(() =>
+            MockAxios.mockResponse(undefined, undefined, true),
+        ).not.toThrow();
     });
 
     it("`mockResponse` should work when used with async / await", async () => {
         const thenFn = jest.fn();
         const promise = MockAxios.post().then(thenFn);
 
-        const responseData = { data: {text: "some data" } };
+        const responseData = { data: { text: "some data" } };
         MockAxios.mockResponse(responseData);
 
         await promise;
@@ -136,7 +151,9 @@ describe("MockAxios", () => {
     it("`mockError` should fail the given promise with the provided response", () => {
         const thenFn = jest.fn();
         const catchFn = jest.fn();
-        const promise = MockAxios.post().then(thenFn).catch(catchFn);
+        const promise = MockAxios.post()
+            .then(thenFn)
+            .catch(catchFn);
 
         const errorObj = { n: "this is an error" };
 
@@ -202,11 +219,15 @@ describe("MockAxios", () => {
     });
 
     it("`mockError` should throw a specific error if no request can be resolved", () => {
-        expect(() => MockAxios.mockError()).toThrowError("No request to respond to!");
+        expect(() => MockAxios.mockError()).toThrowError(
+            "No request to respond to!",
+        );
     });
 
     it("`mockError` should not throw a specific error if no request can be resolved but silentMode is true", () => {
-        expect(() => MockAxios.mockError(undefined, undefined, true)).not.toThrow();
+        expect(() =>
+            MockAxios.mockError(undefined, undefined, true),
+        ).not.toThrow();
     });
 
     // lastReqGet - returns the most recent request

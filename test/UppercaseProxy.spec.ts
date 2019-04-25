@@ -7,7 +7,6 @@ afterEach(() => {
 });
 
 it("UppercaseProxy should get data from the server and convert it to UPPERCASE", () => {
-
     const catchFn = jest.fn();
     const thenFn = jest.fn();
 
@@ -22,7 +21,9 @@ it("UppercaseProxy should get data from the server and convert it to UPPERCASE",
     // a) the correct method was used (post)
     // b) went to the correct web service URL ('/web-service-url/')
     // c) if the payload was correct ('client is saying hello!')
-    expect(mockAxios.post).toHaveBeenCalledWith("/web-service-url/", {data: clientMessage });
+    expect(mockAxios.post).toHaveBeenCalledWith("/web-service-url/", {
+        data: clientMessage,
+    });
 
     // simulating a server response
     const responseObj = { data: "server says hello!" };

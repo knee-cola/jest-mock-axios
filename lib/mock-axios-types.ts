@@ -17,10 +17,10 @@ export type AxiosFn = (...args: any[]) => SpyFn;
 
 interface Interceptors {
     request: {
-        use: SpyFn,
+        use: SpyFn;
     };
     response: {
-        use: SpyFn,
+        use: SpyFn;
     };
 }
 
@@ -52,7 +52,11 @@ export interface AxiosMockAPI {
      * @param silentMode (optional) specifies whether the call should throw an error or
      *   only fail quietly if no matching request is found.
      */
-    mockResponse: ((response?: HttpResponse, queueItem?: SyncPromise|AxiosMockQueueItem, silentMode?: boolean) => void);
+    mockResponse: (
+        response?: HttpResponse,
+        queueItem?: SyncPromise | AxiosMockQueueItem,
+        silentMode?: boolean,
+    ) => void;
     /**
      * Simulate an error in server request
      * @param error (optional) error object
@@ -60,7 +64,11 @@ export interface AxiosMockAPI {
      * @param silentMode (optional) specifies whether the call should throw an error or
      *   only fail quietly if no matching request is found.
      */
-    mockError?: (error?: any, queueItem?: SyncPromise|AxiosMockQueueItem, silentMode?: boolean) => void;
+    mockError?: (
+        error?: any,
+        queueItem?: SyncPromise | AxiosMockQueueItem,
+        silentMode?: boolean,
+    ) => void;
     /**
      * Returns promise of the most recent request
      */
