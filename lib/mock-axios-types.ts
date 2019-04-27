@@ -84,7 +84,7 @@ export interface AxiosMockAPI {
      * @param silentMode (optional) specifies whether the call should throw an error or
      *   only fail quietly if no matching request is found.
      */
-    mockError?: (
+    mockError: (
         error?: any,
         queueItem?: SyncPromise | AxiosMockQueueItem,
         silentMode?: boolean,
@@ -92,22 +92,22 @@ export interface AxiosMockAPI {
     /**
      * Returns promise of the most recent request
      */
-    lastPromiseGet?: () => SyncPromise;
+    lastPromiseGet: () => SyncPromise;
     /**
      * Removes the give promise from the queue
      * @param promise
      */
 
-    popPromise?: (promise?: SyncPromise) => SyncPromise;
+    popPromise: (promise?: SyncPromise) => SyncPromise;
     /**
      * Returns promise of the most recent request
      */
-    lastReqGet?: () => AxiosMockQueueItem;
+    lastReqGet: () => AxiosMockQueueItem;
     /**
      * Removes the give request from the queue
      * @param promise
      */
-    popRequest?: (promise?: AxiosMockQueueItem) => AxiosMockQueueItem;
+    popRequest: (promise?: AxiosMockQueueItem) => AxiosMockQueueItem;
 
     /**
      * Clears all of the queued requests
