@@ -2,6 +2,10 @@ import { Cancel } from "./Cancel";
 
 type Canceler = (message?: string) => void;
 
+/**
+ * Based of https://github.com/axios/axios
+ * Copyright (c) 2014-present Matt Zabriskie
+ */
 export default class CancelToken {
   public static source() {
     let cancel: Canceler;
