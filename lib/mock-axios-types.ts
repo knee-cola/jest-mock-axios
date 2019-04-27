@@ -37,10 +37,31 @@ export interface AxiosAPI {
     delete: jest.Mock<SyncPromise, [string?, any?, any?]>;
     head: jest.Mock<SyncPromise, [string?, any?, any?]>;
     options: jest.Mock<SyncPromise, [string?, any?, any?]>;
+    request: jest.Mock<SyncPromise, [any?]>;
     all: SpyFn;
     create: jest.Mock<AxiosMockType, []>;
     interceptors: Interceptors;
     defaults: AxiosDefaults;
+}
+
+interface Cancel {
+    message: string;
+}
+
+type CancelStatic = new (message?: string) => Cancel;
+interface CancelToken {
+    promise: Promise<Cancel>;
+    reason?: Cancel;
+    throwIfRequested(): void;
+}
+type Canceler = (message?: string) => void;
+interface CancelTokenSource {
+    token: CancelToken;
+    cancel: Canceler;
+}
+interface CancelTokenStatic {
+    new (executor: (cancel: Canceler) => void): CancelToken;
+    source(): CancelTokenSource;
 }
 
 export interface AxiosMockAPI {
@@ -48,7 +69,8 @@ export interface AxiosMockAPI {
      * Simulate a server response, (optionally) with the given data
      * @param response (optional) response returned by the server
      * @param queueItem (optional) request promise for which response should be resolved
-     * @param silentMode (optional) specifies whether the call should throw an error or only fail quietly if no matching request is found.
+     * @param silentMode (optional) specifies whether the call should throw an error or
+     *   only fail quietly if no matching request is found.
      */
     mockResponse: (
         response?: HttpResponse,
@@ -59,9 +81,10 @@ export interface AxiosMockAPI {
      * Simulate an error in server request
      * @param error (optional) error object
      * @param queueItem (optional) request promise for which response should be resolved
-     * @param silentMode (optional) specifies whether the call should throw an error or only fail quietly if no matching request is found.
+     * @param silentMode (optional) specifies whether the call should throw an error or
+     *   only fail quietly if no matching request is found.
      */
-    mockError?: (
+    mockError: (
         error?: any,
         queueItem?: SyncPromise | AxiosMockQueueItem,
         silentMode?: boolean,
@@ -69,23 +92,23 @@ export interface AxiosMockAPI {
     /**
      * Returns promise of the most recent request
      */
-    lastPromiseGet?: () => SyncPromise;
+    lastPromiseGet: () => SyncPromise;
     /**
      * Removes the give promise from the queue
      * @param promise
      */
 
-    popPromise?: (promise?: SyncPromise) => SyncPromise;
+    popPromise: (promise?: SyncPromise) => SyncPromise;
     /**
      * Returns request item of the most recent request
      */
-    lastReqGet?: () => AxiosMockQueueItem;
+    lastReqGet: () => AxiosMockQueueItem;
     /**
      * Returns request item of the most recent request with the given url
      * The url must equal the url given in the 1st parameter when the request was made
      * Returns undefined if no matching request could be found
      *
-     * THe result can then be used with @see mockResponse
+     * The result can then be used with @see mockResponse
      *
      * @param url the url of the request to be found
      */
@@ -94,12 +117,16 @@ export interface AxiosMockAPI {
      * Removes the give request from the queue
      * @param promise
      */
-    popRequest?: (promise?: AxiosMockQueueItem) => AxiosMockQueueItem;
+    popRequest: (promise?: AxiosMockQueueItem) => AxiosMockQueueItem;
 
     /**
      * Clears all of the queued requests
      */
     reset: () => void;
+
+    Cancel: CancelStatic;
+    CancelToken: CancelTokenStatic;
+    isCancel(value: any): boolean;
 }
 
 export interface AxiosMockQueueItem {

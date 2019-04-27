@@ -1,15 +1,14 @@
-import MockAxios from '../lib/index';
-import SyncPromise from 'jest-mock-promise';
+import SyncPromise from "jest-mock-promise";
+import MockAxios from "../lib/index";
 
-describe('MockAxios', () => {
-
+describe("MockAxios", () => {
     afterEach(() => {
         MockAxios.reset();
     });
-  
+
     it(`should return a promise when called directly`, () => {
-        expect(typeof MockAxios).toBe('function');
-        expect(MockAxios()).toEqual(new SyncPromise);
+        expect(typeof MockAxios).toBe("function");
+        expect(MockAxios()).toEqual(new SyncPromise());
     });
     it("`get` should return a promise", () => {
         expect(MockAxios.get()).toEqual(new SyncPromise());
@@ -32,24 +31,33 @@ describe('MockAxios', () => {
     it("`options` should return a promise", () => {
         expect(MockAxios.options()).toEqual(new SyncPromise());
     });
+    it("`request` should return a promise", () => {
+        expect(MockAxios.request()).toEqual(new SyncPromise());
+    });
     it("`all` should return a promise", () => {
-        const promise = Promise.resolve('');
+        const promise = Promise.resolve("");
         expect(MockAxios.all([promise])).toBeInstanceOf(Promise);
     });
     it("`create` should return reference to MockAxios itself", () => {
         expect(MockAxios.create()).toBe(MockAxios);
     });
 
-    // mockResponse - Simulate a server response, (optionaly) with the given data
+    // mockResponse - Simulate a server response, (optionally) with the given data
     it("`mockResponse` should resolve the given promise with the provided response", () => {
-        let thenFn = jest.fn();
+        const thenFn = jest.fn();
         MockAxios.post().then(thenFn);
 
-        let responseData = { data: {text:"some data" } };
-        let responseObj = {"config": {}, "data": responseData.data, "headers": {}, "status": 200, "statusText": "OK"};
+        const responseData = { data: { text: "some data" } };
+        const responseObj = {
+            config: {},
+            data: responseData.data,
+            headers: {},
+            status: 200,
+            statusText: "OK",
+        };
         MockAxios.mockResponse(responseObj);
-        
-        expect(thenFn).toHaveBeenCalledWith(responseObj);    
+
+        expect(thenFn).toHaveBeenCalledWith(responseObj);
     });
 
     it("`mockResponse` should remove the last promise from the queue", () => {
@@ -59,49 +67,55 @@ describe('MockAxios', () => {
     });
 
     it("`mockResponse` resolve the provided promise", () => {
-        let firstFn = jest.fn();
-        let secondFn = jest.fn();
-        let thirdFn = jest.fn();
+        const firstFn = jest.fn();
+        const secondFn = jest.fn();
+        const thirdFn = jest.fn();
 
-        let firstPromise = MockAxios.post().then(firstFn);
-        let secondPromise = MockAxios.post().then(secondFn);
-        let thirdPromise = MockAxios.post().then(thirdFn);
+        MockAxios.post().then(firstFn);
+        const secondPromise = MockAxios.post().then(secondFn);
+        MockAxios.post().then(thirdFn);
 
-        let responseData = { data: {text:"some data" } };
-        let responseObj = {"config": {}, "data": responseData.data, "headers": {}, "status": 200, "statusText": "OK"};
+        const responseData = { data: { text: "some data" } };
+        const responseObj = {
+            config: {},
+            data: responseData.data,
+            headers: {},
+            status: 200,
+            statusText: "OK",
+        };
         MockAxios.mockResponse(responseObj, secondPromise);
-        
+
         expect(firstFn).not.toHaveBeenCalled();
         expect(secondFn).toHaveBeenCalledWith(responseObj);
         expect(thirdFn).not.toHaveBeenCalled();
     });
 
     it("`mockResponse` should resolve the last given promise if none was provided", () => {
-        let firstPromise = MockAxios.post();
-        let secondPromise = MockAxios.post();
-        let thirdPromise = MockAxios.post();
+        const firstPromise = MockAxios.post();
+        const secondPromise = MockAxios.post();
+        const thirdPromise = MockAxios.post();
 
-        let firstThen = jest.fn();
-        let secondThen = jest.fn();
-        let thirdThen = jest.fn();
+        const firstThen = jest.fn();
+        const secondThen = jest.fn();
+        const thirdThen = jest.fn();
 
         firstPromise.then(firstThen);
         secondPromise.then(secondThen);
         thirdPromise.then(thirdThen);
 
         MockAxios.mockResponse();
-        
+
         expect(firstThen).toHaveBeenCalled();
         expect(secondThen).not.toHaveBeenCalled();
         expect(thirdThen).not.toHaveBeenCalled();
 
         MockAxios.mockResponse();
-        
+
         expect(secondThen).toHaveBeenCalled();
         expect(thirdThen).not.toHaveBeenCalled();
 
         MockAxios.mockResponse();
-        
+
         expect(thirdThen).toHaveBeenCalled();
 
         // functions should be called once only
@@ -111,20 +125,37 @@ describe('MockAxios', () => {
     });
 
     it("`mockResponse` should throw a specific error if no request can be resolved", () => {
-        expect(() => MockAxios.mockResponse()).toThrowError('No request to respond to!');
+        expect(() => MockAxios.mockResponse()).toThrowError(
+            "No request to respond to!",
+        );
     });
 
     it("`mockResponse` should not throw a specific error if no request can be resolved but silentMode is true", () => {
-        expect(() => MockAxios.mockResponse(undefined, undefined, true)).not.toThrow()
+        expect(() =>
+            MockAxios.mockResponse(undefined, undefined, true),
+        ).not.toThrow();
     });
-    
+
+    it("`mockResponse` should work when used with async / await", async () => {
+        const thenFn = jest.fn();
+        const promise = MockAxios.post().then(thenFn);
+
+        const responseData = { data: { text: "some data" } };
+        MockAxios.mockResponse(responseData);
+
+        await promise;
+        expect(thenFn).toHaveBeenCalled();
+    });
+
     // mockError - Simulate an error in server request
     it("`mockError` should fail the given promise with the provided response", () => {
-        let thenFn = jest.fn();
-        let catchFn = jest.fn();
-        let promise = MockAxios.post().then(thenFn).catch(catchFn);
+        const thenFn = jest.fn();
+        const catchFn = jest.fn();
+        const promise = MockAxios.post()
+            .then(thenFn)
+            .catch(catchFn);
 
-        let errorObj = { n:"this is an error" };
+        const errorObj = { n: "this is an error" };
 
         MockAxios.mockError(errorObj, promise);
         expect(catchFn).toHaveBeenCalledWith(errorObj);
@@ -136,51 +167,51 @@ describe('MockAxios', () => {
         MockAxios.mockError();
         expect(MockAxios.popPromise()).toBeUndefined();
     });
-      
+
     it("`mockError` fail the provided promise", () => {
-        let firstFn = jest.fn();
-        let secondFn = jest.fn();
-        let thirdFn = jest.fn();
-      
-        let firstPromise = MockAxios.post().catch(firstFn);
-        let secondPromise = MockAxios.post().catch(secondFn);
-        let thirdPromise = MockAxios.post().catch(thirdFn);
-      
+        const firstFn = jest.fn();
+        const secondFn = jest.fn();
+        const thirdFn = jest.fn();
+
+        MockAxios.post().catch(firstFn);
+        const secondPromise = MockAxios.post().catch(secondFn);
+        MockAxios.post().catch(thirdFn);
+
         MockAxios.mockError({}, secondPromise);
-        
+
         expect(firstFn).not.toHaveBeenCalled();
         expect(secondFn).toHaveBeenCalled();
         expect(thirdFn).not.toHaveBeenCalled();
     });
-      
+
     it("`mockError` should fail the last given promise if none was provided", () => {
-        let firstPromise = MockAxios.post();
-        let secondPromise = MockAxios.post();
-        let thirdPromise = MockAxios.post();
-      
-        let firstFn = jest.fn();
-        let secondFn = jest.fn();
-        let thirdFn = jest.fn();
-      
+        const firstPromise = MockAxios.post();
+        const secondPromise = MockAxios.post();
+        const thirdPromise = MockAxios.post();
+
+        const firstFn = jest.fn();
+        const secondFn = jest.fn();
+        const thirdFn = jest.fn();
+
         firstPromise.catch(firstFn);
         secondPromise.catch(secondFn);
         thirdPromise.catch(thirdFn);
-      
+
         MockAxios.mockError({});
-        
+
         expect(firstFn).toHaveBeenCalled();
         expect(secondFn).not.toHaveBeenCalled();
         expect(thirdFn).not.toHaveBeenCalled();
-      
+
         MockAxios.mockError();
-        
+
         expect(secondFn).toHaveBeenCalled();
         expect(thirdFn).not.toHaveBeenCalled();
-      
+
         MockAxios.mockError();
-        
+
         expect(thirdFn).toHaveBeenCalled();
-      
+
         // functions should be called once only
         expect(firstFn.mock.calls.length).toBe(1);
         expect(secondFn.mock.calls.length).toBe(1);
@@ -188,33 +219,35 @@ describe('MockAxios', () => {
     });
 
     it("`mockError` should throw a specific error if no request can be resolved", () => {
-        expect(() => MockAxios.mockError()).toThrowError('No request to respond to!');
+        expect(() => MockAxios.mockError()).toThrowError(
+            "No request to respond to!",
+        );
     });
 
     it("`mockError` should not throw a specific error if no request can be resolved but silentMode is true", () => {
-        expect(() => MockAxios.mockError(undefined, undefined, true)).not.toThrow()
+        expect(() =>
+            MockAxios.mockError(undefined, undefined, true),
+        ).not.toThrow();
     });
-    
+
     // lastReqGet - returns the most recent request
     it("`lastReqGet` should return the most recent request", () => {
-        let thenFn = jest.fn();
-        let firstPromise = MockAxios.post();
-        let lastPromise = MockAxios.post();
+        MockAxios.post();
+        const lastPromise = MockAxios.post();
 
         expect(MockAxios.lastReqGet().promise).toBe(lastPromise);
     });
-    
+
     // lastPromiseGet - Returns promise of the most recent request
     it("`lastPromiseGet` should return the most recent promise", () => {
-        let thenFn = jest.fn();
-        let firstPromise = MockAxios.post();
-        let lastPromise = MockAxios.post();
+        MockAxios.post();
+        const lastPromise = MockAxios.post();
 
         expect(MockAxios.lastPromiseGet()).toBe(lastPromise);
     });
 
     it("`getReqByUrl should return the most recent request matching the url", () => {
-        const url = 'url';
+        const url = "url";
         MockAxios.post(url);
         const lastPromise = MockAxios.post(url);
 
@@ -222,7 +255,7 @@ describe('MockAxios', () => {
     });
 
     it("`getReqByUrl should return undefined if no matching request can be found", () => {
-        const url = 'url';
+        const url = "url";
         MockAxios.post();
 
         expect(MockAxios.getReqByUrl(url)).toBeUndefined();
@@ -230,11 +263,9 @@ describe('MockAxios', () => {
 
     // popPromise - Removes the give promise from the queue
     it("`popPromise` should remove the given promise from the queue", () => {
-        let thenFn = jest.fn();
-
-        let firstPromise = MockAxios.post();
-        let secondPromise = MockAxios.post();
-        let thirdPromise = MockAxios.post();
+        const firstPromise = MockAxios.post();
+        const secondPromise = MockAxios.post();
+        const thirdPromise = MockAxios.post();
 
         expect(MockAxios.popPromise(firstPromise)).toBe(firstPromise);
         expect(MockAxios.popPromise(thirdPromise)).toBe(thirdPromise);
@@ -246,14 +277,12 @@ describe('MockAxios', () => {
 
     // popPromise - Removes the give promise from the queue
     it("`popRequest` should remove the given request from the queue", () => {
-        let thenFn = jest.fn();
-
         MockAxios.post();
-        let firstReq = MockAxios.lastReqGet();
+        const firstReq = MockAxios.lastReqGet();
         MockAxios.post();
-        let secondReq = MockAxios.lastReqGet();
+        const secondReq = MockAxios.lastReqGet();
         MockAxios.post();
-        let thirdReq = MockAxios.lastReqGet();
+        const thirdReq = MockAxios.lastReqGet();
 
         expect(MockAxios.popRequest(firstReq)).toBe(firstReq);
         expect(MockAxios.popRequest(thirdReq)).toBe(thirdReq);
@@ -265,10 +294,8 @@ describe('MockAxios', () => {
 
     // reset - Clears all of the queued requests
     it("`reset` should clear all the queued requests", () => {
-        let thenFn = jest.fn();
-
-        let firstPromise = MockAxios.post();
-        let lastPromise = MockAxios.post();
+        MockAxios.post();
+        MockAxios.post();
 
         MockAxios.reset();
         MockAxios.reset();
@@ -282,6 +309,7 @@ describe('MockAxios', () => {
         MockAxios.put();
         MockAxios.patch();
         MockAxios.delete();
+        MockAxios.request();
         MockAxios.all([]);
         MockAxios.head();
         MockAxios.options();
@@ -291,6 +319,7 @@ describe('MockAxios', () => {
         expect(MockAxios.put).toHaveBeenCalled();
         expect(MockAxios.patch).toHaveBeenCalled();
         expect(MockAxios.delete).toHaveBeenCalled();
+        expect(MockAxios.request).toHaveBeenCalled();
         expect(MockAxios.all).toHaveBeenCalled();
         expect(MockAxios.head).toHaveBeenCalled();
         expect(MockAxios.options).toHaveBeenCalled();
@@ -302,8 +331,36 @@ describe('MockAxios', () => {
         expect(MockAxios.put).not.toHaveBeenCalled();
         expect(MockAxios.patch).not.toHaveBeenCalled();
         expect(MockAxios.delete).not.toHaveBeenCalled();
+        expect(MockAxios.request).not.toHaveBeenCalled();
         expect(MockAxios.all).not.toHaveBeenCalled();
         expect(MockAxios.head).not.toHaveBeenCalled();
         expect(MockAxios.options).not.toHaveBeenCalled();
+    });
+
+    describe("provides cancel interfaces", () => {
+        it("provides axios.Cancel", () => {
+            expect(MockAxios).toHaveProperty("Cancel");
+            const cancel = new MockAxios.Cancel();
+            expect(cancel).toHaveProperty("__CANCEL__");
+            expect(cancel.toString()).toEqual("Cancel");
+        });
+
+        it("provides axios.isCancel", () => {
+            expect(MockAxios).toHaveProperty("isCancel");
+            expect(MockAxios.isCancel({})).toEqual(false);
+            expect(MockAxios.isCancel(new MockAxios.Cancel())).toEqual(true);
+        });
+
+        it("provides axios.CancelToken", () => {
+            expect(MockAxios).toHaveProperty("CancelToken");
+            const CancelTokenClass = MockAxios.CancelToken;
+            const cancelToken = CancelTokenClass.source();
+            expect(cancelToken).toHaveProperty("cancel");
+            expect(cancelToken).toHaveProperty("token");
+
+            expect(cancelToken.token).toBeInstanceOf(MockAxios.CancelToken);
+            expect(() => cancelToken.cancel()).not.toThrow();
+            expect(() => cancelToken.token.throwIfRequested()).not.toThrow();
+        });
     });
 });

@@ -7,7 +7,7 @@ Because it works synchronously, meaning that your tests will be easier to write,
 ## Can it be used with Jasmine/Mocha?
 Unfortunately *out of the box* this mock works only with [Jest](https://facebook.github.io/jest/).
 
-However, if you look at the [source code](https://github.com/knee-cola/jest-mock-axios/blob/master/lib/mock-axios.ts), you can see that it uses Jest only to define spies (for methods `post`, `get`, `put`, `patch`, `delete`, `create`, `all`, `head`, `options`). This means that it can easily be modified to use any other testing framework - go to [GitHub](https://github.com/knee-cola/jest-mock-axios), clone it, modify it, play with it :)
+However, if you look at the [source code](https://github.com/knee-cola/jest-mock-axios/blob/master/lib/mock-axios.ts), you can see that it uses Jest only to define spies (for methods `post`, `get`, `put`, `patch`, `delete`, `create`, `all`, `head`, `options`, `request`). This means that it can easily be modified to use any other testing framework - go to [GitHub](https://github.com/knee-cola/jest-mock-axios), clone it, modify it, play with it :)
 
 # What's in this document?
 * [Installation](#installation)
@@ -113,7 +113,7 @@ export default UppercaseProxy;
 At the bottom of this page you can find [additional examples](#additional-examples).
 
 # Axios mock API
-In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, `create`, `all`, `head`, `options`), which are exposed as spies, Axios mock has three additional public methods, which are intended to facilitate mocking:
+In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, `create`, `all`, `head`, `options`, `request`), which are exposed as spies, Axios mock has three additional public methods, which are intended to facilitate mocking:
 * `mockResponse` - simulates a server (web service) response
 * `mockError` - simulates a (network/server) error 
 * `lastReqGet` - returns extended info about the most recent request
@@ -194,7 +194,7 @@ let requestInfo = {
 ## axios.lastPromiseGet()
 `lastPromiseGet` method returns a promise given when the most recent server request was made. The returned value can be used to pinpoint exact server request we wish to resolve (the value is passed as the second param of `mockResponse` or `mockError` methods).
 
-The promise object returned by this function corresponds to the one returned by `post`, `get`, `put`, `patch`, `delete`, `head`, `options` or `all` method inside the code we wish to test.
+The promise object returned by this function corresponds to the one returned by `post`, `get`, `put`, `patch`, `delete`, `head`, `options`, `request` or `all` method inside the code we wish to test.
 
 
 [Additional examples](#additional-examples) at the end of this document illustrate how this method can be used.
@@ -307,10 +307,10 @@ Although this might not be the most realistic use-case of this functionality, it
 
 ## Interceptors
 
-AxiosMock offers basic support for interceptors (i.e. it does not break when interceptors are used in tested code). However, interceptors are not applied to the mocked requests / responses at the moment. 
+AxiosMock offers basic support for interceptors (i.e. it does not break when interceptors are used in tested code). However, interceptors are not applied to the mocked requests / responses at the moment.
 
 # Missing features
-AxiosMock covers the most popular parts of Axios API, meaning that some of the features are missing or only partially implemented (i.e. interceptors).
+AxiosMock covers the most popular parts of Axios API, meaning that some of the features are missing or only partially implemented (i.e. interceptors). AxiosMock provides the `axios.CancelToken` interface, but with an empty implementation.
 
 If you need an additional feature, you can request it by creating a new issue on [project's GitHub page](https://github.com/knee-cola/jest-mock-axios/issues/).
 

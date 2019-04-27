@@ -7,22 +7,20 @@
  */
 
 import SyncPromise from "jest-mock-promise";
+import Cancel from "./cancel/Cancel";
+import CancelToken from "./cancel/CancelToken";
 import {
-    AnyFunction,
     AxiosMockQueueItem,
     AxiosMockType,
     HttpResponse,
-    SpyFn,
 } from "./mock-axios-types";
 
 /** a FIFO queue of pending request */
 const _pending_requests: AxiosMockQueueItem[] = [];
 
-const _newReq: (url: string, data?: any, config?: any) => SyncPromise = (
-    url: string,
-    data?: any,
-    config?: any,
-) => {
+const _newReq: (config?: any) => SyncPromise = (config: any = {}) => {
+    const url: string = config.url;
+    const data: any = config.data;
     const promise: SyncPromise = new SyncPromise();
     _pending_requests.push({
         config,
@@ -33,17 +31,27 @@ const _newReq: (url: string, data?: any, config?: any) => SyncPromise = (
     return promise;
 };
 
+const _helperReq = (url: string, data?: any, config?: any) => {
+    const conf = data && config ? config : {};
+    return _newReq({
+        ...conf,
+        data,
+        url,
+    });
+};
+
 const MockAxios: AxiosMockType = (jest.fn(_newReq) as unknown) as AxiosMockType;
 
 // mocking Axios methods
-MockAxios.get = jest.fn(_newReq);
-MockAxios.post = jest.fn(_newReq);
-MockAxios.put = jest.fn(_newReq);
-MockAxios.patch = jest.fn(_newReq);
-MockAxios.delete = jest.fn(_newReq);
+MockAxios.get = jest.fn(_helperReq);
+MockAxios.post = jest.fn(_helperReq);
+MockAxios.put = jest.fn(_helperReq);
+MockAxios.patch = jest.fn(_helperReq);
+MockAxios.delete = jest.fn(_helperReq);
+MockAxios.request = jest.fn(_newReq);
 MockAxios.all = jest.fn((values) => Promise.all(values));
-MockAxios.head = jest.fn(_newReq);
-MockAxios.options = jest.fn(_newReq);
+MockAxios.head = jest.fn(_helperReq);
+MockAxios.options = jest.fn(_helperReq);
 MockAxios.create = jest.fn(() => MockAxios);
 
 MockAxios.interceptors = {
@@ -98,7 +106,7 @@ MockAxios.popRequest = (request?: AxiosMockQueueItem) => {
  * @param queueItem
  */
 const popQueueItem = (queueItem: SyncPromise | AxiosMockQueueItem = null) => {
-    // first le't pretend the param is a queue item
+    // first let's pretend the param is a queue item
     const request: AxiosMockQueueItem = MockAxios.popRequest(
         queueItem as AxiosMockQueueItem,
     );
@@ -187,7 +195,14 @@ MockAxios.reset = () => {
     MockAxios.delete.mockClear();
     MockAxios.head.mockClear();
     MockAxios.options.mockClear();
+    MockAxios.request.mockClear();
     MockAxios.all.mockClear();
+};
+
+MockAxios.Cancel = Cancel;
+MockAxios.CancelToken = CancelToken;
+MockAxios.isCancel = (u): u is Cancel => {
+    return !!(u && u.__CANCEL__);
 };
 
 // this is a singleton object
