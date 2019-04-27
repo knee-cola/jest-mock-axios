@@ -307,10 +307,10 @@ Although this might not be the most realistic use-case of this functionality, it
 
 ## Interceptors
 
-AxiosMock offers basic support for interceptors (i.e. it does not break when interceptors are used in tested code). However, interceptors are not applied to the mocked requests / responses at the moment. 
+AxiosMock offers basic support for interceptors (i.e. it does not break when interceptors are used in tested code). However, interceptors are not applied to the mocked requests / responses at the moment.
 
 # Missing features
-AxiosMock covers the most popular parts of Axios API, meaning that some of the features are missing or only partially implemented (i.e. interceptors).
+AxiosMock covers the most popular parts of Axios API, meaning that some of the features are missing or only partially implemented (i.e. interceptors). AxiosMock provides the `axios.CancelToken` interface, but with an empty implementation.
 
 If you need an additional feature, you can request it by creating a new issue on [project's GitHub page](https://github.com/knee-cola/jest-mock-axios/issues/).
 

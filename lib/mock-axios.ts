@@ -7,6 +7,8 @@
  */
 
 import SyncPromise from "jest-mock-promise";
+import Cancel from "./cancel/Cancel";
+import CancelToken from "./cancel/CancelToken";
 import {
     AxiosMockQueueItem,
     AxiosMockType,
@@ -104,7 +106,7 @@ MockAxios.popRequest = (request?: AxiosMockQueueItem) => {
  * @param queueItem
  */
 const popQueueItem = (queueItem: SyncPromise | AxiosMockQueueItem = null) => {
-    // first let pretend the param is a queue item
+    // first let's pretend the param is a queue item
     const request: AxiosMockQueueItem = MockAxios.popRequest(
         queueItem as AxiosMockQueueItem,
     );
@@ -188,6 +190,12 @@ MockAxios.reset = () => {
     MockAxios.options.mockClear();
     MockAxios.request.mockClear();
     MockAxios.all.mockClear();
+};
+
+MockAxios.Cancel = Cancel;
+MockAxios.CancelToken = CancelToken;
+MockAxios.isCancel = (u): u is Cancel => {
+    return !!(u && u.__CANCEL__);
 };
 
 // this is a singleton object

@@ -321,4 +321,31 @@ describe("MockAxios", () => {
         expect(MockAxios.head).not.toHaveBeenCalled();
         expect(MockAxios.options).not.toHaveBeenCalled();
     });
+
+    describe("provides cancel interfaces", () => {
+        it("provides axios.Cancel", () => {
+            expect(MockAxios).toHaveProperty("Cancel");
+            const cancel = new MockAxios.Cancel();
+            expect(cancel).toHaveProperty("__CANCEL__");
+            expect(cancel.toString()).toEqual("Cancel");
+        });
+
+        it("provides axios.isCancel", () => {
+            expect(MockAxios).toHaveProperty("isCancel");
+            expect(MockAxios.isCancel({})).toEqual(false);
+            expect(MockAxios.isCancel(new MockAxios.Cancel())).toEqual(true);
+        });
+
+        it("provides axios.CancelToken", () => {
+            expect(MockAxios).toHaveProperty("CancelToken");
+            const CancelTokenClass = MockAxios.CancelToken;
+            const cancelToken = CancelTokenClass.source();
+            expect(cancelToken).toHaveProperty("cancel");
+            expect(cancelToken).toHaveProperty("token");
+
+            expect(cancelToken.token).toBeInstanceOf(MockAxios.CancelToken);
+            expect(() => cancelToken.cancel()).not.toThrow();
+            expect(() => cancelToken.token.throwIfRequested()).not.toThrow();
+        });
+    });
 });
