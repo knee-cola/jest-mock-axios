@@ -15,18 +15,18 @@ export type SpyFn = AnyFunction & { mockClear: AnyFunction };
 
 export type AxiosFn = (...args: any[]) => SpyFn;
 
-type Interceptors = {
+interface Interceptors {
     request: {
-        use: SpyFn
-    },
+        use: SpyFn;
+    };
     response: {
-        use: SpyFn
-    }
-};
+        use: SpyFn;
+    };
+}
 
-type AxiosDefaults = {
-    headers: any
-};
+interface AxiosDefaults {
+    headers: any;
+}
 
 export interface AxiosAPI {
     // mocking Axios methods
@@ -50,14 +50,22 @@ export interface AxiosMockAPI {
      * @param queueItem (optional) request promise for which response should be resolved
      * @param silentMode (optional) specifies whether the call should throw an error or only fail quietly if no matching request is found.
      */
-    mockResponse: ((response?: HttpResponse, queueItem?: SyncPromise|AxiosMockQueueItem, silentMode?: boolean) => void);
+    mockResponse: (
+        response?: HttpResponse,
+        queueItem?: SyncPromise | AxiosMockQueueItem,
+        silentMode?: boolean,
+    ) => void;
     /**
      * Simulate an error in server request
      * @param error (optional) error object
      * @param queueItem (optional) request promise for which response should be resolved
      * @param silentMode (optional) specifies whether the call should throw an error or only fail quietly if no matching request is found.
      */
-    mockError?: (error?: any, queueItem?: SyncPromise|AxiosMockQueueItem, silentMode?: boolean) => void;
+    mockError?: (
+        error?: any,
+        queueItem?: SyncPromise | AxiosMockQueueItem,
+        silentMode?: boolean,
+    ) => void;
     /**
      * Returns promise of the most recent request
      */
@@ -76,9 +84,9 @@ export interface AxiosMockAPI {
      * Returns request item of the most recent request with the given url
      * The url must equal the url given in the 1st parameter when the request was made
      * Returns undefined if no matching request could be found
-     * 
+     *
      * THe result can then be used with @see mockResponse
-     * 
+     *
      * @param url the url of the request to be found
      */
     getReqByUrl: (url: string) => AxiosMockQueueItem;
