@@ -191,6 +191,14 @@ let requestInfo = {
 
 **NOTE:** this is a sibling method to the `lastPromiseGet` (which returns only the promise portion of this the request object).
 
+## axios.getReqByUrl(url)
+
+`getReqByUrl()` returns the same info about a specific request as `lastReqGet` (see above). Instead of returning the
+most recent request, it returns the most recent request matching the given url.
+
+### Arguments: `url`
+The url to be matched. Must match exactly the url passed to axios before.
+
 ## axios.lastPromiseGet()
 `lastPromiseGet` method returns a promise given when the most recent server request was made. The returned value can be used to pinpoint exact server request we wish to resolve (the value is passed as the second param of `mockResponse` or `mockError` methods).
 
