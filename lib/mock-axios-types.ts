@@ -54,7 +54,7 @@ interface CancelToken {
       reason?: Cancel;
       throwIfRequested(): void;
 }
-export type Canceler = (message?: string) => void;
+type Canceler = (message?: string) => void;
 interface CancelTokenSource {
       token: CancelToken;
       cancel: Canceler;
