@@ -245,6 +245,25 @@ describe("MockAxios", () => {
         expect(MockAxios.lastReqGet().promise).toBe(lastPromise);
     });
 
+    it("`lastReqGet` should contain config as passed to axios", () => {
+        const url = "url";
+        const data = { data: "data" };
+        const config = { config: "config" };
+        const promise = MockAxios.post("url", data, config);
+        const lastReq = MockAxios.lastReqGet();
+
+        expect(lastReq).toEqual({
+            config: {
+                ...config,
+                data,
+                url,
+            },
+            data,
+            promise,
+            url,
+        });
+    });
+
     // lastPromiseGet - Returns promise of the most recent request
     it("`lastPromiseGet` should return the most recent promise", () => {
         MockAxios.post();
