@@ -106,7 +106,7 @@ MockAxios.popRequest = (request?: AxiosMockQueueItem) => {
  * @param queueItem
  */
 const popQueueItem = (queueItem: SyncPromise | AxiosMockQueueItem = null) => {
-    // first le't pretend the param is a queue item
+    // first let's pretend the param is a queue item
     const request: AxiosMockQueueItem = MockAxios.popRequest(
         queueItem as AxiosMockQueueItem,
     );

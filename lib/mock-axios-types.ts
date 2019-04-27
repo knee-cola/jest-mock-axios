@@ -69,7 +69,8 @@ export interface AxiosMockAPI {
      * Simulate a server response, (optionally) with the given data
      * @param response (optional) response returned by the server
      * @param queueItem (optional) request promise for which response should be resolved
-     * @param silentMode (optional) specifies whether the call should throw an error or only fail quietly if no matching request is found.
+     * @param silentMode (optional) specifies whether the call should throw an error or
+     *   only fail quietly if no matching request is found.
      */
     mockResponse: (
         response?: HttpResponse,
@@ -80,7 +81,8 @@ export interface AxiosMockAPI {
      * Simulate an error in server request
      * @param error (optional) error object
      * @param queueItem (optional) request promise for which response should be resolved
-     * @param silentMode (optional) specifies whether the call should throw an error or only fail quietly if no matching request is found.
+     * @param silentMode (optional) specifies whether the call should throw an error or
+     *   only fail quietly if no matching request is found.
      */
     mockError?: (
         error?: any,

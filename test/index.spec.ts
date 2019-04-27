@@ -42,7 +42,7 @@ describe("MockAxios", () => {
         expect(MockAxios.create()).toBe(MockAxios);
     });
 
-    // mockResponse - Simulate a server response, (optionaly) with the given data
+    // mockResponse - Simulate a server response, (optionally) with the given data
     it("`mockResponse` should resolve the given promise with the provided response", () => {
         const thenFn = jest.fn();
         MockAxios.post().then(thenFn);
@@ -71,9 +71,9 @@ describe("MockAxios", () => {
         const secondFn = jest.fn();
         const thirdFn = jest.fn();
 
-        const firstPromise = MockAxios.post().then(firstFn);
+        MockAxios.post().then(firstFn);
         const secondPromise = MockAxios.post().then(secondFn);
-        const thirdPromise = MockAxios.post().then(thirdFn);
+        MockAxios.post().then(thirdFn);
 
         const responseData = { data: { text: "some data" } };
         const responseObj = {
@@ -136,6 +136,17 @@ describe("MockAxios", () => {
         ).not.toThrow();
     });
 
+    it("`mockResponse` should work when used with async / await", async () => {
+        const thenFn = jest.fn();
+        const promise = MockAxios.post().then(thenFn);
+
+        const responseData = { data: { text: "some data" } };
+        MockAxios.mockResponse(responseData);
+
+        await promise;
+        expect(thenFn).toHaveBeenCalled();
+    });
+
     // mockError - Simulate an error in server request
     it("`mockError` should fail the given promise with the provided response", () => {
         const thenFn = jest.fn();
@@ -162,9 +173,9 @@ describe("MockAxios", () => {
         const secondFn = jest.fn();
         const thirdFn = jest.fn();
 
-        const firstPromise = MockAxios.post().catch(firstFn);
+        MockAxios.post().catch(firstFn);
         const secondPromise = MockAxios.post().catch(secondFn);
-        const thirdPromise = MockAxios.post().catch(thirdFn);
+        MockAxios.post().catch(thirdFn);
 
         MockAxios.mockError({}, secondPromise);
 
@@ -221,8 +232,7 @@ describe("MockAxios", () => {
 
     // lastReqGet - returns the most recent request
     it("`lastReqGet` should return the most recent request", () => {
-        const thenFn = jest.fn();
-        const firstPromise = MockAxios.post();
+        MockAxios.post();
         const lastPromise = MockAxios.post();
 
         expect(MockAxios.lastReqGet().promise).toBe(lastPromise);
@@ -230,8 +240,7 @@ describe("MockAxios", () => {
 
     // lastPromiseGet - Returns promise of the most recent request
     it("`lastPromiseGet` should return the most recent promise", () => {
-        const thenFn = jest.fn();
-        const firstPromise = MockAxios.post();
+        MockAxios.post();
         const lastPromise = MockAxios.post();
 
         expect(MockAxios.lastPromiseGet()).toBe(lastPromise);
@@ -239,8 +248,6 @@ describe("MockAxios", () => {
 
     // popPromise - Removes the give promise from the queue
     it("`popPromise` should remove the given promise from the queue", () => {
-        const thenFn = jest.fn();
-
         const firstPromise = MockAxios.post();
         const secondPromise = MockAxios.post();
         const thirdPromise = MockAxios.post();
@@ -255,8 +262,6 @@ describe("MockAxios", () => {
 
     // popPromise - Removes the give promise from the queue
     it("`popRequest` should remove the given request from the queue", () => {
-        const thenFn = jest.fn();
-
         MockAxios.post();
         const firstReq = MockAxios.lastReqGet();
         MockAxios.post();
@@ -274,10 +279,8 @@ describe("MockAxios", () => {
 
     // reset - Clears all of the queued requests
     it("`reset` should clear all the queued requests", () => {
-        const thenFn = jest.fn();
-
-        const firstPromise = MockAxios.post();
-        const lastPromise = MockAxios.post();
+        MockAxios.post();
+        MockAxios.post();
 
         MockAxios.reset();
         MockAxios.reset();
