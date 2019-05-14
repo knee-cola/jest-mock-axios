@@ -140,4 +140,4 @@ export interface AxiosMockQueueItem {
  * Axios object can be called like a function,
  * that's why we're defining it as a spy
  */
-export type AxiosMockType = AxiosFn & AxiosAPI & AxiosMockAPI;
+export type AxiosMockType = AxiosFn & AxiosAPI & AxiosMockAPI & jest.Mock;
