@@ -1,4 +1,4 @@
-import SyncPromise from "jest-mock-promise";
+import { SynchronousPromise, UnresolvedSynchronousPromise  } from "synchronous-promise";
 import MockAxios from "../lib/index";
 
 describe("MockAxios", () => {
@@ -8,33 +8,33 @@ describe("MockAxios", () => {
 
     it(`should return a promise when called directly`, () => {
         expect(typeof MockAxios).toBe("function");
-        expect(MockAxios()).toEqual(new SyncPromise());
+        expect(MockAxios()).toEqual(SynchronousPromise.unresolved());
     });
 
     describe("axios instance methods", () => {
         it("`get` should return a promise", () => {
-            expect(MockAxios.get()).toEqual(new SyncPromise());
+            expect(MockAxios.get()).toEqual(SynchronousPromise.unresolved());
         });
         it("`put` should return a promise", () => {
-            expect(MockAxios.put()).toEqual(new SyncPromise());
+            expect(MockAxios.put()).toEqual(SynchronousPromise.unresolved());
         });
         it("`patch` should return a promise", () => {
-            expect(MockAxios.patch()).toEqual(new SyncPromise());
+            expect(MockAxios.patch()).toEqual(SynchronousPromise.unresolved());
         });
         it("`post` should return a promise", () => {
-            expect(MockAxios.post()).toEqual(new SyncPromise());
+            expect(MockAxios.post()).toEqual(SynchronousPromise.unresolved());
         });
         it("`delete` should return a promise", () => {
-            expect(MockAxios.delete()).toEqual(new SyncPromise());
+            expect(MockAxios.delete()).toEqual(SynchronousPromise.unresolved());
         });
         it("`head` should return a promise", () => {
-            expect(MockAxios.head()).toEqual(new SyncPromise());
+            expect(MockAxios.head()).toEqual(SynchronousPromise.unresolved());
         });
         it("`options` should return a promise", () => {
-            expect(MockAxios.options()).toEqual(new SyncPromise());
+            expect(MockAxios.options()).toEqual(SynchronousPromise.unresolved());
         });
         it("`request` should return a promise", () => {
-            expect(MockAxios.request()).toEqual(new SyncPromise());
+            expect(MockAxios.request()).toEqual(SynchronousPromise.unresolved());
         });
         it("`all` should return a promise", () => {
             const promise = Promise.resolve("");

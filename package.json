@@ -44,6 +44,7 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "jest-mock-promise": "^1.0.23"
+    "jest-mock-promise": "^1.0.23",
+    "synchronous-promise": "^2.0.9"
   }
 }
