@@ -8,19 +8,12 @@ export interface HttpResponse {
     config?: object;
 }
 
-export type AnyFunction = (...args: any[]) => any;
-
-// spy is a function which extends an object (it has static methods and properties)
-export type SpyFn = AnyFunction & { mockClear: AnyFunction };
-
-export type AxiosFn = (...args: any[]) => SpyFn;
-
 interface Interceptors {
     request: {
-        use: SpyFn;
+        use: jest.Mock<number, [any?, any?]>;
     };
     response: {
-        use: SpyFn;
+        use: jest.Mock<number, [any?, any?]>;
     };
 }
 
@@ -38,7 +31,7 @@ export interface AxiosAPI {
     head: jest.Mock<SyncPromise, [string?, any?, any?]>;
     options: jest.Mock<SyncPromise, [string?, any?, any?]>;
     request: jest.Mock<SyncPromise, [any?]>;
-    all: SpyFn;
+    all: jest.Mock<Promise<any>, [any]>;
     create: jest.Mock<AxiosMockType, []>;
     interceptors: Interceptors;
     defaults: AxiosDefaults;
@@ -140,4 +133,4 @@ export interface AxiosMockQueueItem {
  * Axios object can be called like a function,
  * that's why we're defining it as a spy
  */
-export type AxiosMockType = AxiosFn & AxiosAPI & AxiosMockAPI;
+export type AxiosMockType = AxiosAPI & AxiosMockAPI & jest.Mock<SyncPromise, [any?]>;
