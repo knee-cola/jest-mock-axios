@@ -8,33 +8,33 @@ describe("MockAxios", () => {
 
     it(`should return a promise when called directly`, () => {
         expect(typeof MockAxios).toBe("function");
-        expect(MockAxios()).toEqual(SynchronousPromise.unresolved());
+        expect(MockAxios()).toBeInstanceOf(SynchronousPromise);
     });
 
     describe("axios instance methods", () => {
         it("`get` should return a promise", () => {
-            expect(MockAxios.get()).toEqual(SynchronousPromise.unresolved());
+            expect(MockAxios.get()).toBeInstanceOf(SynchronousPromise);
         });
         it("`put` should return a promise", () => {
-            expect(MockAxios.put()).toEqual(SynchronousPromise.unresolved());
+            expect(MockAxios.put()).toBeInstanceOf(SynchronousPromise);
         });
         it("`patch` should return a promise", () => {
-            expect(MockAxios.patch()).toEqual(SynchronousPromise.unresolved());
+            expect(MockAxios.patch()).toBeInstanceOf(SynchronousPromise);
         });
         it("`post` should return a promise", () => {
-            expect(MockAxios.post()).toEqual(SynchronousPromise.unresolved());
+            expect(MockAxios.post()).toBeInstanceOf(SynchronousPromise);
         });
         it("`delete` should return a promise", () => {
-            expect(MockAxios.delete()).toEqual(SynchronousPromise.unresolved());
+            expect(MockAxios.delete()).toBeInstanceOf(SynchronousPromise);
         });
         it("`head` should return a promise", () => {
-            expect(MockAxios.head()).toEqual(SynchronousPromise.unresolved());
+            expect(MockAxios.head()).toBeInstanceOf(SynchronousPromise);
         });
         it("`options` should return a promise", () => {
-            expect(MockAxios.options()).toEqual(SynchronousPromise.unresolved());
+            expect(MockAxios.options()).toBeInstanceOf(SynchronousPromise);
         });
         it("`request` should return a promise", () => {
-            expect(MockAxios.request()).toEqual(SynchronousPromise.unresolved());
+            expect(MockAxios.request()).toBeInstanceOf(SynchronousPromise);
         });
         it("`all` should return a promise", () => {
             const promise = Promise.resolve("");
@@ -70,13 +70,14 @@ describe("MockAxios", () => {
             expect(MockAxios.popPromise()).toBeUndefined();
         });
 
-        it("`mockResponse` resolve the provided promise", () => {
+        it("`mockResponse` should resolve the provided promise", () => {
             const firstFn = jest.fn();
             const secondFn = jest.fn();
             const thirdFn = jest.fn();
 
             MockAxios.post().then(firstFn);
-            const secondPromise = MockAxios.post().then(secondFn);
+            const secondPromise = MockAxios.post();
+            secondPromise.then(secondFn);
             MockAxios.post().then(thirdFn);
 
             const responseData = { data: { text: "some data" } };
@@ -157,9 +158,8 @@ describe("MockAxios", () => {
         it("`mockError` should fail the given promise with the provided response", () => {
             const thenFn = jest.fn();
             const catchFn = jest.fn();
-            const promise = MockAxios.post()
-                .then(thenFn)
-                .catch(catchFn);
+            const promise = MockAxios.post();
+            promise.then(thenFn).catch(catchFn);
 
             const errorObj = { n: "this is an error" };
 
@@ -180,7 +180,8 @@ describe("MockAxios", () => {
             const thirdFn = jest.fn();
 
             MockAxios.post().catch(firstFn);
-            const secondPromise = MockAxios.post().catch(secondFn);
+            const secondPromise = MockAxios.post();
+            secondPromise.catch(secondFn);
             MockAxios.post().catch(thirdFn);
 
             MockAxios.mockError({}, secondPromise);
@@ -245,7 +246,6 @@ describe("MockAxios", () => {
             MockAxios.mockError(new CustomError("custom error"));
 
             expect(catchFn).toHaveBeenCalled();
-            console.log(catchFn.mock.calls[0]);
             expect(catchFn.mock.calls[0][0]).toBeInstanceOf(CustomError);
         });
     });
