@@ -164,7 +164,7 @@ MockAxios.mockError = (
     }
 
     // resolving the Promise with the given response data
-    promise.reject(Object.assign({}, error));
+    promise.reject(error);
 };
 
 MockAxios.lastReqGet = () => {
