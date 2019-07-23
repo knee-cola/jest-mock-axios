@@ -235,6 +235,19 @@ describe("MockAxios", () => {
                 MockAxios.mockError(undefined, undefined, true),
             ).not.toThrow();
         });
+
+        it("`mockError` should pass down the error object", () => {
+            class CustomError extends Error {}
+            const promise = MockAxios.post();
+            const catchFn = jest.fn();
+            promise.catch(catchFn);
+
+            MockAxios.mockError(new CustomError("custom error"));
+
+            expect(catchFn).toHaveBeenCalled();
+            console.log(catchFn.mock.calls[0]);
+            expect(catchFn.mock.calls[0][0]).toBeInstanceOf(CustomError);
+        });
     });
 
     // lastReqGet - returns the most recent request
