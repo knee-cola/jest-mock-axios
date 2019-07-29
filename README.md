@@ -325,9 +325,7 @@ If you need an additional feature, you can request it by creating a new issue on
 Also you are welcome to implement the missing feature yourself and make a pull request :)
 
 # Synchronous promise
-Tha magic which enables axios mock to work synchronously is hidden away in [`jest-mock-promise`](https://www.npmjs.com/package/jest-mock-promise), which enables promises to be settled in synchronous manner.
-
-The [`jest-mock-promise`](https://www.npmjs.com/package/jest-mock-promise) can be used to mock any asyc component which uses promises.
+The magic which enables axios mock to work synchronously is hidden away in [`synchronous-promise`](https://www.npmjs.com/package/synchronous-promise), which enables promises to be settled in synchronous manner.
 
 # Inspiration
 This mock is loosely based on the following gist: [tux4/axios-test.js](https://gist.github.com/tux4/36006a1859323f779ab0)
