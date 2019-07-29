@@ -8,13 +8,6 @@ export interface HttpResponse {
     config?: object;
 }
 
-export type AnyFunction = (...args: any[]) => any;
-
-// spy is a function which extends an object (it has static methods and properties)
-export type SpyFn = AnyFunction & { mockClear: AnyFunction };
-
-export type AxiosFn = (...args: any[]) => SpyFn;
-
 interface Interceptors {
     request: {
         use: jest.Mock<number, [any?, any?]>;
