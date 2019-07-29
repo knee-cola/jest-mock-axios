@@ -5,7 +5,7 @@ const UppercaseProxy = (clientMessage) => {
     axios.interceptors.response.use((config) => config);
 
     // requesting data from server
-    let axiosPromise = axios.post("/web-service-url/", { data: clientMessage });
+    const axiosPromise = axios.post("/web-service-url/", { data: clientMessage });
 
     // converting server response to upper case
     const axiosPromiseConverted = axiosPromise.then((serverData) =>

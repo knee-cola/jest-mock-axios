@@ -236,7 +236,7 @@ describe("MockAxios", () => {
                 MockAxios.mockError(undefined, undefined, true),
             ).not.toThrow();
         });
-      
+
         it("`mockError` should pass down the error object", () => {
             class CustomError extends Error {}
             const promise = MockAxios.post();
@@ -246,7 +246,6 @@ describe("MockAxios", () => {
             MockAxios.mockError(new CustomError("custom error"));
 
             expect(catchFn).toHaveBeenCalled();
-            console.log(catchFn.mock.calls[0]);
             expect(catchFn.mock.calls[0][0]).toBeInstanceOf(CustomError);
         });
     });
