@@ -1,4 +1,4 @@
-import SyncPromise from "jest-mock-promise";
+import { SynchronousPromise, UnresolvedSynchronousPromise  } from "synchronous-promise";
 
 export interface HttpResponse {
     data: any;
@@ -7,6 +7,13 @@ export interface HttpResponse {
     headers?: object;
     config?: object;
 }
+
+export type AnyFunction = (...args: any[]) => any;
+
+// spy is a function which extends an object (it has static methods and properties)
+export type SpyFn = AnyFunction & { mockClear: AnyFunction };
+
+export type AxiosFn = (...args: any[]) => SpyFn;
 
 interface Interceptors {
     request: {
@@ -23,14 +30,14 @@ interface AxiosDefaults {
 
 export interface AxiosAPI {
     // mocking Axios methods
-    get: jest.Mock<SyncPromise, [string?, any?, any?]>;
-    post: jest.Mock<SyncPromise, [string?, any?, any?]>;
-    put: jest.Mock<SyncPromise, [string?, any?, any?]>;
-    patch: jest.Mock<SyncPromise, [string?, any?, any?]>;
-    delete: jest.Mock<SyncPromise, [string?, any?, any?]>;
-    head: jest.Mock<SyncPromise, [string?, any?, any?]>;
-    options: jest.Mock<SyncPromise, [string?, any?, any?]>;
-    request: jest.Mock<SyncPromise, [any?]>;
+    get: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
+    post: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
+    put: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
+    patch: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
+    delete: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
+    head: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
+    options: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
+    request: jest.Mock<UnresolvedSynchronousPromise<any>, [any?]>;
     all: jest.Mock<Promise<any>, [any]>;
     create: jest.Mock<AxiosMockType, []>;
     interceptors: Interceptors;
@@ -67,7 +74,7 @@ export interface AxiosMockAPI {
      */
     mockResponse: (
         response?: HttpResponse,
-        queueItem?: SyncPromise | AxiosMockQueueItem,
+        queueItem?: Promise<any> | AxiosMockQueueItem,
         silentMode?: boolean,
     ) => void;
     /**
@@ -79,19 +86,19 @@ export interface AxiosMockAPI {
      */
     mockError: (
         error?: any,
-        queueItem?: SyncPromise | AxiosMockQueueItem,
+        queueItem?: Promise<any> | AxiosMockQueueItem,
         silentMode?: boolean,
     ) => void;
     /**
      * Returns promise of the most recent request
      */
-    lastPromiseGet: () => SyncPromise;
+    lastPromiseGet: () => SynchronousPromise<any>;
     /**
      * Removes the give promise from the queue
      * @param promise
      */
 
-    popPromise: (promise?: SyncPromise) => SyncPromise;
+    popPromise: (promise?: UnresolvedSynchronousPromise<any>) => UnresolvedSynchronousPromise<any>;
     /**
      * Returns request item of the most recent request
      */
@@ -123,7 +130,7 @@ export interface AxiosMockAPI {
 }
 
 export interface AxiosMockQueueItem {
-    promise: SyncPromise;
+    promise: UnresolvedSynchronousPromise<any>;
     url: string;
     data?: any;
     config?: any;
@@ -133,4 +140,4 @@ export interface AxiosMockQueueItem {
  * Axios object can be called like a function,
  * that's why we're defining it as a spy
  */
-export type AxiosMockType = AxiosAPI & AxiosMockAPI & jest.Mock<SyncPromise, [any?]>;
+export type AxiosMockType = AxiosAPI & AxiosMockAPI & jest.Mock<UnresolvedSynchronousPromise<any>, [any?]>;

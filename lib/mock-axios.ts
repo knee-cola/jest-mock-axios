@@ -6,7 +6,7 @@
  * @license  @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
-import SyncPromise from "jest-mock-promise";
+import { SynchronousPromise, UnresolvedSynchronousPromise  } from "synchronous-promise";
 import Cancel from "./cancel/Cancel";
 import CancelToken from "./cancel/CancelToken";
 import {
@@ -18,10 +18,10 @@ import {
 /** a FIFO queue of pending request */
 const _pending_requests: AxiosMockQueueItem[] = [];
 
-const _newReq: (config?: any) => SyncPromise = (config: any = {}) => {
+const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: any = {}) => {
     const url: string = config.url;
     const data: any = config.data;
-    const promise: SyncPromise = new SyncPromise();
+    const promise: UnresolvedSynchronousPromise<any> = SynchronousPromise.unresolved();
     _pending_requests.push({
         config,
         data,
@@ -69,7 +69,7 @@ MockAxios.defaults = {
     },
 };
 
-MockAxios.popPromise = (promise?: SyncPromise) => {
+MockAxios.popPromise = (promise?: SynchronousPromise<any>) => {
     if (promise) {
         // remove the promise from pending queue
         for (let ix = 0; ix < _pending_requests.length; ix++) {
@@ -105,7 +105,7 @@ MockAxios.popRequest = (request?: AxiosMockQueueItem) => {
  * Removes an item form the queue, based on it's type
  * @param queueItem
  */
-const popQueueItem = (queueItem: SyncPromise | AxiosMockQueueItem = null) => {
+const popQueueItem = (queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null) => {
     // first let's pretend the param is a queue item
     const request: AxiosMockQueueItem = MockAxios.popRequest(
         queueItem as AxiosMockQueueItem,
@@ -117,13 +117,13 @@ const popQueueItem = (queueItem: SyncPromise | AxiosMockQueueItem = null) => {
         return request.promise;
     } else {
         // ELSE maybe the `queueItem` is a promise (legacy mode)
-        return MockAxios.popPromise(queueItem as SyncPromise);
+        return MockAxios.popPromise(queueItem as UnresolvedSynchronousPromise<any>);
     }
 };
 
 MockAxios.mockResponse = (
     response?: HttpResponse,
-    queueItem: SyncPromise | AxiosMockQueueItem = null,
+    queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null,
     silentMode: boolean = false,
 ): void => {
     // replacing missing data with default values
@@ -152,7 +152,7 @@ MockAxios.mockResponse = (
 
 MockAxios.mockError = (
     error: any = {},
-    queueItem: SyncPromise | AxiosMockQueueItem = null,
+    queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null,
     silentMode: boolean = false,
 ) => {
     const promise = popQueueItem(queueItem);
@@ -164,7 +164,7 @@ MockAxios.mockError = (
     }
 
     // resolving the Promise with the given response data
-    promise.reject(Object.assign({}, error));
+    promise.reject(error);
 };
 
 MockAxios.lastReqGet = () => {

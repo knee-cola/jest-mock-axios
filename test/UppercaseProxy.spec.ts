@@ -29,10 +29,10 @@ it("UppercaseProxy should get data from the server and convert it to UPPERCASE",
     const responseObj = { data: "server says hello!" };
     mockAxios.mockResponse(responseObj);
 
+    // catch should not have been called
+    expect(catchFn).not.toHaveBeenCalled();
+
     // checking the `then` spy has been called and if the
     // response from the server was converted to upper case
     expect(thenFn).toHaveBeenCalledWith("SERVER SAYS HELLO!");
-
-    // catch should not have been called
-    expect(catchFn).not.toHaveBeenCalled();
 });
