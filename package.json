@@ -31,19 +31,19 @@
   },
   "homepage": "https://github.com/knee-cola/jest-mock-axios#readme",
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/preset-typescript": "^7.3.3",
-    "@types/jest": "^24.0.15",
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-typescript": "^7.6.0",
+    "@types/jest": "^24.0.18",
     "babel-loader": "^8.0.6",
-    "jest": "^24.8.0",
-    "rimraf": "^2.6.3",
+    "jest": "^24.9.0",
+    "rimraf": "^2.7.1",
     "ts-jest": "^24.0.2",
-    "tslint": "^5.18.0",
-    "typescript": "^3.5.3"
+    "tslint": "^5.19.0",
+    "typescript": "^3.6.2"
   },
   "dependencies": {
-    "synchronous-promise": "^2.0.9"
+    "synchronous-promise": "^2.0.10"
   }
 }
