@@ -143,7 +143,7 @@ The given response object will get passed to `then` even handler function.
 The second argument enables us to pinpoint an exact server request we wish to resolve. This can be useful if we're making multiple server requests and are planing to resolve them in a different order from the one in which they were made.
 
 We supply two different objects:
-* a extended request info object, which can be accessed by calling `lastReqGet` method
+* an extended request info object, which can be accessed by calling `lastReqGet` method
 * a `promise` object, which can be accessed by calling the `lastPromiseGet` method
 
 If ommited this argument defaults to the latest request made (internally the `lastReqGet` method is called).
@@ -228,7 +228,7 @@ import axios from '../lib/index';
 class MyComponent {
 
     CallServer () {
-        // making a `post` requst and storing the given promise
+        // making a `post` request and storing the given promise
         this.axiosPromise = axios.post('/web-service-url/', { data: clientMessage });
     }
 }
