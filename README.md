@@ -123,7 +123,7 @@ In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, 
 *Note: `all` is just an alias to Promise.all (as it is in axios). Thus you can use it with mockResponse, but you can still retrieve statistics for it. Mock the requests used in all instead.*
 
 ## axios.mockResponse(response[, requestInfo])
-After a request has been made to the server (web service), this method resolves that request by simulating a server response. 
+After a request has been made to the server (web service), this method resolves that request by simulating a server response. Status meaning is ignored, i.e. `400` will still resolve `axios` promise. Use `mockError` for non-2xx responses.
 **NOTE:** This method should be called _after_ the axios call in your test for the promise to resolve properly.
 
 ### Arguments: `response`
