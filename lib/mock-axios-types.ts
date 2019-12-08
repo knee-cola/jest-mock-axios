@@ -59,32 +59,34 @@ interface CancelTokenStatic {
 
 export interface AxiosMockAPI {
     /**
-     * Simulate a server response, (optionally) with the given data
+     * Simulates a server response, (optionally) with the given data
      * @param response (optional) response returned by the server
      * @param queueItem (optional) request promise for which response should be resolved
      * @param silentMode (optional) specifies whether the call should throw an error or
-     *   only fail quietly if no matching request is found.
+     *   only fail quietly if no matching request is found. Defaults to false.
      */
     mockResponse: (
         response?: HttpResponse,
         queueItem?: Promise<any> | AxiosMockQueueItem,
         silentMode?: boolean,
     ) => void;
+
     /**
-     * Simulate a server response for a specific request, (optionally) with the given data
+     * Simulates a server response for a specific request, (optionally) with the given data
      * @param criteria specifies which request should be resolved; it can be just the URL
      *   or an object containing url and/or method
      * @param response (optional) response returned by the server
      * @param silentMode (optional) specifies whether the call should throw an error or
-     *   only fail quietly if no matching request is found.
+     *   only fail quietly if no matching request is found. Defaults to false.
      */
     mockResponseFor: (
         criteria: string | AxiosMockRequestCriteria,
         response?: HttpResponse,
         silentMode?: boolean,
     ) => void;
+
     /**
-     * Simulate an error in server request
+     * Simulates an error in server request
      * @param error (optional) error object
      * @param queueItem (optional) request promise for which response should be resolved
      * @param silentMode (optional) specifies whether the call should throw an error or
@@ -95,20 +97,24 @@ export interface AxiosMockAPI {
         queueItem?: Promise<any> | AxiosMockQueueItem,
         silentMode?: boolean,
     ) => void;
+
     /**
      * Returns promise of the most recent request
      */
     lastPromiseGet: () => SynchronousPromise<any>;
+
     /**
      * Removes the give promise from the queue
      * @param promise
      */
 
     popPromise: (promise?: UnresolvedSynchronousPromise<any>) => UnresolvedSynchronousPromise<any>;
+
     /**
      * Returns request item of the most recent request
      */
     lastReqGet: () => AxiosMockQueueItem;
+
     /**
      * Returns request item of the most recent request with the given criteria
      * Returns undefined if no matching request could be found
@@ -119,6 +125,7 @@ export interface AxiosMockAPI {
      * @param criteria the criteria by which to find the request
      */
     getReqMatching: (criteria: AxiosMockRequestCriteria) => AxiosMockQueueItem;
+
     /**
      * Returns request item of the most recent request with the given url
      * The url must equal the url given in the 1st parameter when the request was made
@@ -129,6 +136,7 @@ export interface AxiosMockAPI {
      * @param url the url of the request to be found
      */
     getReqByUrl: (url: string) => AxiosMockQueueItem;
+
     /**
      * Removes the give request from the queue
      * @param promise

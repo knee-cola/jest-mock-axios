@@ -163,11 +163,13 @@ MockAxios.mockResponseFor = (
         criteria = {url: criteria};
     }
     const queueItem = MockAxios.getReqMatching(criteria);
+
     if (!queueItem && !silentMode) {
         throw new Error("No request to respond to!");
     } else if (!queueItem) {
         return;
     }
+
     MockAxios.mockResponse(response, queueItem, silentMode);
 };
 
@@ -201,9 +203,11 @@ const _checkCriteria = (item: AxiosMockQueueItem, criteria: AxiosMockRequestCrit
     if (criteria.method !== undefined && criteria.method !== item.method) {
         return false;
     }
+
     if (criteria.url !== undefined && criteria.url !== item.url) {
         return false;
     }
+
     return true;
 };
 
