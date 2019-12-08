@@ -15,6 +15,7 @@ However, if you look at the [source code](https://github.com/knee-cola/jest-mock
 * [Basic example](#basic-example)
 * [Axios mock API](#axios-mock-api)
   * [axios.mockResponse](#axiosmockresponseresponse-requestinfo-silentmode)
+  * [axios.mockResponseFor](#axiosmockresponseforcriteria-response-silentmode)
   * [axios.mockError](#axiosmockerrorerr-requestinfo)
   * [axios.lastReqGet](#axioslastreqget)
   * [axios.lastPromiseGet](#axioslastpromiseget)
@@ -115,14 +116,14 @@ At the bottom of this page you can find [additional examples](#additional-exampl
 # Axios mock API
 In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, `create`, `all`, `head`, `options`, `request`), which are exposed as spies, Axios mock has three additional public methods, which are intended to facilitate mocking:
 * `mockResponse` - simulates a server (web service) response
-* `mockError` - simulates a (network/server) error 
+* `mockError` - simulates a (network/server) error
 * `lastReqGet` - returns extended info about the most recent request
 * `lastPromiseGet` - returns promise created when the most recent request was made
 * `reset` - resets the Axios mock object - prepare it for the next test (typically used in `afterEach`)
 
 *Note: `all` is just an alias to Promise.all (as it is in axios). Thus you can use it with mockResponse, but you can still retrieve statistics for it. Mock the requests used in all instead.*
 
-## axios.mockResponse(response[, requestInfo])
+## axios.mockResponse(response[, requestInfo[, silentMode]])
 After a request has been made to the server (web service), this method resolves that request by simulating a server response. Status meaning is ignored, i.e. `400` will still resolve `axios` promise. Use `mockError` for non-2xx responses.
 **NOTE:** This method should be called _after_ the axios call in your test for the promise to resolve properly.
 
@@ -154,8 +155,12 @@ At the end of this document you can find [an example](#resolving-requests-out-of
 Both `mockResponse` and `mockError` will throw an error if you're trying to respond to no request, as this usually means you're doing something wrong.
 You can change this behavior by passing `true` as third argument, activating the so-called `silentMode`. With `silentMode` activated, the methods will just do nothing.
 
+## axios.mockResponseFor(criteria, response[, silentMode])
+This behaves very similar to `mockResponse`, but you explicitly specify the request you want to respond to by
+specifying an object containing `url` and/or `method`, or just a plain string (to match by URL only).
+
 ## axios.mockError(err[, requestInfo])
-This method simulates an error while making a server request (network error, server error, etc ...). 
+This method simulates an error while making a server request (network error, server error, etc ...).
 **NOTE:** This method should be called _after_ the axios call in your test for the promise to resolve properly.
 
 ### Arguments: `err`
@@ -192,6 +197,14 @@ let requestInfo = {
 **NOTE:** this is a sibling method to the `lastPromiseGet` (which returns only the promise portion of this the request object).
 
 If no request has been made yet, returns `undefined`.
+
+## axios.getReqMatching(criteria)
+
+`getReqMatching()` returns the same info about a specific request as `lastReqGet` (see above). Instead of returning
+the most recent request, it returns the most recent request matching the given criteria or `undefined` if no such request could be found.
+
+### Arguments: `criteria`
+An object specifying which request to match. Currently `url` and `method` are supported.
 
 ## axios.getReqByUrl(url)
 
@@ -244,14 +257,14 @@ In our spec file we will compare promise stored inside the `MyComponent` with va
     import MyComponent from '../src/SomeSourceFile';
 
     let myComp = new MyComponent();
-    
+
     myComp.CallServer();
 
     // getting the extended info about the most recent request
     let lastReqInfo = MockAxios.lastReqGet();
     // getting the promise made when the most recent request was made
     let lastPromise = MockAxios.lastPromiseGet();
-    
+
     // the following expression will write `true` to the console
     // > here we compare promise stored in the `MyComponent` to the one
     //   returned by the `lastPromiseGet` method
@@ -278,7 +291,7 @@ it('when resolving a request an appropriate handler should be called', () => {
 
     let thenFn1 = jest.fn(),
         thenFn2 = jest.fn();
-    
+
     // creating the FIRST server request
     UppercaseProxy('client is saying hello!').then(thenFn1);
     // storing the request info - we'll need it later to pinpoint the request
