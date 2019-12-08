@@ -159,6 +159,21 @@ You can change this behavior by passing `true` as third argument, activating the
 This behaves very similar to `mockResponse`, but you explicitly specify the request you want to respond to by
 specifying an object containing `url` and/or `method`, or just a plain string (to match by URL only).
 
+Example:
+```js
+mockAxios.mockResponseFor({url: '/get'}, {data: "test"});
+```
+
+### Arguments: `criteria`
+
+An object or string (the url) specifying which request to match. Currently `url` and `method` are supported for the object. If both `url` and `method` are passed, it only responds to requests matching both. If multiple requests match against the criteria, the most recent one is responded to.
+
+### Arguments: `response`
+The second argument is a `response` object, which works the same way as described part about the `mockResponse` method.
+
+### Arguments: (optional) `silentMode`
+The third argument is the `silentMode` flag, which works the same way as described part about the `mockResponse` method.
+
 ## axios.mockError(err[, requestInfo])
 This method simulates an error while making a server request (network error, server error, etc ...).
 **NOTE:** This method should be called _after_ the axios call in your test for the promise to resolve properly.
