@@ -71,6 +71,19 @@ export interface AxiosMockAPI {
         silentMode?: boolean,
     ) => void;
     /**
+     * Simulate a server response for a specific request, (optionally) with the given data
+     * @param criteria specifies which request should be resolved; it can be just the URL
+     *   or an object containing url and/or method
+     * @param response (optional) response returned by the server
+     * @param silentMode (optional) specifies whether the call should throw an error or
+     *   only fail quietly if no matching request is found.
+     */
+    mockResponseFor: (
+        criteria: string | AxiosMockRequestCriteria,
+        response?: HttpResponse,
+        silentMode?: boolean,
+    ) => void;
+    /**
      * Simulate an error in server request
      * @param error (optional) error object
      * @param queueItem (optional) request promise for which response should be resolved

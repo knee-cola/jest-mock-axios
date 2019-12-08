@@ -151,6 +151,24 @@ describe("MockAxios", () => {
             await promise;
             expect(thenFn).toHaveBeenCalled();
         });
+
+        it("`mockResponseFor` should get the correct request using the shortcut", () => {
+            const url = "url";
+            const thenFn = jest.fn();
+            MockAxios.post(url).then(thenFn);
+            MockAxios.get("otherurl")
+            MockAxios.mockResponseFor(url);
+            expect(thenFn).toHaveBeenCalled();
+        });
+
+        it("`mockResponseFor` should get the correct request", () => {
+            const url = "url";
+            const thenFn = jest.fn();
+            MockAxios.post(url).then(thenFn);
+            MockAxios.get(url)
+            MockAxios.mockResponseFor({url, method: "post"});
+            expect(thenFn).toHaveBeenCalled();
+        });
     });
 
     describe("mockError", () => {

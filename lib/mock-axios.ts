@@ -154,6 +154,23 @@ MockAxios.mockResponse = (
     promise.resolve(response);
 };
 
+MockAxios.mockResponseFor = (
+    criteria: string | AxiosMockRequestCriteria,
+    response?: HttpResponse,
+    silentMode: boolean = false,
+): void => {
+    if (typeof criteria === "string") {
+        criteria = {url: criteria};
+    }
+    const queueItem = MockAxios.getReqMatching(criteria);
+    if (!queueItem && !silentMode) {
+        throw new Error("No request to respond to!");
+    } else if (!queueItem) {
+        return;
+    }
+    MockAxios.mockResponse(response, queueItem, silentMode);
+};
+
 MockAxios.mockError = (
     error: any = {},
     queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null,
