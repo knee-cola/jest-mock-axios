@@ -11,6 +11,7 @@ const UppercaseProxy = (clientMessage) => {
     const axiosPromiseConverted = axiosPromise.then((serverData) =>
         serverData.data.toUpperCase(),
     ).catch(() => {
+        // tslint:disable-next-line: no-console
         console.log("catched!");
     });
 

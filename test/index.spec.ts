@@ -305,13 +305,13 @@ describe("MockAxios", () => {
             config: {
                 ...config,
                 data,
-                url,
                 method,
+                url,
             },
             data,
+            method,
             promise,
             url,
-            method,
         });
     });
 
