@@ -97,6 +97,16 @@ export interface AxiosMockAPI {
      */
     lastReqGet: () => AxiosMockQueueItem;
     /**
+     * Returns request item of the most recent request with the given criteria
+     * Returns undefined if no matching request could be found
+     *
+     * The result can then be used with @see mockResponse; in most cases it is better
+     * to use @see mockResponseFor instead of calling this function yourself
+     *
+     * @param criteria the criteria by which to find the request
+     */
+    getReqMatching: (criteria: AxiosMockRequestCriteria) => AxiosMockQueueItem;
+    /**
      * Returns request item of the most recent request with the given url
      * The url must equal the url given in the 1st parameter when the request was made
      * Returns undefined if no matching request could be found
@@ -124,9 +134,15 @@ export interface AxiosMockAPI {
 
 export interface AxiosMockQueueItem {
     promise: UnresolvedSynchronousPromise<any>;
+    method: string;
     url: string;
     data?: any;
     config?: any;
+}
+
+export interface AxiosMockRequestCriteria {
+    url?: string;
+    method?: string;
 }
 
 /**

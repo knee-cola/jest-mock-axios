@@ -6,11 +6,12 @@
  * @license  @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
-import { SynchronousPromise, UnresolvedSynchronousPromise  } from "synchronous-promise";
+import { SynchronousPromise, UnresolvedSynchronousPromise } from "synchronous-promise";
 import Cancel from "./cancel/Cancel";
 import CancelToken from "./cancel/CancelToken";
 import {
     AxiosMockQueueItem,
+    AxiosMockRequestCriteria,
     AxiosMockType,
     HttpResponse,
 } from "./mock-axios-types";
@@ -19,23 +20,26 @@ import {
 const _pending_requests: AxiosMockQueueItem[] = [];
 
 const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: any = {}) => {
+    const method: string = config.method;
     const url: string = config.url;
     const data: any = config.data;
     const promise: UnresolvedSynchronousPromise<any> = SynchronousPromise.unresolved();
     _pending_requests.push({
         config,
         data,
+        method,
         promise,
         url,
     });
     return promise;
 };
 
-const _helperReq = (url: string, data?: any, config?: any) => {
+const _helperReq = (method: string, url: string, data?: any, config?: any) => {
     const conf = data && config ? config : {};
     return _newReq({
         ...conf,
         data,
+        method,
         url,
     });
 };
@@ -43,15 +47,15 @@ const _helperReq = (url: string, data?: any, config?: any) => {
 const MockAxios: AxiosMockType = (jest.fn(_newReq) as unknown) as AxiosMockType;
 
 // mocking Axios methods
-MockAxios.get = jest.fn(_helperReq);
-MockAxios.post = jest.fn(_helperReq);
-MockAxios.put = jest.fn(_helperReq);
-MockAxios.patch = jest.fn(_helperReq);
-MockAxios.delete = jest.fn(_helperReq);
+MockAxios.get = jest.fn(_helperReq.bind(null, "get"));
+MockAxios.post = jest.fn(_helperReq.bind(null, "post"));
+MockAxios.put = jest.fn(_helperReq.bind(null, "put"));
+MockAxios.patch = jest.fn(_helperReq.bind(null, "patch"));
+MockAxios.delete = jest.fn(_helperReq.bind(null, "delete"));
 MockAxios.request = jest.fn(_newReq);
 MockAxios.all = jest.fn((values) => Promise.all(values));
-MockAxios.head = jest.fn(_helperReq);
-MockAxios.options = jest.fn(_helperReq);
+MockAxios.head = jest.fn(_helperReq.bind(null, "head"));
+MockAxios.options = jest.fn(_helperReq.bind(null, "options"));
 MockAxios.create = jest.fn(() => MockAxios);
 
 MockAxios.interceptors = {
@@ -176,11 +180,25 @@ MockAxios.lastPromiseGet = () => {
     return req ? req.promise : void 0;
 };
 
-MockAxios.getReqByUrl = (url: string) => {
+const _checkCriteria = (item: AxiosMockQueueItem, criteria: AxiosMockRequestCriteria) => {
+    if (criteria.method !== undefined && criteria.method !== item.method) {
+        return false;
+    }
+    if (criteria.url !== undefined && criteria.url !== item.url) {
+        return false;
+    }
+    return true;
+};
+
+MockAxios.getReqMatching = (criteria: AxiosMockRequestCriteria) => {
     return _pending_requests
         .slice()
         .reverse() // reverse cloned array to return most recent req
-        .find((x: AxiosMockQueueItem) => x.url === url);
+        .find((x: AxiosMockQueueItem) => _checkCriteria(x, criteria));
+};
+
+MockAxios.getReqByUrl = (url: string) => {
+    return MockAxios.getReqMatching({url});
 };
 
 MockAxios.reset = () => {
