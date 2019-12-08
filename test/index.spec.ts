@@ -153,6 +153,41 @@ describe("MockAxios", () => {
         });
     });
 
+    describe("mockResponseFor", () => {
+        it("`mockResponseFor` should get the correct request using the shortcut", () => {
+            const url = "url";
+            const thenFn = jest.fn();
+            MockAxios.post(url).then(thenFn);
+            MockAxios.get("otherurl");
+            MockAxios.mockResponseFor(url);
+            expect(thenFn).toHaveBeenCalled();
+        });
+
+        it("`mockResponseFor` should get the correct request", () => {
+            const url = "url";
+            const thenFn = jest.fn();
+            MockAxios.post(url).then(thenFn);
+            MockAxios.get(url);
+            MockAxios.mockResponseFor({url, method: "post"});
+            expect(thenFn).toHaveBeenCalled();
+        });
+
+        it("`mockResponseFor` should throw an error if no matching request can be found and !silentMode", () => {
+            const url = "url";
+            expect(() => MockAxios.mockResponseFor({url, method: "post"})).toThrowError(
+                "No request to respond to!",
+            );
+        });
+
+        it("`mockResponseFor` should not throw an error if no matching request can be found but silentMode", () => {
+            const url = "url";
+            const thenFn = jest.fn();
+            MockAxios.post("otherurl").then(thenFn);
+            expect(() => MockAxios.mockResponseFor({url, method: "post"}, {data: {}}, true)).not.toThrow();
+            expect(thenFn).not.toHaveBeenCalled();
+        });
+    });
+
     describe("mockError", () => {
         // mockError - Simulate an error in server request
         it("`mockError` should fail the given promise with the provided response", () => {
@@ -259,6 +294,7 @@ describe("MockAxios", () => {
     });
 
     it("`lastReqGet` should contain config as passed to axios", () => {
+        const method = "post";
         const url = "url";
         const data = { data: "data" };
         const config = { config: "config" };
@@ -270,10 +306,12 @@ describe("MockAxios", () => {
                 ...config,
                 data,
                 url,
+                method,
             },
             data,
             promise,
             url,
+            method,
         });
     });
 
@@ -285,7 +323,23 @@ describe("MockAxios", () => {
         expect(MockAxios.lastPromiseGet()).toBe(lastPromise);
     });
 
-    it("`getReqByUrl should return the most recent request matching the url", () => {
+    it("`getReqMatching` should return the most recent request matching the criteria", () => {
+        const url = "url";
+        MockAxios.delete(url);
+        const promise = MockAxios.delete(url);
+        MockAxios.get(url);
+
+        expect(MockAxios.getReqMatching({url, method: "delete"}).promise).toBe(promise);
+    });
+
+    it("`getReqMatching` should return undefined if no matching request can be found", () => {
+        const url = "url";
+        MockAxios.post();
+
+        expect(MockAxios.getReqMatching({url})).toBeUndefined();
+    });
+
+    it("`getReqByUrl` should return the most recent request matching the url", () => {
         const url = "url";
         MockAxios.post(url);
         const lastPromise = MockAxios.post(url);
@@ -293,7 +347,7 @@ describe("MockAxios", () => {
         expect(MockAxios.getReqByUrl(url).promise).toBe(lastPromise);
     });
 
-    it("`getReqByUrl should return undefined if no matching request can be found", () => {
+    it("`getReqByUrl` should return undefined if no matching request can be found", () => {
         const url = "url";
         MockAxios.post();
 

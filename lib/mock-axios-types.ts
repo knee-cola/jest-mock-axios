@@ -71,6 +71,19 @@ export interface AxiosMockAPI {
         silentMode?: boolean,
     ) => void;
     /**
+     * Simulate a server response for a specific request, (optionally) with the given data
+     * @param criteria specifies which request should be resolved; it can be just the URL
+     *   or an object containing url and/or method
+     * @param response (optional) response returned by the server
+     * @param silentMode (optional) specifies whether the call should throw an error or
+     *   only fail quietly if no matching request is found.
+     */
+    mockResponseFor: (
+        criteria: string | AxiosMockRequestCriteria,
+        response?: HttpResponse,
+        silentMode?: boolean,
+    ) => void;
+    /**
      * Simulate an error in server request
      * @param error (optional) error object
      * @param queueItem (optional) request promise for which response should be resolved
@@ -96,6 +109,16 @@ export interface AxiosMockAPI {
      * Returns request item of the most recent request
      */
     lastReqGet: () => AxiosMockQueueItem;
+    /**
+     * Returns request item of the most recent request with the given criteria
+     * Returns undefined if no matching request could be found
+     *
+     * The result can then be used with @see mockResponse; in most cases it is better
+     * to use @see mockResponseFor instead of calling this function yourself
+     *
+     * @param criteria the criteria by which to find the request
+     */
+    getReqMatching: (criteria: AxiosMockRequestCriteria) => AxiosMockQueueItem;
     /**
      * Returns request item of the most recent request with the given url
      * The url must equal the url given in the 1st parameter when the request was made
@@ -124,9 +147,15 @@ export interface AxiosMockAPI {
 
 export interface AxiosMockQueueItem {
     promise: UnresolvedSynchronousPromise<any>;
+    method: string;
     url: string;
     data?: any;
     config?: any;
+}
+
+export interface AxiosMockRequestCriteria {
+    url?: string;
+    method?: string;
 }
 
 /**
