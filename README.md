@@ -343,6 +343,38 @@ Although this might not be the most realistic use-case of this functionality, it
 
 **NOTE:** the identical effect can be achieved by using the [`lastPromiseGet`](#axioslastpromiseget) method. These two methods perform a similar task, as described in the corresponding documentation.
 
+## Using `await` and `async`
+
+You can also use this library with `await` and `async`. Given the following async function (same as above):
+```js
+const UppercaseProxy = async (clientMessage) => {
+    const serverData = await axios.post("/web-service-url/", { data: clientMessage });
+
+    return serverData.data.toUpperCase();
+};
+```
+
+The function can be tested like this (basically the same idea as in the first example at the top):
+```js
+it("UppercaseProxy should get data from the server and convert it to UPPERCASE", async () => {
+    const clientMessage = "client is saying hello!";
+
+    const promise = UppercaseProxy(clientMessage);
+
+    expect(mockAxios.post).toHaveBeenCalledWith("/web-service-url/", {
+        data: clientMessage,
+    });
+
+    // simulating a server response
+    const responseObj = { data: "server says hello!" };
+    mockAxios.mockResponse(responseObj);
+
+    const result = await promise;
+
+    expect(result).toEqual("SERVER SAYS HELLO!")
+});
+```
+
 ## Interceptors
 
 AxiosMock offers basic support for interceptors (i.e. it does not break when interceptors are used in tested code). However, interceptors are not applied to the mocked requests / responses at the moment.
