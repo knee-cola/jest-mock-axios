@@ -24,6 +24,16 @@ const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: an
     const url: string = config.url;
     const data: any = config.data;
     const promise: UnresolvedSynchronousPromise<any> = SynchronousPromise.unresolved();
+
+    if(config.cancelToken) {
+        config.cancelToken.promise.then((cancel: any) => {
+            // check if promise is still waiting for an answer
+            if(_pending_requests.find(x => x.promise === promise)) {
+                MockAxios.mockError(cancel, promise)
+            }
+        })
+    }
+
     _pending_requests.push({
         config,
         data,
@@ -44,18 +54,22 @@ const _helperReq = (method: string, url: string, data?: any, config?: any) => {
     });
 };
 
+const _helperReqNoData = (method: string, url: string, config?: any) => {
+    return _helperReq(method, url, {}, config)
+}
+
 const MockAxios: AxiosMockType = (jest.fn(_newReq) as unknown) as AxiosMockType;
 
 // mocking Axios methods
-MockAxios.get = jest.fn(_helperReq.bind(null, "get"));
+MockAxios.get = jest.fn(_helperReqNoData.bind(null, "get"));
 MockAxios.post = jest.fn(_helperReq.bind(null, "post"));
 MockAxios.put = jest.fn(_helperReq.bind(null, "put"));
 MockAxios.patch = jest.fn(_helperReq.bind(null, "patch"));
-MockAxios.delete = jest.fn(_helperReq.bind(null, "delete"));
+MockAxios.delete = jest.fn(_helperReqNoData.bind(null, "delete"));
 MockAxios.request = jest.fn(_newReq);
 MockAxios.all = jest.fn((values) => Promise.all(values));
-MockAxios.head = jest.fn(_helperReq.bind(null, "head"));
-MockAxios.options = jest.fn(_helperReq.bind(null, "options"));
+MockAxios.head = jest.fn(_helperReqNoData.bind(null, "head"));
+MockAxios.options = jest.fn(_helperReqNoData.bind(null, "options"));
 MockAxios.create = jest.fn(() => MockAxios);
 
 MockAxios.interceptors = {
