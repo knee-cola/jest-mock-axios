@@ -379,8 +379,12 @@ it("UppercaseProxy should get data from the server and convert it to UPPERCASE",
 
 AxiosMock offers basic support for interceptors (i.e. it does not break when interceptors are used in tested code). However, interceptors are not applied to the mocked requests / responses at the moment.
 
+## Cancelling requests
+
+`jest-mock-axios` has basic support for cancelling requests as in axios. Please note that you will get an error if you try to mock a response for a request after it has been cancelled. Please refer to the provided [test case](https://github.com/knee-cola/jest-mock-axios/blob/master/test/cancel.spec.ts) for further usage details.
+
 # Missing features
-AxiosMock covers the most popular parts of Axios API, meaning that some of the features are missing or only partially implemented (i.e. interceptors). AxiosMock provides the `axios.CancelToken` interface, but with an empty implementation.
+AxiosMock covers the most popular parts of Axios API, meaning that some of the features are missing or only partially implemented (i.e. interceptors).
 
 If you need an additional feature, you can request it by creating a new issue on [project's GitHub page](https://github.com/knee-cola/jest-mock-axios/issues/).
 
