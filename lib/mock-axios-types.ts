@@ -23,13 +23,13 @@ interface AxiosDefaults {
 
 export interface AxiosAPI {
     // mocking Axios methods
-    get: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
+    get: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?]>;
     post: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
     put: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
     patch: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
-    delete: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
-    head: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
-    options: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
+    delete: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?]>;
+    head: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?]>;
+    options: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?]>;
     request: jest.Mock<UnresolvedSynchronousPromise<any>, [any?]>;
     all: jest.Mock<Promise<any>, [any]>;
     create: jest.Mock<AxiosMockType, []>;
