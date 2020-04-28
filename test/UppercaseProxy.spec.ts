@@ -1,5 +1,6 @@
 import mockAxios from "../lib/index";
 import UppercaseProxy from "./UppercaseProxy";
+import CancelToken from "../lib/cancel/CancelToken";
 
 afterEach(() => {
     // cleaning up the mess left behind the previous test
@@ -23,6 +24,7 @@ it("UppercaseProxy should get data from the server and convert it to UPPERCASE",
     // c) if the payload was correct ('client is saying hello!')
     expect(mockAxios.post).toHaveBeenCalledWith("/web-service-url/", {
         data: clientMessage,
+        cancelToken: expect.any(CancelToken)
     });
 
     // simulating a server response

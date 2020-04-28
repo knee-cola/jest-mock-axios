@@ -4,8 +4,11 @@ const UppercaseProxy = (clientMessage) => {
     axios.interceptors.request.use((config) => config);
     axios.interceptors.response.use((config) => config);
 
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+
     // requesting data from server
-    const axiosPromise = axios.post("/web-service-url/", { data: clientMessage });
+    const axiosPromise = axios.post("/web-service-url/", { data: clientMessage, cancelToken: source.token });
 
     // converting server response to upper case
     const axiosPromiseConverted = axiosPromise.then((serverData) =>
