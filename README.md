@@ -114,7 +114,7 @@ export default UppercaseProxy;
 At the bottom of this page you can find [additional examples](#additional-examples).
 
 # Axios mock API
-In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, `create`, `all`, `head`, `options`, `request`), which are exposed as spies, Axios mock has three additional public methods, which are intended to facilitate mocking:
+In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, `create`, `all`, `head`, `options`, `request`, `axios(url)`), which are exposed as spies, Axios mock has additional public methods, which are intended to facilitate mocking:
 * `mockResponse` - simulates a server (web service) response
 * `mockError` - simulates a (network/server) error
 * `lastReqGet` - returns extended info about the most recent request
