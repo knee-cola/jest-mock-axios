@@ -163,6 +163,15 @@ describe("MockAxios", () => {
             expect(thenFn).toHaveBeenCalled();
         });
 
+        it("`mockResponseFor` should get the correct request when axios() ist called directly", () => {
+            const url = "url";
+            const thenFn = jest.fn();
+            MockAxios.post("otherurl");
+            MockAxios(url).then(thenFn);
+            MockAxios.mockResponseFor(url);
+            expect(thenFn).toHaveBeenCalled();
+        });
+
         it("`mockResponseFor` should get the correct request", () => {
             const url = "url";
             const thenFn = jest.fn();

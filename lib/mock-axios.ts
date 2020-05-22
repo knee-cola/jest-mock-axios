@@ -19,8 +19,14 @@ import {
 /** a FIFO queue of pending request */
 const _pending_requests: AxiosMockQueueItem[] = [];
 
-const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: any = {}) => {
-    const method: string = config.method;
+const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: any = {}, actualConfig: any = {}) => {
+    if(typeof config === 'string') {
+        // Allow for axios('example/url'[, config])
+        actualConfig.url = config;
+        config = actualConfig;
+    }
+
+    const method: string = config.method || "get";
     const url: string = config.url;
     const data: any = config.data;
     const promise: UnresolvedSynchronousPromise<any> = SynchronousPromise.unresolved();
