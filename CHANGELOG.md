@@ -1,0 +1,95 @@
+# Changelog
+
+## [4.1.0] - 2020-05-22
+
+### Added
+
+- Support `axios(url, [config])` syntax
+
+## [4.0.0] - 2020-04-28
+
+### Changed
+
+- Using `.cancel` in the code to test now actually cancels (i.e. rejects) the axios call / promise.
+
+### Removed
+
+- The signatures of `get`, `delete`, `head`, and `options` now align with these of axios, meaning that the third argument (used to be `data`) has been removed.
+
+## [3.2.0] - 2019-12-08
+
+### Added
+
+- Added `mockResponseFor` and `getReqMatching` to support more sophisticated request-responding (#43 by @ThiefMaster)
+
+### Other
+
+- Updated dependencies
+
+## [3.1.2] - 2019-10-26
+
+### Other
+
+- Update dependencies
+
+## [3.1.1] - 2019-09-07
+
+### Fixed
+
+- Fixes an upstream bug in `synchronous-promise` where `finally` would be called too early (#38)
+
+## [3.1.0] - 2019-07-29
+
+### Changed
+
+- We switched the library for synchronous promises from `jest-mock-promise` to `synchronous-promise`. This offers us:
+  - Support for `finally` (#35)
+  - Better handling of `.catch` (#17)
+
+- The error object used for `mockError` is now passed directly to `catch` / `reject` instead of being cloned beforehand (#14) (Breaking)
+
+
+### Removed
+
+- You can no longer pass the return value of `then` and `catch` to `lastPromiseGet`. This was an undocumented feature. Use the promise directly instead.
+
+## [3.0.0] - 2019-04-27
+
+### Added
+
+* Allow specifying requests to respond to (#1) - see README
+* Provide mocked cancellation (#30, #32), thanks @VanTanev 
+
+### Changed
+
+* Make interface methods non-optional in typings
+
+
+## [2.4.0] - 2019-04-08
+
+### Added
+
+-  Add support for setting default common headers (#16)
+
+### Changed
+
+- Throw more descriptive error messages when trying to respond to no request as described in #3  (throwing an error can be disabled totally by passing a new, third argument `silentMode` to `mockResponse` and `mockError`)
+- Improve type definitions (#25)
+
+### Docs
+
+- Improved docs (#26)
+
+## [2.3.0] - 2019-03-19
+
+### Added
+- Add basic support for interceptors (#5, #23)
+- Add support for more methods (`patch`, `head`, `options`) (#11, #12)
+- Add support for `axios.all` (#21)
+
+### Fixed
+- Fix typescript declarations (#10, #15)
+
+### Other
+- Fix various README typos (#22)
+- Migrate internal build process from webpack to typescript (#10)
