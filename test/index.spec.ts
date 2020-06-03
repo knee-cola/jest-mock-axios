@@ -439,6 +439,26 @@ describe("MockAxios", () => {
         expect(MockAxios.options).not.toHaveBeenCalled();
     });
 
+    // queue - return the queue list
+    it("`queue` should return the queued requests", () => {
+        MockAxios.post();
+        const firstReq = MockAxios.lastReqGet();
+        MockAxios.post();
+        const secondReq = MockAxios.lastReqGet();
+
+        expect(MockAxios.queue()).toStrictEqual([firstReq, secondReq]);
+    });
+
+    // getReqByMatchUrl - return the queue list
+    it("`getReqByMatchUrl` should return the queued request with a matching regex url", () => {
+      const url = "right_url";
+      MockAxios.post(url);
+      const firstReq = MockAxios.lastReqGet();
+      MockAxios.post("wrong_url");
+
+      expect(MockAxios.getReqByMatchUrl(new RegExp('right'))).toStrictEqual(firstReq);
+    });
+
     describe("provides cancel interfaces", () => {
         it("provides axios.Cancel", () => {
             expect(MockAxios).toHaveProperty("Cancel");

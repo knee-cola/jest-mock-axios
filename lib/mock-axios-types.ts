@@ -138,10 +138,25 @@ export interface AxiosMockAPI {
     getReqByUrl: (url: string) => AxiosMockQueueItem;
 
     /**
+     * Returns request item of the most recent request with the given regex url
+     * Returns undefined if no matching request could be found
+     *
+     * The result can then be used with @see mockResponse
+     *
+     * @param url the url of the request to be found
+     */
+    getReqByMatchUrl: (url: RegExp) => AxiosMockQueueItem;
+
+    /**
      * Removes the give request from the queue
      * @param promise
      */
     popRequest: (promise?: AxiosMockQueueItem) => AxiosMockQueueItem;
+
+    /**
+     * Return the queued requests
+     */
+    queue: () => AxiosMockQueueItem[];
 
     /**
      * Clears all of the queued requests

@@ -242,6 +242,17 @@ MockAxios.getReqByUrl = (url: string) => {
     return MockAxios.getReqMatching({url});
 };
 
+MockAxios.getReqByMatchUrl = (url: RegExp) => {
+    return _pending_requests
+        .slice()
+        .reverse() // reverse cloned array to return most recent req
+        .find((x: AxiosMockQueueItem) => url.test(x.url));
+};
+
+MockAxios.queue = () => {
+    return _pending_requests;
+};
+
 MockAxios.reset = () => {
     // remove all the requests
     _pending_requests.splice(0, _pending_requests.length);
