@@ -45,7 +45,7 @@ const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: an
         data,
         method,
         promise,
-        url,
+        url
     });
     return promise;
 };

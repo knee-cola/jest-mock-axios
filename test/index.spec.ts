@@ -481,8 +481,9 @@ describe("MockAxios", () => {
             expect(cancelToken).toHaveProperty("token");
 
             expect(cancelToken.token).toBeInstanceOf(MockAxios.CancelToken);
-            expect(() => cancelToken.cancel()).not.toThrow();
             expect(() => cancelToken.token.throwIfRequested()).not.toThrow();
+            expect(() => cancelToken.cancel()).not.toThrow();
+            expect(() => cancelToken.token.throwIfRequested()).toThrow();
         });
     });
 });
