@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.0] - Unreleased
+
+### Added
+
+- Added `getReqByMatchUrl` (!52) by @niltonvasques
+- Expose pending requests as `queue` (!52) by @niltonvasques
+
 ## [4.1.0] - 2020-05-22
 
 ### Added
