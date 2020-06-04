@@ -118,6 +118,8 @@ In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, 
 * `mockResponse` - simulates a server (web service) response
 * `mockError` - simulates a (network/server) error
 * `lastReqGet` - returns extended info about the most recent request
+* `getReqByMatchUrl` - returns extended info about the most recent request matching the given regexUrl.
+* `queue` - returns a queue with all requests received.
 * `lastPromiseGet` - returns promise created when the most recent request was made
 * `reset` - resets the Axios mock object - prepare it for the next test (typically used in `afterEach`)
 
@@ -228,6 +230,14 @@ most recent request, it returns the most recent request matching the given url o
 
 ### Arguments: `url`
 The url to be matched. Must match exactly the url passed to axios before.
+
+## axios.getReqByMatchUrl(regexUrl)
+
+`getReqByMatchUrl()` returns the same info about a specific request as `lastReqGet` (see above). Instead of returning the
+most recent request, it returns the most recent request with a url that matches the given regexUrl or `undefined` if no such request could be found.
+
+### Arguments: `regexUrl`
+The regexUrl matcher. Must contains a Regex object `Regex(/.../)`.
 
 ## axios.lastPromiseGet()
 `lastPromiseGet` method returns a promise given when the most recent server request was made. The returned value can be used to pinpoint exact server request we wish to resolve (the value is passed as the second param of `mockResponse` or `mockError` methods).
