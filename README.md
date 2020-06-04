@@ -18,7 +18,7 @@ However, if you look at the [source code](https://github.com/knee-cola/jest-mock
   * [axios.mockResponseFor](#axiosmockresponseforcriteria-response-silentmode)
   * [axios.mockError](#axiosmockerrorerr-requestinfo)
   * [axios.lastReqGet](#axioslastreqget)
-  * [axios.getReqByMatchUrl](#axiosgetreqbymatchurl)
+  * [axios.getReqByMatchUrl](#axiosgetreqbymatchurlregexurl)
   * [axios.lastPromiseGet](#axioslastpromiseget)
   * [axios.reset](#axiosreset)
 * [Additional examples](#additional-examples)
@@ -239,6 +239,13 @@ most recent request, it returns the most recent request with a url that matches 
 
 ### Arguments: `regexUrl`
 The regexUrl matcher. Must contains a Regex object `Regex(/.../)`.
+
+### Usage
+
+```ts
+const req = mockAxios.getReqByMatchUrl(/resource\/\d+\/create/)
+mockAxios.mockResponse({ data: { id: 1 } }, req)
+```
 
 ## axios.lastPromiseGet()
 `lastPromiseGet` method returns a promise given when the most recent server request was made. The returned value can be used to pinpoint exact server request we wish to resolve (the value is passed as the second param of `mockResponse` or `mockError` methods).
