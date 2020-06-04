@@ -238,7 +238,7 @@ The url to be matched. Must match exactly the url passed to axios before.
 most recent request, it returns the most recent request with a url that matches the given regexUrl or `undefined` if no such request could be found.
 
 ### Arguments: `regexUrl`
-The regexUrl matcher. Must contains a Regex object `Regex(/.../)`.
+The regexUrl matcher. Must contain a Regex object `RegExp(/.../)`.
 
 ### Usage
 
