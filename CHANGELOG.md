@@ -2,10 +2,18 @@
 
 ## [4.2.0] - Unreleased
 
+### Breaking
+
+- `throwIfRequested` in `CancelToken` now actually throws if requested (not surprising, so not "really" breaking)
+
 ### Added
 
 - Added `getReqByMatchUrl` (!52) by @niltonvasques
 - Expose pending requests as `queue` (!52) by @niltonvasques
+
+### Fixed
+
+- Fixed some bugs regarding to the cancel implementation
 
 ## [4.1.0] - 2020-05-22
 
