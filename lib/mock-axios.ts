@@ -219,6 +219,13 @@ MockAxios.lastPromiseGet = () => {
     return req ? req.promise : void 0;
 };
 
+const _findReqByPredicate = (predicate: (item: AxiosMockQueueItem) => boolean) => {
+    return _pending_requests
+    .slice()
+    .reverse() // reverse cloned array to return most recent req
+    .find(predicate);
+}
+
 const _checkCriteria = (item: AxiosMockQueueItem, criteria: AxiosMockRequestCriteria) => {
     if (criteria.method !== undefined && criteria.method !== item.method) {
         return false;
@@ -232,10 +239,7 @@ const _checkCriteria = (item: AxiosMockQueueItem, criteria: AxiosMockRequestCrit
 };
 
 MockAxios.getReqMatching = (criteria: AxiosMockRequestCriteria) => {
-    return _pending_requests
-        .slice()
-        .reverse() // reverse cloned array to return most recent req
-        .find((x: AxiosMockQueueItem) => _checkCriteria(x, criteria));
+    return _findReqByPredicate((x) => _checkCriteria(x, criteria));
 };
 
 MockAxios.getReqByUrl = (url: string) => {
@@ -243,10 +247,7 @@ MockAxios.getReqByUrl = (url: string) => {
 };
 
 MockAxios.getReqByMatchUrl = (url: RegExp) => {
-    return _pending_requests
-        .slice()
-        .reverse() // reverse cloned array to return most recent req
-        .find((x: AxiosMockQueueItem) => url.test(x.url));
+    return _findReqByPredicate((x) => url.test(x.url));
 };
 
 MockAxios.queue = () => {
