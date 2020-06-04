@@ -449,7 +449,7 @@ describe("MockAxios", () => {
         expect(MockAxios.queue()).toStrictEqual([firstReq, secondReq]);
     });
 
-    // getReqByMatchUrl - return the queue list
+    // getReqByMatchUrl - return the most recent request matching the regex
     it("`getReqByMatchUrl` should return the queued request with a matching regex url", () => {
       const url = "right_url";
       MockAxios.post(url);
