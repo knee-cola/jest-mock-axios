@@ -18,6 +18,7 @@ However, if you look at the [source code](https://github.com/knee-cola/jest-mock
   * [axios.mockResponseFor](#axiosmockresponseforcriteria-response-silentmode)
   * [axios.mockError](#axiosmockerrorerr-requestinfo)
   * [axios.lastReqGet](#axioslastreqget)
+  * [axios.getReqByMatchUrl](#axiosgetreqbymatchurl)
   * [axios.lastPromiseGet](#axioslastpromiseget)
   * [axios.reset](#axiosreset)
 * [Additional examples](#additional-examples)
