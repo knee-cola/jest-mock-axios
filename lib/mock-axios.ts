@@ -6,10 +6,7 @@
  * @license  @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
-import {
-    SynchronousPromise,
-    UnresolvedSynchronousPromise,
-} from "synchronous-promise";
+import { SynchronousPromise, UnresolvedSynchronousPromise } from "synchronous-promise";
 import Cancel from "./cancel/Cancel";
 import CancelToken from "./cancel/CancelToken";
 import {
@@ -22,11 +19,8 @@ import {
 /** a FIFO queue of pending request */
 const _pending_requests: AxiosMockQueueItem[] = [];
 
-const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (
-    config: any = {},
-    actualConfig: any = {}
-) => {
-    if (typeof config === "string") {
+const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: any = {}, actualConfig: any = {}) => {
+    if(typeof config === 'string') {
         // Allow for axios('example/url'[, config])
         actualConfig.url = config;
         config = actualConfig;
@@ -37,13 +31,13 @@ const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (
     const data: any = config.data;
     const promise: UnresolvedSynchronousPromise<any> = SynchronousPromise.unresolved();
 
-    if (config.cancelToken) {
+    if(config.cancelToken) {
         config.cancelToken.promise.then((cancel: any) => {
             // check if promise is still waiting for an answer
-            if (_pending_requests.find((x) => x.promise === promise)) {
-                MockAxios.mockError(cancel, promise);
+            if(_pending_requests.find(x => x.promise === promise)) {
+                MockAxios.mockError(cancel, promise)
             }
-        });
+        })
     }
 
     _pending_requests.push({
@@ -51,7 +45,7 @@ const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (
         data,
         method,
         promise,
-        url,
+        url
     });
     return promise;
 };
@@ -67,8 +61,8 @@ const _helperReq = (method: string, url: string, data?: any, config?: any) => {
 };
 
 const _helperReqNoData = (method: string, url: string, config?: any) => {
-    return _helperReq(method, url, {}, config);
-};
+    return _helperReq(method, url, {}, config)
+}
 
 const MockAxios: AxiosMockType = (jest.fn(_newReq) as unknown) as AxiosMockType;
 
@@ -137,12 +131,10 @@ MockAxios.popRequest = (request?: AxiosMockQueueItem) => {
  * Removes an item form the queue, based on it's type
  * @param queueItem
  */
-const popQueueItem = (
-    queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null
-) => {
+const popQueueItem = (queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null) => {
     // first let's pretend the param is a queue item
     const request: AxiosMockQueueItem = MockAxios.popRequest(
-        queueItem as AxiosMockQueueItem
+        queueItem as AxiosMockQueueItem,
     );
 
     if (request) {
@@ -151,16 +143,14 @@ const popQueueItem = (
         return request.promise;
     } else {
         // ELSE maybe the `queueItem` is a promise (legacy mode)
-        return MockAxios.popPromise(
-            queueItem as UnresolvedSynchronousPromise<any>
-        );
+        return MockAxios.popPromise(queueItem as UnresolvedSynchronousPromise<any>);
     }
 };
 
 MockAxios.mockResponse = (
     response?: HttpResponse,
     queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null,
-    silentMode: boolean = false
+    silentMode: boolean = false,
 ): void => {
     // replacing missing data with default values
     response = Object.assign(
@@ -171,7 +161,7 @@ MockAxios.mockResponse = (
             status: 200,
             statusText: "OK",
         },
-        response
+        response,
     );
 
     const promise = popQueueItem(queueItem);
@@ -189,10 +179,10 @@ MockAxios.mockResponse = (
 MockAxios.mockResponseFor = (
     criteria: string | AxiosMockRequestCriteria,
     response?: HttpResponse,
-    silentMode: boolean = false
+    silentMode: boolean = false,
 ): void => {
     if (typeof criteria === "string") {
-        criteria = { url: criteria };
+        criteria = {url: criteria};
     }
     const queueItem = MockAxios.getReqMatching(criteria);
 
@@ -208,7 +198,7 @@ MockAxios.mockResponseFor = (
 MockAxios.mockError = (
     error: any = {},
     queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null,
-    silentMode: boolean = false
+    silentMode: boolean = false,
 ) => {
     const promise = popQueueItem(queueItem);
 
@@ -231,19 +221,14 @@ MockAxios.lastPromiseGet = () => {
     return req ? req.promise : void 0;
 };
 
-const _findReqByPredicate = (
-    predicate: (item: AxiosMockQueueItem) => boolean
-) => {
+const _findReqByPredicate = (predicate: (item: AxiosMockQueueItem) => boolean) => {
     return _pending_requests
-        .slice()
-        .reverse() // reverse cloned array to return most recent req
-        .find(predicate);
-};
+    .slice()
+    .reverse() // reverse cloned array to return most recent req
+    .find(predicate);
+}
 
-const _checkCriteria = (
-    item: AxiosMockQueueItem,
-    criteria: AxiosMockRequestCriteria
-) => {
+const _checkCriteria = (item: AxiosMockQueueItem, criteria: AxiosMockRequestCriteria) => {
     if (criteria.method !== undefined && criteria.method !== item.method) {
         return false;
     }
@@ -260,7 +245,7 @@ MockAxios.getReqMatching = (criteria: AxiosMockRequestCriteria) => {
 };
 
 MockAxios.getReqByUrl = (url: string) => {
-    return MockAxios.getReqMatching({ url });
+    return MockAxios.getReqMatching({url});
 };
 
 MockAxios.getReqByMatchUrl = (url: RegExp) => {
