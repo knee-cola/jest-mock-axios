@@ -1,4 +1,7 @@
-import { SynchronousPromise, UnresolvedSynchronousPromise  } from "synchronous-promise";
+import {
+    SynchronousPromise,
+    UnresolvedSynchronousPromise,
+} from "synchronous-promise";
 
 export interface HttpResponse {
     data: any;
@@ -11,9 +14,11 @@ export interface HttpResponse {
 interface Interceptors {
     request: {
         use: jest.Mock<number, [any?, any?]>;
+        eject: jest.Mock<number, [any?, any?]>;
     };
     response: {
         use: jest.Mock<number, [any?, any?]>;
+        eject: jest.Mock<number, [any?, any?]>;
     };
 }
 
@@ -68,7 +73,7 @@ export interface AxiosMockAPI {
     mockResponse: (
         response?: HttpResponse,
         queueItem?: Promise<any> | AxiosMockQueueItem,
-        silentMode?: boolean,
+        silentMode?: boolean
     ) => void;
 
     /**
@@ -82,7 +87,7 @@ export interface AxiosMockAPI {
     mockResponseFor: (
         criteria: string | AxiosMockRequestCriteria,
         response?: HttpResponse,
-        silentMode?: boolean,
+        silentMode?: boolean
     ) => void;
 
     /**
@@ -95,7 +100,7 @@ export interface AxiosMockAPI {
     mockError: (
         error?: any,
         queueItem?: Promise<any> | AxiosMockQueueItem,
-        silentMode?: boolean,
+        silentMode?: boolean
     ) => void;
 
     /**
@@ -108,7 +113,9 @@ export interface AxiosMockAPI {
      * @param promise
      */
 
-    popPromise: (promise?: UnresolvedSynchronousPromise<any>) => UnresolvedSynchronousPromise<any>;
+    popPromise: (
+        promise?: UnresolvedSynchronousPromise<any>
+    ) => UnresolvedSynchronousPromise<any>;
 
     /**
      * Returns request item of the most recent request
@@ -185,4 +192,6 @@ export interface AxiosMockRequestCriteria {
  * Axios object can be called like a function,
  * that's why we're defining it as a spy
  */
-export type AxiosMockType = AxiosAPI & AxiosMockAPI & jest.Mock<UnresolvedSynchronousPromise<any>, [any?]>;
+export type AxiosMockType = AxiosAPI &
+    AxiosMockAPI &
+    jest.Mock<UnresolvedSynchronousPromise<any>, [any?]>;
