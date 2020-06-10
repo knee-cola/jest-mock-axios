@@ -8,13 +8,14 @@ export interface HttpResponse {
     config?: object;
 }
 
+interface Interceptor {
+    use: jest.Mock<number, [any?, any?]>;
+    eject: jest.Mock<void, [number]>;
+}
+
 interface Interceptors {
-    request: {
-        use: jest.Mock<number, [any?, any?]>;
-    };
-    response: {
-        use: jest.Mock<number, [any?, any?]>;
-    };
+    request: Interceptor;
+    response: Interceptor;
 }
 
 interface AxiosDefaults {

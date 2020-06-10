@@ -81,9 +81,11 @@ MockAxios.create = jest.fn(() => MockAxios);
 MockAxios.interceptors = {
     request: {
         use: jest.fn(),
+        eject: jest.fn(),
     },
     response: {
         use: jest.fn(),
+        eject: jest.fn(),
     },
 };
 
