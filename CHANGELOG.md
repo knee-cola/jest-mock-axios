@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.2.1] - Unreleased
+
+### Fixed
+
+- Add mock for `interceptors.eject` by @webbushka
+
 ## [4.2.0] - 2020-06-04
 
 ### Breaking
