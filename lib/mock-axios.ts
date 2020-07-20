@@ -229,7 +229,7 @@ const _findReqByPredicate = (predicate: (item: AxiosMockQueueItem) => boolean) =
 }
 
 const _checkCriteria = (item: AxiosMockQueueItem, criteria: AxiosMockRequestCriteria) => {
-    if (criteria.method !== undefined && criteria.method !== item.method) {
+    if (criteria.method !== undefined && criteria.method.toLowerCase() !== item.method.toLowerCase()) {
         return false;
     }
 
