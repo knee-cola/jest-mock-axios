@@ -1,10 +1,14 @@
 # Changelog
 
-## [4.2.1] - Unreleased
+## [4.2.1] - 2020-07-21
 
 ### Fixed
 
 - Add mock for `interceptors.eject` by @webbushka
+
+### Changed
+
+- Ignore case when matching HTTP methods by @Chris-Thompson-bnsf
 
 ## [4.2.0] - 2020-06-04
 
