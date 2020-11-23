@@ -33,7 +33,7 @@ Installation is simple - just run:
     npm i --save-dev jest-mock-axios
 
 Next you need to setup a [manual Jest mock](https://facebook.github.io/jest/docs/en/manual-mocks.html) for *Axios* (we'll explain why a bit later):
-* create `__mocks__` directory in your project root
+* create `__mocks__` directory in your project root (or whatever is configured in the `roots` config in jest.config.js - when using `react-scripts` this is `<rootDir>/src`, so you need to place it under `src/__mocks__`)
 * inside this new directory create a files named `axios.js`
 * copy & paste the following snippets to `axios.js` file
 
