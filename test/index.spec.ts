@@ -212,6 +212,18 @@ describe("MockAxios", () => {
             expect(thenFn).not.toHaveBeenCalledWith(errorObj);
         });
 
+        it("`mockError` should mark error as an axios error", () => {
+            const thenFn = jest.fn();
+            const catchFn = jest.fn();
+            const promise = MockAxios.post();
+            promise.then(thenFn).catch(catchFn);
+
+            const errorObj = { n: "this is an error" };
+
+            MockAxios.mockError(errorObj, promise);
+            expect(MockAxios.isAxiosError(errorObj)).toBe(true)
+        });
+
         it("`mockError` should remove the promise from the queue", () => {
             MockAxios.post();
             MockAxios.mockError();

@@ -208,9 +208,15 @@ MockAxios.mockError = (
         return;
     }
 
-    // resolving the Promise with the given response data
+    if (error && typeof error === 'object' && error.isAxiosError === void 0) {
+        error.isAxiosError = true;
+    }
+
+    // resolving the Promise with the given error
     promise.reject(error);
 };
+
+MockAxios.isAxiosError = (payload) => (typeof payload === 'object') && (payload.isAxiosError === true);
 
 MockAxios.lastReqGet = () => {
     return _pending_requests[_pending_requests.length - 1];

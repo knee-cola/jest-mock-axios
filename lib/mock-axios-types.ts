@@ -36,6 +36,7 @@ export interface AxiosAPI {
     create: jest.Mock<AxiosMockType, []>;
     interceptors: Interceptors;
     defaults: AxiosDefaults;
+    isAxiosError: (error: any) => boolean;
 }
 
 interface Cancel {
