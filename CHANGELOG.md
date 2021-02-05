@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.3.0] - 2021-02-05
+
+### Added
+
+- Added mock for `isAxiosError` by @mAAdhaTTah (#66)
+- Errors passed to `mockError` wil now have `isAxiosError` attached by @mAAdhaTTah (#66)
+
+### Other
+
+- Updated dependencies
+
 ## [4.2.1] - 2020-07-21
 
 ### Fixed
