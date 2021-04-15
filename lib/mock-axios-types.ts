@@ -161,7 +161,7 @@ export interface AxiosMockAPI {
      *          key_x: The key of the request to be found
      *          RegExp_x: The RegExp to be tested against that key
      */
-    getReqByMatch: (opts: object) => AxiosMockQueueItem;
+    getReqByMatch: (opts: {[key in keyof AxiosMockQueueItem]+?: RegExp}) => AxiosMockQueueItem;
 
     /**
      * Removes the give request from the queue

@@ -471,10 +471,11 @@ describe("MockAxios", () => {
       expect(MockAxios.getReqByMatchUrl(new RegExp('right'))).toStrictEqual(firstReq);
     });
 
-    let firstReq
-    let deleteReq
     // getReqByMatch - return the most recent request matching any key with the regex (e.g.: url, data, config)
     describe("with `getReqByMatch`", () => {
+      let firstReq
+      let deleteReq
+
       beforeEach(() => {
         const url = "right_url";
         const data = { data: "my_data_value" };
@@ -508,8 +509,8 @@ describe("MockAxios", () => {
         expect(MockAxios.getReqByMatch({ url: new RegExp('right'), data: new RegExp('my_data') })).toStrictEqual(firstReq);
       });
 
-      it("should return undefined matching invalid keys/values", () => {
-        expect(MockAxios.getReqByMatch({ invalid: new RegExp('invalid') })).toBeUndefined();
+      it("should return undefined matching unexistent value", () => {
+        expect(MockAxios.getReqByMatch({ url: new RegExp('undefined') })).toBeUndefined();
       });
     })
 
