@@ -266,22 +266,22 @@ The key + regex matchers. Must contain pairs of keys of the requests and a Regex
 
 * `url` that matches `/batch/`
 ```ts
-const request = mockAxios.getReqByMatchUrl({ url: /batch/ })
+const request = mockAxios.getReqByMatch({ url: /batch/ })
 ```
 
 * `data` that matches `/disciplines/`
 ```ts
-const request = mockAxios.getReqByMatchUrl({ data: /disciplines/ })
+const request = mockAxios.getReqByMatch({ data: /disciplines/ })
 ```
 
 * `config` that matches `/my_config/`
 ```ts
-const request = mockAxios.getReqByMatchUrl({ config: /my_config/ })
+const request = mockAxios.getReqByMatch({ config: /my_config/ })
 ```
 
 * `url` + `data` (multiple keys is supported ✔️)
 ```ts
-const request = mockAxios.getReqByMatchUrl({ url: /batch/, data: /disciplines/ })
+const request = mockAxios.getReqByMatch({ url: /batch/, data: /disciplines/ })
 ```
 
 ## axios.lastPromiseGet()
