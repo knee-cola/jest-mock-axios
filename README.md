@@ -119,6 +119,7 @@ In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, 
 * `mockResponse` - simulates a server (web service) response
 * `mockError` - simulates a (network/server) error
 * `lastReqGet` - returns extended info about the most recent request
+* `getReqMatching` - returns extended info about the most recent request matching the given criteria (url and method)
 * `getReqByMatchUrl` - returns extended info about the most recent request matching the given regexUrl.
 * `queue` - returns a queue with all requests received.
 * `lastPromiseGet` - returns promise created when the most recent request was made
