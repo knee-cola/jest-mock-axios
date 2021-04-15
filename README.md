@@ -19,6 +19,7 @@ However, if you look at the [source code](https://github.com/knee-cola/jest-mock
   * [axios.mockError](#axiosmockerrorerr-requestinfo)
   * [axios.lastReqGet](#axioslastreqget)
   * [axios.getReqByMatchUrl](#axiosgetreqbymatchurlregexurl)
+  * [axios.getReqByMatch](#axiosgetreqbymatchopts)
   * [axios.lastPromiseGet](#axioslastpromiseget)
   * [axios.reset](#axiosreset)
 * [Additional examples](#additional-examples)
@@ -120,6 +121,7 @@ In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, 
 * `mockError` - simulates a (network/server) error
 * `lastReqGet` - returns extended info about the most recent request
 * `getReqByMatchUrl` - returns extended info about the most recent request matching the given regexUrl.
+* `getReqByMatch` - returns extended info about the most recent request matching the given keys and regexUrls.
 * `queue` - returns a queue with all requests received.
 * `lastPromiseGet` - returns promise created when the most recent request was made
 * `reset` - resets the Axios mock object - prepare it for the next test (typically used in `afterEach`)
@@ -245,6 +247,41 @@ The regexUrl matcher. Must contain a Regex object `RegExp(/.../)`.
 ```ts
 const req = mockAxios.getReqByMatchUrl(/resource\/\d+\/create/)
 mockAxios.mockResponse({ data: { id: 1 } }, req)
+```
+
+## axios.getReqByMatch(opts)
+
+`getReqByMatch()` returns the same info about a specific request as `getReqByMatchUrl()` (see above). Instead of matching only the `url`, it's possible to match any **keys** and **RegexUrls**.
+
+It returns the most recent request with key(s) that match(es) the given RegexUrl(s) or `undefined` if no such request could be found.
+
+### Arguments: `opts`
+```rb
+{ key_a: RegExp_a, ..., key_n: RegExp_n }
+```
+
+The key + regex matchers. Must contain pairs of keys of the requests and a Regex object `RegExp(/.../)` to be tested against.
+
+### Usages
+
+* `url` that matches `/batch/`
+```ts
+const request = mockAxios.getReqByMatchUrl({ url: /batch/ })
+```
+
+* `data` that matches `/disciplines/`
+```ts
+const request = mockAxios.getReqByMatchUrl({ data: /disciplines/ })
+```
+
+* `config` that matches `/my_config/`
+```ts
+const request = mockAxios.getReqByMatchUrl({ config: /my_config/ })
+```
+
+* `url` + `data` (multiple keys is supported ✔️)
+```ts
+const request = mockAxios.getReqByMatchUrl({ url: /batch/, data: /disciplines/ })
 ```
 
 ## axios.lastPromiseGet()
