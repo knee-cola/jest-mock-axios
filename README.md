@@ -256,11 +256,14 @@ mockAxios.mockResponse({ data: { id: 1 } }, req)
 It returns the most recent request with key(s) that match(es) the given RegexUrl(s) or `undefined` if no such request could be found.
 
 ### Arguments: `opts`
+
+The keys + regexes matchers.
+
+Must contain pairs of keys and a Regex objects `RegExp(/.../)` to be tested against the requests.
+
 ```rb
 { key_a: RegExp_a, ..., key_n: RegExp_n }
 ```
-
-The key + regex matchers. Must contain pairs of keys of the requests and a Regex object `RegExp(/.../)` to be tested against.
 
 ### Usages
 
@@ -279,7 +282,15 @@ const request = mockAxios.getReqByMatch({ data: /disciplines/ })
 const request = mockAxios.getReqByMatch({ config: /my_config/ })
 ```
 
-* `url` + `data` (multiple keys is supported ✔️)
+* `method` that matches `/delete/`
+```ts
+const request = mockAxios.getReqByMatch({ method: /delete/ })
+```
+
+* `url` that matches `/batch/` **and** `data` that matches `/disciplines/`
+
+> multiple keys is supported ✔️
+
 ```ts
 const request = mockAxios.getReqByMatch({ url: /batch/, data: /disciplines/ })
 ```
