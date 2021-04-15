@@ -151,7 +151,7 @@ export interface AxiosMockAPI {
 
     /**
      * Returns the most recent request matching any key with the regex (e.g.: url, data, config)
-     *   Can also use multiple keys for research. For example: getReqByMatch({ url: /batch/, data: /disciplines/ })
+     *   Can also use multiple keys for research. For example: getReqByMatch({ url: /batch/, data: /employees/ })
      *
      * Returns undefined if no matching request could be found
      *

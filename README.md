@@ -272,9 +272,9 @@ Must contain pairs of keys and a Regex objects `RegExp(/.../)` to be tested agai
 const request = mockAxios.getReqByMatch({ url: /batch/ })
 ```
 
-* `data` that matches `/disciplines/`
+* `data` that matches `/employees/`
 ```ts
-const request = mockAxios.getReqByMatch({ data: /disciplines/ })
+const request = mockAxios.getReqByMatch({ data: /employees/ })
 ```
 
 * `config` that matches `/my_config/`
@@ -287,12 +287,12 @@ const request = mockAxios.getReqByMatch({ config: /my_config/ })
 const request = mockAxios.getReqByMatch({ method: /delete/ })
 ```
 
-* `url` that matches `/batch/` **and** `data` that matches `/disciplines/`
+* `url` that matches `/batch/` **and** `data` that matches `/employees/`
 
 > multiple keys is supported ✔️
 
 ```ts
-const request = mockAxios.getReqByMatch({ url: /batch/, data: /disciplines/ })
+const request = mockAxios.getReqByMatch({ url: /batch/, data: /employees/ })
 ```
 
 ## axios.lastPromiseGet()
