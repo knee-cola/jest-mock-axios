@@ -471,6 +471,63 @@ describe("MockAxios", () => {
       expect(MockAxios.getReqByMatchUrl(new RegExp('right'))).toStrictEqual(firstReq);
     });
 
+    // const method = "post";
+    // const url = "url";
+    // const data = { data: "data" };
+    // const config = { config: "config" };
+    // const promise = MockAxios.post("url", data, config);
+
+    // getReqByMatch - return the most recent request matching any key with the regex (e.g.: url, data, config)
+    describe("with `getReqByMatch`", () => {
+      it("should return the request matching url", () => {
+        const url = "right_url";
+        const data = { data: "my_data_value" };
+        const config = { config: "my_config_value" };
+        MockAxios.post(url, data, config);
+
+        const firstReq = MockAxios.lastReqGet();
+        MockAxios.post("wrong_url");
+
+        expect(MockAxios.getReqByMatch({ url: new RegExp('right') })).toStrictEqual(firstReq);
+      });
+
+      it("should return the request matching data", () => {
+        const url = "right_url";
+        const data = { data: "my_data_value" };
+        const config = { config: "my_config_value" };
+        MockAxios.post(url, data, config);
+
+        const firstReq = MockAxios.lastReqGet();
+        MockAxios.post("wrong_url");
+
+        expect(MockAxios.getReqByMatch({ data: new RegExp('my_data') })).toStrictEqual(firstReq);
+      });
+
+      it("should return the request matching config", () => {
+        const url = "right_url";
+        const data = { data: "my_data_value" };
+        const config = { config: "my_config_value" };
+        MockAxios.post(url, data, config);
+
+        const firstReq = MockAxios.lastReqGet();
+        MockAxios.post("wrong_url");
+
+        expect(MockAxios.getReqByMatch({ config: new RegExp('my_config') })).toStrictEqual(firstReq);
+      });
+
+      it("should return the request matching url and data", () => {
+        const url = "right_url";
+        const data = { data: "my_data_value" };
+        const config = { config: "my_config_value" };
+        MockAxios.post(url, data, config);
+
+        const firstReq = MockAxios.lastReqGet();
+        MockAxios.post("wrong_url");
+
+        expect(MockAxios.getReqByMatch({ url: new RegExp('right'), data: new RegExp('my_data') })).toStrictEqual(firstReq);
+      });
+    })
+
     describe("provides cancel interfaces", () => {
         it("provides axios.Cancel", () => {
             expect(MockAxios).toHaveProperty("Cancel");
