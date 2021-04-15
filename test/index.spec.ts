@@ -472,6 +472,7 @@ describe("MockAxios", () => {
     });
 
     let firstReq
+    let deleteReq
     // getReqByMatch - return the most recent request matching any key with the regex (e.g.: url, data, config)
     describe("with `getReqByMatch`", () => {
       beforeEach(() => {
@@ -479,9 +480,12 @@ describe("MockAxios", () => {
         const data = { data: "my_data_value" };
         const config = { config: "my_config_value" };
         MockAxios.post(url, data, config);
-
         firstReq = MockAxios.lastReqGet();
+
         MockAxios.post("wrong_url");
+
+        MockAxios.delete("wrong_url");
+        deleteReq = MockAxios.lastReqGet();
       })
 
       it("should return the request matching url", () => {
@@ -496,8 +500,16 @@ describe("MockAxios", () => {
         expect(MockAxios.getReqByMatch({ config: new RegExp('my_config') })).toStrictEqual(firstReq);
       });
 
+      it("should return the request matching method", () => {
+        expect(MockAxios.getReqByMatch({ method: new RegExp('delete') })).toStrictEqual(deleteReq);
+      });
+
       it("should return the request matching url and data", () => {
         expect(MockAxios.getReqByMatch({ url: new RegExp('right'), data: new RegExp('my_data') })).toStrictEqual(firstReq);
+      });
+
+      it("should return undefined matching invalid keys/values", () => {
+        expect(MockAxios.getReqByMatch({ invalid: new RegExp('invalid') })).toBeUndefined();
       });
     })
 
