@@ -151,7 +151,7 @@ export interface AxiosMockAPI {
 
     /**
      * Returns the most recent request matching any key with the regex (e.g.: url, data, config)
-     *   Can also use multiple keys for research. For example: getReqByMatch({ url: /batch/, data: /employees/ })
+     *   Can also use multiple keys for research. For example: getReqByRegex({ url: /batch/, data: /employees/ })
      *
      * Returns undefined if no matching request could be found
      *
@@ -161,7 +161,7 @@ export interface AxiosMockAPI {
      *          key_x: The key of the request to be found
      *          RegExp_x: The RegExp to be tested against that key
      */
-    getReqByMatch: (opts: {[key in keyof AxiosMockQueueItem]+?: RegExp}) => AxiosMockQueueItem;
+    getReqByRegex: (opts: {[key in keyof AxiosMockQueueItem]+?: RegExp}) => AxiosMockQueueItem;
 
     /**
      * Removes the give request from the queue

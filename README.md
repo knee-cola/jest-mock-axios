@@ -19,7 +19,7 @@ However, if you look at the [source code](https://github.com/knee-cola/jest-mock
   * [axios.mockError](#axiosmockerrorerr-requestinfo)
   * [axios.lastReqGet](#axioslastreqget)
   * [axios.getReqByMatchUrl](#axiosgetreqbymatchurlregexurl)
-  * [axios.getReqByMatch](#axiosgetreqbymatchopts)
+  * [axios.getReqByRegex](#axiosgetreqbyregexopts)
   * [axios.lastPromiseGet](#axioslastpromiseget)
   * [axios.reset](#axiosreset)
 * [Additional examples](#additional-examples)
@@ -121,7 +121,7 @@ In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, 
 * `mockError` - simulates a (network/server) error
 * `lastReqGet` - returns extended info about the most recent request
 * `getReqByMatchUrl` - returns extended info about the most recent request matching the given regexUrl.
-* `getReqByMatch` - returns extended info about the most recent request matching the given keys and regexUrls.
+* `getReqByRegex` - returns extended info about the most recent request matching the given keys and regexUrls.
 * `queue` - returns a queue with all requests received.
 * `lastPromiseGet` - returns promise created when the most recent request was made
 * `reset` - resets the Axios mock object - prepare it for the next test (typically used in `afterEach`)
@@ -249,9 +249,9 @@ const req = mockAxios.getReqByMatchUrl(/resource\/\d+\/create/)
 mockAxios.mockResponse({ data: { id: 1 } }, req)
 ```
 
-## axios.getReqByMatch(opts)
+## axios.getReqByRegex(opts)
 
-`getReqByMatch()` returns the same info about a specific request as `getReqByMatchUrl()` (see above). Instead of matching only the `url`, it's possible to match any **keys** and **RegexUrls**.
+`getReqByRegex()` returns the same info about a specific request as `getReqByMatchUrl()` (see above). Instead of matching only the `url` against a **RegexUrls**, it's possible to match **any keys** against **RegexUrls**.
 
 It returns the most recent request with key(s) that match(es) the given RegexUrl(s) or `undefined` if no such request could be found.
 
@@ -269,22 +269,22 @@ Must contain pairs of keys and a Regex objects `RegExp(/.../)` to be tested agai
 
 * `url` that matches `/batch/`
 ```ts
-const request = mockAxios.getReqByMatch({ url: /batch/ })
+const request = mockAxios.getReqByRegex({ url: /batch/ })
 ```
 
 * `data` that matches `/employees/`
 ```ts
-const request = mockAxios.getReqByMatch({ data: /employees/ })
+const request = mockAxios.getReqByRegex({ data: /employees/ })
 ```
 
 * `config` that matches `/my_config/`
 ```ts
-const request = mockAxios.getReqByMatch({ config: /my_config/ })
+const request = mockAxios.getReqByRegex({ config: /my_config/ })
 ```
 
 * `method` that matches `/delete/`
 ```ts
-const request = mockAxios.getReqByMatch({ method: /delete/ })
+const request = mockAxios.getReqByRegex({ method: /delete/ })
 ```
 
 * `url` that matches `/batch/` **and** `data` that matches `/employees/`
@@ -292,7 +292,7 @@ const request = mockAxios.getReqByMatch({ method: /delete/ })
 > multiple keys is supported ✔️
 
 ```ts
-const request = mockAxios.getReqByMatch({ url: /batch/, data: /employees/ })
+const request = mockAxios.getReqByRegex({ url: /batch/, data: /employees/ })
 ```
 
 ## axios.lastPromiseGet()

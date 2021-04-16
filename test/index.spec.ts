@@ -471,8 +471,8 @@ describe("MockAxios", () => {
       expect(MockAxios.getReqByMatchUrl(new RegExp('right'))).toStrictEqual(firstReq);
     });
 
-    // getReqByMatch - return the most recent request matching any key with the regex (e.g.: url, data, config)
-    describe("with `getReqByMatch`", () => {
+    // getReqByRegex - return the most recent request matching any key with the regex (e.g.: url, data, config)
+    describe("with `getReqByRegex`", () => {
       let firstReq
       let deleteReq
 
@@ -490,27 +490,27 @@ describe("MockAxios", () => {
       })
 
       it("should return the request matching url", () => {
-        expect(MockAxios.getReqByMatch({ url: new RegExp('right') })).toStrictEqual(firstReq);
+        expect(MockAxios.getReqByRegex({ url: new RegExp('right') })).toStrictEqual(firstReq);
       });
 
       it("should return the request matching data", () => {
-        expect(MockAxios.getReqByMatch({ data: new RegExp('my_data') })).toStrictEqual(firstReq);
+        expect(MockAxios.getReqByRegex({ data: new RegExp('my_data') })).toStrictEqual(firstReq);
       });
 
       it("should return the request matching config", () => {
-        expect(MockAxios.getReqByMatch({ config: new RegExp('my_config') })).toStrictEqual(firstReq);
+        expect(MockAxios.getReqByRegex({ config: new RegExp('my_config') })).toStrictEqual(firstReq);
       });
 
       it("should return the request matching method", () => {
-        expect(MockAxios.getReqByMatch({ method: new RegExp('delete') })).toStrictEqual(deleteReq);
+        expect(MockAxios.getReqByRegex({ method: new RegExp('delete') })).toStrictEqual(deleteReq);
       });
 
       it("should return the request matching url and data", () => {
-        expect(MockAxios.getReqByMatch({ url: new RegExp('right'), data: new RegExp('my_data') })).toStrictEqual(firstReq);
+        expect(MockAxios.getReqByRegex({ url: new RegExp('right'), data: new RegExp('my_data') })).toStrictEqual(firstReq);
       });
 
       it("should return undefined matching unexistent value", () => {
-        expect(MockAxios.getReqByMatch({ url: new RegExp('undefined') })).toBeUndefined();
+        expect(MockAxios.getReqByRegex({ url: new RegExp('undefined') })).toBeUndefined();
       });
     })
 
