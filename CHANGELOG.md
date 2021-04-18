@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.4.0] - 2021-04-18
+
+### Added
+
+- Added `getReqByRegex` by @Victorcorcos
+
+### Other
+
+- Updated dependencies
+
 ## [4.3.0] - 2021-02-05
 
 ### Added
