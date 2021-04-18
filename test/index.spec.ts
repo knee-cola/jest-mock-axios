@@ -473,8 +473,8 @@ describe("MockAxios", () => {
 
     // getReqByRegex - return the most recent request matching any key with the regex (e.g.: url, data, config)
     describe("with `getReqByRegex`", () => {
-      let firstReq
-      let deleteReq
+      let firstReq;
+      let deleteReq;
 
       beforeEach(() => {
         const url = "right_url";
