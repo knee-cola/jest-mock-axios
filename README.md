@@ -19,6 +19,7 @@ However, if you look at the [source code](https://github.com/knee-cola/jest-mock
   * [axios.mockError](#axiosmockerrorerr-requestinfo)
   * [axios.lastReqGet](#axioslastreqget)
   * [axios.getReqByMatchUrl](#axiosgetreqbymatchurlregexurl)
+  * [axios.getReqByRegex](#axiosgetreqbyregexopts)
   * [axios.lastPromiseGet](#axioslastpromiseget)
   * [axios.reset](#axiosreset)
 * [Additional examples](#additional-examples)
@@ -121,6 +122,7 @@ In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, 
 * `lastReqGet` - returns extended info about the most recent request
 * `getReqMatching` - returns extended info about the most recent request matching the given criteria (url and method)
 * `getReqByMatchUrl` - returns extended info about the most recent request matching the given regexUrl.
+* `getReqByRegex` - returns extended info about the most recent request matching the given keys and regexUrls.
 * `queue` - returns a queue with all requests received.
 * `lastPromiseGet` - returns promise created when the most recent request was made
 * `reset` - resets the Axios mock object - prepare it for the next test (typically used in `afterEach`)
@@ -246,6 +248,52 @@ The regexUrl matcher. Must contain a Regex object `RegExp(/.../)`.
 ```ts
 const req = mockAxios.getReqByMatchUrl(/resource\/\d+\/create/)
 mockAxios.mockResponse({ data: { id: 1 } }, req)
+```
+
+## axios.getReqByRegex(opts)
+
+`getReqByRegex()` returns the same info about a specific request as `getReqByMatchUrl()` (see above). Instead of matching only the `url` against a **RegexUrls**, it's possible to match **any keys** against **RegexUrls**.
+
+It returns the most recent request with key(s) that match(es) the given RegexUrl(s) or `undefined` if no such request could be found.
+
+### Arguments: `opts`
+
+The keys + regexes matchers.
+
+Must contain pairs of keys and a Regex objects `RegExp(/.../)` to be tested against the requests.
+
+```rb
+{ key_a: RegExp_a, ..., key_n: RegExp_n }
+```
+
+### Usages
+
+* `url` that matches `/batch/`
+```ts
+const request = mockAxios.getReqByRegex({ url: /batch/ })
+```
+
+* `data` that matches `/employees/`
+```ts
+const request = mockAxios.getReqByRegex({ data: /employees/ })
+```
+
+* `config` that matches `/my_config/`
+```ts
+const request = mockAxios.getReqByRegex({ config: /my_config/ })
+```
+
+* `method` that matches `/delete/`
+```ts
+const request = mockAxios.getReqByRegex({ method: /delete/ })
+```
+
+* `url` that matches `/batch/` **and** `data` that matches `/employees/`
+
+> multiple keys is supported ✔️
+
+```ts
+const request = mockAxios.getReqByRegex({ url: /batch/, data: /employees/ })
 ```
 
 ## axios.lastPromiseGet()

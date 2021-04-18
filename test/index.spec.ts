@@ -471,6 +471,49 @@ describe("MockAxios", () => {
       expect(MockAxios.getReqByMatchUrl(new RegExp('right'))).toStrictEqual(firstReq);
     });
 
+    // getReqByRegex - return the most recent request matching any key with the regex (e.g.: url, data, config)
+    describe("with `getReqByRegex`", () => {
+      let firstReq;
+      let deleteReq;
+
+      beforeEach(() => {
+        const url = "right_url";
+        const data = { data: "my_data_value" };
+        const config = { config: "my_config_value" };
+        MockAxios.post(url, data, config);
+        firstReq = MockAxios.lastReqGet();
+
+        MockAxios.post("wrong_url");
+
+        MockAxios.delete("wrong_url");
+        deleteReq = MockAxios.lastReqGet();
+      })
+
+      it("should return the request matching url", () => {
+        expect(MockAxios.getReqByRegex({ url: new RegExp('right') })).toStrictEqual(firstReq);
+      });
+
+      it("should return the request matching data", () => {
+        expect(MockAxios.getReqByRegex({ data: new RegExp('my_data') })).toStrictEqual(firstReq);
+      });
+
+      it("should return the request matching config", () => {
+        expect(MockAxios.getReqByRegex({ config: new RegExp('my_config') })).toStrictEqual(firstReq);
+      });
+
+      it("should return the request matching method", () => {
+        expect(MockAxios.getReqByRegex({ method: new RegExp('delete') })).toStrictEqual(deleteReq);
+      });
+
+      it("should return the request matching url and data", () => {
+        expect(MockAxios.getReqByRegex({ url: new RegExp('right'), data: new RegExp('my_data') })).toStrictEqual(firstReq);
+      });
+
+      it("should return undefined matching unexistent value", () => {
+        expect(MockAxios.getReqByRegex({ url: new RegExp('undefined') })).toBeUndefined();
+      });
+    })
+
     describe("provides cancel interfaces", () => {
         it("provides axios.Cancel", () => {
             expect(MockAxios).toHaveProperty("Cancel");

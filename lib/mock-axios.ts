@@ -258,6 +258,10 @@ MockAxios.getReqByMatchUrl = (url: RegExp) => {
     return _findReqByPredicate((x) => url.test(x.url));
 };
 
+MockAxios.getReqByRegex = (opts: {[key in keyof AxiosMockQueueItem]+?: RegExp}) => {
+  return _findReqByPredicate(x => Object.entries(opts).every(([key, value]) => value.test(JSON.stringify(x[key]))));
+};
+
 MockAxios.queue = () => {
     return _pending_requests;
 };
