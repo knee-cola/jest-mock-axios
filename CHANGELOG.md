@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.4.1] - 2021-09-28
+
+### Other
+
+- Updated dependencies (Jest 27)
+
 ## [4.4.0] - 2021-04-18
 
 ### Added
