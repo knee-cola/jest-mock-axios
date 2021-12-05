@@ -243,6 +243,17 @@ const _checkCriteria = (item: AxiosMockQueueItem, criteria: AxiosMockRequestCrit
         return false;
     }
 
+    if(criteria.params !== undefined) {
+        if(item.config === undefined || !item.config.params || (typeof item.config.params !== 'object') ) {
+          return false;
+        }
+
+        const paramsMatching = Object.entries(criteria.params).every(([key, value]) => item.config.params[key] === value);
+        if(!paramsMatching) {
+            return false;
+        }
+    }
+
     return true;
 };
 

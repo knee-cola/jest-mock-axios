@@ -120,7 +120,7 @@ In addition to standard Axios methods (`post`, `get`, `put`, `patch`, `delete`, 
 * `mockResponse` - simulates a server (web service) response
 * `mockError` - simulates a (network/server) error
 * `lastReqGet` - returns extended info about the most recent request
-* `getReqMatching` - returns extended info about the most recent request matching the given criteria (url and method)
+* `getReqMatching` - returns extended info about the most recent request matching the given criteria (url, method and params)
 * `getReqByMatchUrl` - returns extended info about the most recent request matching the given regexUrl.
 * `getReqByRegex` - returns extended info about the most recent request matching the given keys and regexUrls.
 * `queue` - returns a queue with all requests received.
@@ -225,7 +225,7 @@ If no request has been made yet, returns `undefined`.
 the most recent request, it returns the most recent request matching the given criteria or `undefined` if no such request could be found.
 
 ### Arguments: `criteria`
-An object specifying which request to match. Currently `url` and `method` are supported.
+An object specifying which request to match. Currently `url`, `method` and `params` are supported.
 
 ## axios.getReqByUrl(url)
 

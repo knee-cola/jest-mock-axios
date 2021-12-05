@@ -195,6 +195,7 @@ export interface AxiosMockQueueItem {
 export interface AxiosMockRequestCriteria {
     url?: string;
     method?: string;
+    params?: any;
 }
 
 /**
