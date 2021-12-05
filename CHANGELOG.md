@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.5.0] - 2021-12-05
+
+### Added
+
+- Added support for passing `params` in `getReqMatching` (with support from @kylorhall, #77)
+
 ## [4.4.1] - 2021-09-28
 
 ### Other
