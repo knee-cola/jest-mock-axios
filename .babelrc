@@ -14,7 +14,8 @@
                         "modules": "commonjs"
                     }
                 ]
-            ]
+            ],
+            "plugins": ["add-module-exports"]
         },
     }
 }

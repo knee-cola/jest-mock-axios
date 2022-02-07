@@ -2,6 +2,8 @@
   "name": "jest-mock-axios",
   "version": "4.6.0-rc1",
   "description": "Axios mock for Jest",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
   "types": "./dist/lib/index.d.ts",
   "type": "module",
   "exports": {
@@ -47,6 +49,7 @@
     "@babel/preset-typescript": "^7.16.7",
     "@types/jest": "^27.4.0",
     "babel-loader": "^8.2.3",
+    "babel-plugin-add-module-exports": "^1.0.4",
     "cross-env": "^7.0.3",
     "jest": "^27.5.0",
     "rimraf": "^3.0.2",
