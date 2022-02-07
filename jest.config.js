@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     "name": "mock-axios",
     "verbose": true,
     "testRegex": "/test/.*\\.spec\\.(ts|tsx|js)$",

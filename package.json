@@ -25,7 +25,7 @@
     "build:js:esm": "cross-env BABEL_ENV=esm babel lib --out-dir dist/esm --extensions \".ts,.tsx\" --source-maps inline",
     "build:js:cjs": "cross-env BABEL_ENV=cjs babel lib --out-dir dist/cjs --extensions \".ts,.tsx\" --source-maps inline",
     "deploy2npm": "npm run build && npm publish",
-    "test": "jest --watch"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watch"
   },
   "repository": {
     "type": "git",
