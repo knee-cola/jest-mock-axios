@@ -1,6 +1,20 @@
-{    
-  "presets": [
-    "@babel/env",
-    "@babel/typescript"
-  ]
+{
+    "env": {
+        "esm": {
+            "presets": [
+                "@babel/typescript"
+            ]
+        },
+        "cjs": {
+            "presets": [
+                "@babel/typescript",
+                [
+                    "@babel/env",
+                    {
+                        "modules": "commonjs"
+                    }
+                ]
+            ]
+        },
+    }
 }

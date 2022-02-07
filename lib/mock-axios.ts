@@ -6,7 +6,9 @@
  * @license  @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
-import { SynchronousPromise, UnresolvedSynchronousPromise } from "synchronous-promise";
+ import {jest} from '@jest/globals';
+ 
+ import { SynchronousPromise, UnresolvedSynchronousPromise } from "synchronous-promise";
 import Cancel from "./cancel/Cancel";
 import CancelToken from "./cancel/CancelToken";
 import {
@@ -67,24 +69,38 @@ const _helperReqNoData = (method: string, url: string, config?: any) => {
 const MockAxios: AxiosMockType = (jest.fn(_newReq) as unknown) as AxiosMockType;
 
 // mocking Axios methods
+// @ts-ignore
 MockAxios.get = jest.fn(_helperReqNoData.bind(null, "get"));
+// @ts-ignore
 MockAxios.post = jest.fn(_helperReq.bind(null, "post"));
+// @ts-ignore
 MockAxios.put = jest.fn(_helperReq.bind(null, "put"));
+// @ts-ignore
 MockAxios.patch = jest.fn(_helperReq.bind(null, "patch"));
+// @ts-ignore
 MockAxios.delete = jest.fn(_helperReqNoData.bind(null, "delete"));
+// @ts-ignore
 MockAxios.request = jest.fn(_newReq);
+// @ts-ignore
 MockAxios.all = jest.fn((values) => Promise.all(values));
+// @ts-ignore
 MockAxios.head = jest.fn(_helperReqNoData.bind(null, "head"));
+// @ts-ignore
 MockAxios.options = jest.fn(_helperReqNoData.bind(null, "options"));
+// @ts-ignore
 MockAxios.create = jest.fn(() => MockAxios);
 
 MockAxios.interceptors = {
     request: {
+        // @ts-ignore
         use: jest.fn(),
+        // @ts-ignore
         eject: jest.fn(),
     },
     response: {
+        // @ts-ignore
         use: jest.fn(),
+        // @ts-ignore
         eject: jest.fn(),
     },
 };
