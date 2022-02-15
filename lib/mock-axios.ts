@@ -6,7 +6,7 @@
  * @license  @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
- import {jest} from '@jest/globals';
+import {jest} from '@jest/globals';
  
  import { SynchronousPromise, UnresolvedSynchronousPromise } from "synchronous-promise";
 import Cancel from "./cancel/Cancel";

@@ -2,28 +2,21 @@
   "name": "jest-mock-axios",
   "version": "4.6.0-rc1",
   "description": "Axios mock for Jest",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/lib/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "exports": {
-    "node": {
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js",
-      "module": "./dist/esm/index.js",
-      "types": "./dist/lib/index.d.ts"
-    },
-    "default": "./dist/esm/index.js"
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs",
+    "types": "./dist/index.d.ts"
   },
   "scripts": {
     "clean": "rimraf ./dist",
     "lint": "tslint -c tslint.json 'lib/**/*.ts' 'test/**/*.ts'",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
-    "build": "npm run build:types && npm run build:js:esm && npm run build:js:cjs",
-    "build:types": "tsc --emitDeclarationOnly",
-    "build:js:esm": "cross-env BABEL_ENV=esm babel lib --out-dir dist/esm --extensions \".ts,.tsx\" --source-maps inline",
-    "build:js:cjs": "cross-env BABEL_ENV=cjs babel lib --out-dir dist/cjs --extensions \".ts,.tsx\" --source-maps inline",
+    "build": "tsup lib/index.ts --format esm,cjs --dts --clean",
     "deploy2npm": "npm run build && npm publish",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watch"
   },
@@ -43,21 +36,17 @@
   },
   "homepage": "https://github.com/knee-cola/jest-mock-axios#readme",
   "devDependencies": {
-    "@babel/cli": "^7.17.0",
-    "@babel/core": "^7.17.0",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-typescript": "^7.16.7",
     "@types/jest": "^27.4.0",
-    "babel-loader": "^8.2.3",
-    "babel-plugin-add-module-exports": "^1.0.4",
     "cross-env": "^7.0.3",
-    "jest": "^27.5.0",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.1.3",
     "tslint": "^6.1.3",
+    "tsup": "^5.11.13",
     "typescript": "^4.5.5"
   },
   "dependencies": {
+    "@jest/globals": "^27.5.1",
+    "jest": "^27.5.1",
     "synchronous-promise": "^2.0.15"
   }
 }
