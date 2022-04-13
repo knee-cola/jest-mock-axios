@@ -22,6 +22,15 @@ import {
 /** a FIFO queue of pending request */
 const _pending_requests: AxiosMockQueueItem[] = [];
 const _responseInterceptors: InterceptorsStack[] = [];
+const _requestInterceptors: InterceptorsStack[] = [];
+
+const processInterceptors = (data: any, stack: InterceptorsStack[], type: keyof InterceptorsStack) => {
+    return stack.map(({[type]: interceptor}) => interceptor)
+        .filter((interceptor) => !!interceptor)
+        .reduce((_result, next) => {
+            return next(_result);
+        }, data);
+}
 
 const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: any = {}, actualConfig: any = {}) => {
     if(typeof config === 'string') {
@@ -44,13 +53,15 @@ const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: an
         })
     }
 
-    _pending_requests.push({
+    const requestConfig = processInterceptors({
         config,
         data,
         method,
         promise,
         url
-    });
+    }, _requestInterceptors, 'onFulfilled');
+
+    _pending_requests.push(requestConfig);
     return promise;
 };
 
@@ -95,9 +106,13 @@ MockAxios.create = jest.fn(() => MockAxios);
 MockAxios.interceptors = {
     request: {
         // @ts-ignore
-        use: jest.fn(),
+        use: jest.fn((onFulfilled, onRejected) => {
+            return _requestInterceptors.push({ onFulfilled, onRejected })
+        }),
         // @ts-ignore
-        eject: jest.fn(),
+        eject: jest.fn((position: number) => {
+            _requestInterceptors.splice(position - 1, 1);
+        }),
     },
     response: {
         // @ts-ignore
@@ -169,14 +184,6 @@ const popQueueItem = (queueItem: SynchronousPromise<any> | AxiosMockQueueItem = 
     }
 };
 
-const processInterceptors = (data: any, type: keyof InterceptorsStack) => {
-    return _responseInterceptors.map(({[type]: interceptor}) => interceptor)
-        .filter((interceptor) => !!interceptor)
-        .reduce((_result, next) => {
-            return next(_result);
-        }, data);
-}
-
 MockAxios.mockResponse = (
     response?: HttpResponse,
     queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null,
@@ -202,7 +209,7 @@ MockAxios.mockResponse = (
         return;
     }
 
-    const result = processInterceptors(response, 'onFulfilled');
+    const result = processInterceptors(response, _responseInterceptors, 'onFulfilled');
 
     // resolving the Promise with the given response data
     promise.resolve(result);
@@ -244,7 +251,7 @@ MockAxios.mockError = (
         error.isAxiosError = true;
     }
 
-    const result = processInterceptors(error, 'onRejected');
+    const result = processInterceptors(error, _responseInterceptors, 'onRejected');
 
     // resolving the Promise with the given error
     promise.reject(result);
