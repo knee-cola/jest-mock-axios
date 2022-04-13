@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.6.0] - 2022-04-13
+
+### Changed
+
+- Experimental support for native ESM (#79)
+
+### Added
+
+- Interceptors are applied now (#82 by @yarilchenko)
+
 ## [4.5.0] - 2021-12-05
 
 ### Added
