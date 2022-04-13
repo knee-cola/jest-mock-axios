@@ -9,13 +9,18 @@ export interface HttpResponse {
 }
 
 interface Interceptor {
-    use: jest.Mock<number, [any?, any?]>;
+    use: jest.Mock<number, [onFulfilled?: (value: any) => any | Promise<any>, onRejected?: (error: any) => any]>;
     eject: jest.Mock<void, [number]>;
 }
 
 interface Interceptors {
     request: Interceptor;
     response: Interceptor;
+}
+
+export interface InterceptorsStack {
+    onFulfilled?(value: any): any | Promise<any>;
+    onRejected?(error: any): any;
 }
 
 interface AxiosDefaults {

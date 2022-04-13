@@ -7,8 +7,8 @@
  */
 
 import {jest} from '@jest/globals';
- 
- import { SynchronousPromise, UnresolvedSynchronousPromise } from "synchronous-promise";
+
+import { SynchronousPromise, UnresolvedSynchronousPromise } from "synchronous-promise";
 import Cancel from "./cancel/Cancel";
 import CancelToken from "./cancel/CancelToken";
 import {
@@ -16,10 +16,12 @@ import {
     AxiosMockRequestCriteria,
     AxiosMockType,
     HttpResponse,
+    InterceptorsStack,
 } from "./mock-axios-types";
 
 /** a FIFO queue of pending request */
 const _pending_requests: AxiosMockQueueItem[] = [];
+const _responseInterceptors: InterceptorsStack[] = [];
 
 const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: any = {}, actualConfig: any = {}) => {
     if(typeof config === 'string') {
@@ -99,9 +101,13 @@ MockAxios.interceptors = {
     },
     response: {
         // @ts-ignore
-        use: jest.fn(),
+        use: jest.fn((onFulfilled, onRejected) => {
+            return _responseInterceptors.push({onFulfilled, onRejected});
+        }),
         // @ts-ignore
-        eject: jest.fn(),
+        eject: jest.fn((position: number) => {
+            _responseInterceptors.splice(position - 1, 1);
+        }),
     },
 };
 
@@ -163,6 +169,14 @@ const popQueueItem = (queueItem: SynchronousPromise<any> | AxiosMockQueueItem = 
     }
 };
 
+const processInterceptors = (data: any, type: keyof InterceptorsStack) => {
+    return _responseInterceptors.map(({[type]: interceptor}) => interceptor)
+        .filter((interceptor) => !!interceptor)
+        .reduce((_result, next) => {
+            return next(_result);
+        }, data);
+}
+
 MockAxios.mockResponse = (
     response?: HttpResponse,
     queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null,
@@ -188,8 +202,10 @@ MockAxios.mockResponse = (
         return;
     }
 
+    const result = processInterceptors(response, 'onFulfilled');
+
     // resolving the Promise with the given response data
-    promise.resolve(response);
+    promise.resolve(result);
 };
 
 MockAxios.mockResponseFor = (
@@ -228,8 +244,10 @@ MockAxios.mockError = (
         error.isAxiosError = true;
     }
 
+    const result = processInterceptors(error, 'onRejected');
+
     // resolving the Promise with the given error
-    promise.reject(error);
+    promise.reject(result);
 };
 
 MockAxios.isAxiosError = (payload) => (typeof payload === 'object') && (payload.isAxiosError === true);
