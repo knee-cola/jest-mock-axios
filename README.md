@@ -44,7 +44,7 @@ import mockAxios from 'jest-mock-axios';
 export default mockAxios;
 ```
 
-⚠️ In v4.6.0 this module is inadvertently a pure ES module ([#83](https://github.com/knee-cola/jest-mock-axios/issues/83)). Please use v4.5.0 if you encounter any problems for now.
+⚠️ In v4.6.0 this module is inadvertently a pure ES module ([#83](https://github.com/knee-cola/jest-mock-axios/issues/83)). Please use v4.5.0 or v4.6.1 if you encounter any problems for now.
 
 ## Why do we need to manually create the mock?
 It's because Jest expects mocks to be placed in the project root, while

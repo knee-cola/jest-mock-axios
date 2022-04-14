@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.6.1] - 2022-04-13
+
+### Changed
+
+- Revert "Experimental support for native ESM" (#83)
+
 ## [4.6.0] - 2022-04-13
 
 ### Changed

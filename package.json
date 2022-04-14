@@ -1,6 +1,6 @@
 {
   "name": "jest-mock-axios",
-  "version": "4.6.0",
+  "version": "4.6.1",
   "description": "Axios mock for Jest",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
