@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.7.0] - 2022-09-01
+
+### Fixed
+
+- Using `Promise.reject` in interceptors triggers `UnhandledPromiseRejection` (#87)
+
+### Changed
+
+- Calling `MockAxios.reset()` now resets interceptors as well
+
+### Other
+
+- Updated dependencies (Jest 28)
+
 ## [4.6.1] - 2022-04-13
 
 ### Changed

@@ -1,3 +1,4 @@
+import {jest} from '@jest/globals';
 import { SynchronousPromise, UnresolvedSynchronousPromise  } from "synchronous-promise";
 
 export interface HttpResponse {
@@ -11,6 +12,7 @@ export interface HttpResponse {
 interface Interceptor {
     use: jest.Mock<number, [onFulfilled?: (value: any) => any | Promise<any>, onRejected?: (error: any) => any]>;
     eject: jest.Mock<void, [number]>;
+    clear: jest.Mock<void, []>;
 }
 
 interface Interceptors {

@@ -3,3 +3,5 @@ test
 .idea/
 .vscode/
 coverage/
+.tool-versions
+tsconfig.json

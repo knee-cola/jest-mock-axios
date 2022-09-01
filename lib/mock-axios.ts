@@ -113,6 +113,10 @@ MockAxios.interceptors = {
         eject: jest.fn((position: number) => {
             _requestInterceptors.splice(position - 1, 1);
         }),
+        // @ts-ignore
+        clear: jest.fn(() => {
+            _requestInterceptors.length = 0;
+        }),
     },
     response: {
         // @ts-ignore
@@ -122,6 +126,10 @@ MockAxios.interceptors = {
         // @ts-ignore
         eject: jest.fn((position: number) => {
             _responseInterceptors.splice(position - 1, 1);
+        }),
+        // @ts-ignore
+        clear: jest.fn(() => {
+            _responseInterceptors.length = 0;
         }),
     },
 };
@@ -201,7 +209,7 @@ MockAxios.mockResponse = (
         response,
     );
 
-    const promise = popQueueItem(queueItem);
+    let promise = popQueueItem(queueItem);
 
     if (!promise && !silentMode) {
         throw new Error("No request to respond to!");
@@ -209,10 +217,12 @@ MockAxios.mockResponse = (
         return;
     }
 
-    const result = processInterceptors(response, _responseInterceptors, 'onFulfilled');
+    for (const interceptor of _responseInterceptors) {
+        promise = promise.then(interceptor.onFulfilled, interceptor.onRejected) as UnresolvedSynchronousPromise<any>;
+    }
 
     // resolving the Promise with the given response data
-    promise.resolve(result);
+    promise.resolve(response);
 };
 
 MockAxios.mockResponseFor = (
@@ -239,7 +249,7 @@ MockAxios.mockError = (
     queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null,
     silentMode: boolean = false,
 ) => {
-    const promise = popQueueItem(queueItem);
+    let promise = popQueueItem(queueItem);
 
     if (!promise && !silentMode) {
         throw new Error("No request to respond to!");
@@ -251,10 +261,12 @@ MockAxios.mockError = (
         error.isAxiosError = true;
     }
 
-    const result = processInterceptors(error, _responseInterceptors, 'onRejected');
+    for (const interceptor of _responseInterceptors) {
+        promise = promise.then(interceptor.onFulfilled, interceptor.onRejected) as UnresolvedSynchronousPromise<any>;;
+    }
 
     // resolving the Promise with the given error
-    promise.reject(result);
+    promise.reject(error);
 };
 
 MockAxios.isAxiosError = (payload) => (typeof payload === 'object') && (payload.isAxiosError === true);
@@ -332,6 +344,10 @@ MockAxios.reset = () => {
     MockAxios.options.mockClear();
     MockAxios.request.mockClear();
     MockAxios.all.mockClear();
+
+
+    MockAxios.interceptors.request.clear();
+    MockAxios.interceptors.response.clear();
 };
 
 MockAxios.Cancel = Cancel;

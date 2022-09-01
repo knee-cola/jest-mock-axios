@@ -446,7 +446,7 @@ it("UppercaseProxy should get data from the server and convert it to UPPERCASE",
 
 ## Interceptors
 
-AxiosMock offers basic support for interceptors (i.e. it does not break when interceptors are used in tested code). However, interceptors are not applied to the mocked requests / responses at the moment.
+AxiosMock offers basic support for interceptors (i.e. it does not break when interceptors are used in tested code).
 
 ## Cancelling requests
 
