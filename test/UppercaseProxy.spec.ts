@@ -1,3 +1,5 @@
+import {afterEach, expect, it, jest} from '@jest/globals';
+
 import mockAxios from "../lib/index";
 import UppercaseProxy from "./UppercaseProxy";
 import CancelToken from "../lib/cancel/CancelToken";
@@ -37,4 +39,20 @@ it("UppercaseProxy should get data from the server and convert it to UPPERCASE",
     // checking the `then` spy has been called and if the
     // response from the server was converted to upper case
     expect(thenFn).toHaveBeenCalledWith("SERVER SAYS HELLO!");
+});
+
+it("UppercaseProxy should catch errors", () => {
+    console.log = jest.fn();
+
+    // using the component, which should make a server response
+    const clientMessage = "client is saying hello!";
+
+    UppercaseProxy(clientMessage);
+
+    // simulating a server response
+    const error = new Error("server says error!");
+    mockAxios.mockError(error);
+
+    // catch should have been called
+    expect(console.log).toHaveBeenCalled();
 });

@@ -1,4 +1,6 @@
-import { SynchronousPromise, UnresolvedSynchronousPromise } from "synchronous-promise";
+import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
+
+import { SynchronousPromise } from "synchronous-promise";
 import MockAxios from "../lib/index";
 
 describe("MockAxios", () => {
@@ -539,6 +541,37 @@ describe("MockAxios", () => {
 
         it("should return undefined matching unexistent value", () => {
             expect(MockAxios.getReqByRegex({ url: new RegExp('undefined') })).toBeUndefined();
+        });
+    });
+
+    describe("interceptors", () => {
+        beforeEach(() => {
+            MockAxios.reset();
+        });
+    
+        it("executes interceptors on request", () => {
+            const interceptor = jest.fn(c => c);
+            MockAxios.interceptors.request.use(interceptor);
+            MockAxios.post();
+            expect(interceptor).toHaveBeenCalled();
+        });
+
+        it("executes interceptors on response", () => {
+            const interceptor = jest.fn(r => r);
+            MockAxios.interceptors.response.use(interceptor);
+            MockAxios.post();
+            MockAxios.mockResponse({ data: "my_data" });
+            expect(interceptor).toHaveBeenCalled();
+        });
+
+        it("handles errors in interceptors", async () => {
+            const errorHandler = jest.fn();
+            const errorInterceptor = jest.fn((e) => Promise.reject(e));
+            MockAxios.interceptors.response.use((d) => d, errorInterceptor);
+            MockAxios.post().catch(errorHandler);
+            MockAxios.mockError({ data: "my_data" });
+            expect(errorInterceptor).toHaveBeenCalled();
+            expect(errorHandler).toHaveBeenCalled();
         });
     })
 

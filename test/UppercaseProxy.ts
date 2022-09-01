@@ -2,7 +2,7 @@ import axios from "../lib/index";
 
 const UppercaseProxy = (clientMessage) => {
     axios.interceptors.request.use((config) => config);
-    axios.interceptors.response.use((config) => config);
+    axios.interceptors.response.use((config) => config, (err) => Promise.reject(err));
 
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
