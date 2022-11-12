@@ -1,6 +1,16 @@
 # Changelog
 
-## [4.7.0] - 2022-09-01
+## [4.7.0] (Beta 2) - 2022-11-12
+
+### Added
+
+- Added (empty) default objects for configuration per HTTP verb (#88) - by @CezarManea (#89)
+
+### Other
+
+- Bumped dependencies (Jest 29)
+
+## [4.7.0] (Beta 1) - 2022-09-01
 
 ### Fixed
 
@@ -13,6 +23,12 @@
 ### Other
 
 - Updated dependencies (Jest 28)
+
+## [4.6.2] - 2022-11-12
+
+### Added
+
+- Added (empty) default objects for configuration per HTTP verb (#88) - by @CezarManea (#89)
 
 ## [4.6.1] - 2022-04-13
 
