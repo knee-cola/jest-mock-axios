@@ -137,6 +137,7 @@ MockAxios.interceptors = {
 MockAxios.defaults = {
     headers: {
         common: [],
+        post: {},
     },
 };
 
