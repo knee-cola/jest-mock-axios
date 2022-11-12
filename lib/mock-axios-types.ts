@@ -10,9 +10,9 @@ export interface HttpResponse {
 }
 
 interface Interceptor {
-    use: jest.Mock<number, [onFulfilled?: (value: any) => any | Promise<any>, onRejected?: (error: any) => any]>;
-    eject: jest.Mock<void, [number]>;
-    clear: jest.Mock<void, []>;
+    use: jest.Mock<(onFulfilled?: (value: any) => any | Promise<any>, onRejected?: (error: any) => any) => number>;
+    eject: jest.Mock<(index: number) => void>;
+    clear: jest.Mock<() => void>;
 }
 
 interface Interceptors {
@@ -29,18 +29,21 @@ interface AxiosDefaults {
     headers: any;
 }
 
+type MockUnresolvedPromise = (url?: string, options?: any) => UnresolvedSynchronousPromise<any>;
+type MockUnresolvedPromiseBody = (url?: string, body?: any, options?: any) => UnresolvedSynchronousPromise<any>;
+
 export interface AxiosAPI {
     // mocking Axios methods
-    get: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?]>;
-    post: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
-    put: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
-    patch: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?, any?]>;
-    delete: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?]>;
-    head: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?]>;
-    options: jest.Mock<UnresolvedSynchronousPromise<any>, [string?, any?]>;
-    request: jest.Mock<UnresolvedSynchronousPromise<any>, [any?]>;
-    all: jest.Mock<Promise<any>, [any]>;
-    create: jest.Mock<AxiosMockType, []>;
+    get: jest.Mock<MockUnresolvedPromise>;
+    post: jest.Mock<MockUnresolvedPromiseBody>;
+    put: jest.Mock<MockUnresolvedPromiseBody>;
+    patch: jest.Mock<MockUnresolvedPromiseBody>;
+    delete: jest.Mock<MockUnresolvedPromise>;
+    head: jest.Mock<MockUnresolvedPromise>;
+    options: jest.Mock<MockUnresolvedPromise>;
+    request: jest.Mock<(options?: any) => UnresolvedSynchronousPromise<any>>;
+    all: jest.Mock<(promises: any) => Promise<any>>;
+    create: jest.Mock<() => AxiosMockType>;
     interceptors: Interceptors;
     defaults: AxiosDefaults;
     isAxiosError: (error: any) => boolean;
@@ -209,4 +212,4 @@ export interface AxiosMockRequestCriteria {
  * Axios object can be called like a function,
  * that's why we're defining it as a spy
  */
-export type AxiosMockType = AxiosAPI & AxiosMockAPI & jest.Mock<UnresolvedSynchronousPromise<any>, [any?]>;
+export type AxiosMockType = AxiosAPI & AxiosMockAPI & jest.Mock<(options?: any) => any>;
