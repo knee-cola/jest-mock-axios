@@ -2,6 +2,7 @@ import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
 
 import { SynchronousPromise } from "synchronous-promise";
 import MockAxios from "../lib/index";
+import { AxiosMockQueueItem } from '../lib/mock-axios-types';
 
 describe("MockAxios", () => {
     afterEach(() => {
@@ -602,4 +603,33 @@ describe("MockAxios", () => {
             expect(() => cancelToken.token.throwIfRequested()).toThrow();
         });
     });
+
+    describe("requestHandler", () => {
+        it("provides a method to set up a requestHandler", () => {
+            expect(MockAxios).toHaveProperty("requestHandler");
+        });
+
+        it("invokes the requestHandler on every incoming request", () => {
+            const requestHandler = jest.fn();
+            MockAxios.requestHandler(requestHandler);
+
+            MockAxios.get();
+            MockAxios.post();
+
+            expect(requestHandler).toHaveBeenCalledTimes(2);
+        });
+
+        it("supplies the latest queue item to the requestHandler", () => {
+            let lastRequestHanderRequest: AxiosMockQueueItem;
+
+            MockAxios.requestHandler((req: AxiosMockQueueItem) => {
+                lastRequestHanderRequest = req;
+            });
+
+            MockAxios.post();
+
+            const lastPromise: AxiosMockQueueItem = MockAxios.post();
+            expect(lastRequestHanderRequest.promise).toBe(lastPromise);
+        });
+    })
 });
