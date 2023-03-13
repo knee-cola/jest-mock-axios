@@ -611,7 +611,7 @@ describe("MockAxios", () => {
 
         it("invokes the requestHandler on every incoming request", () => {
             const requestHandler = jest.fn();
-            MockAxios.requestHandler(requestHandler);
+            MockAxios.useRequestHandler(requestHandler);
 
             MockAxios.get();
             MockAxios.post();
