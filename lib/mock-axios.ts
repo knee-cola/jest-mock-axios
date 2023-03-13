@@ -364,7 +364,7 @@ MockAxios.reset = () => {
     MockAxios.interceptors.response.clear();
 };
 
-MockAxios.requestHandler = (handler: RequestHandler) => {
+MockAxios.useRequestHandler = (handler: RequestHandler) => {
     _requestHandler = handler;
 }
 
