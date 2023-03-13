@@ -628,7 +628,7 @@ describe("MockAxios", () => {
 
             MockAxios.post();
 
-            const lastPromise: AxiosMockQueueItem = MockAxios.post();
+            const lastPromise = MockAxios.post();
             expect(lastRequestHanderRequest.promise).toBe(lastPromise);
         });
     })
