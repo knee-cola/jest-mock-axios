@@ -606,7 +606,7 @@ describe("MockAxios", () => {
 
     describe("requestHandler", () => {
         it("provides a method to set up a requestHandler", () => {
-            expect(MockAxios).toHaveProperty("requestHandler");
+            expect(MockAxios).toHaveProperty("useRequestHandler");
         });
 
         it("invokes the requestHandler on every incoming request", () => {
