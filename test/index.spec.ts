@@ -622,7 +622,7 @@ describe("MockAxios", () => {
         it("supplies the latest queue item to the requestHandler", () => {
             let lastRequestHanderRequest: AxiosMockQueueItem;
 
-            MockAxios.requestHandler((req: AxiosMockQueueItem) => {
+            MockAxios.useRequestHandler((req: AxiosMockQueueItem) => {
                 lastRequestHanderRequest = req;
             });
 
