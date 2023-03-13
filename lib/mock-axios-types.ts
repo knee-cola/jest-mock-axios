@@ -197,7 +197,7 @@ export interface AxiosMockAPI {
      * 
      * @param handler the function to invoke with the new request item every time a new request comes in
      */
-    requestHandler: (handler: RequestHandler) => void;
+    useRequestHandler: (handler: RequestHandler) => void;
 
     Cancel: CancelStatic;
     CancelToken: CancelTokenStatic;
