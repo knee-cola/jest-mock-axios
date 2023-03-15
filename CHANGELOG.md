@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.6.3] - 2023-03-15
+
+### Added
+
+- `useRequestHandler` allows you to dynamically handle every invoked request (#95) - by @rubenduiveman (#95)
+
+## [4.6.2] - 2022-11-12
+
+### Added
+
+- Added (empty) default objects for configuration per HTTP verb (#88) - by @CezarManea (#89)
+
 ## [4.6.1] - 2022-04-13
 
 ### Changed
