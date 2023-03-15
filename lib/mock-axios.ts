@@ -17,12 +17,15 @@ import {
     AxiosMockType,
     HttpResponse,
     InterceptorsStack,
+    RequestHandler,
 } from "./mock-axios-types";
 
 /** a FIFO queue of pending request */
 const _pending_requests: AxiosMockQueueItem[] = [];
 const _responseInterceptors: InterceptorsStack[] = [];
 const _requestInterceptors: InterceptorsStack[] = [];
+
+let _requestHandler: RequestHandler;
 
 const processInterceptors = (data: any, stack: InterceptorsStack[], type: keyof InterceptorsStack) => {
     return stack.map(({[type]: interceptor}) => interceptor)
@@ -62,6 +65,11 @@ const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: an
     }, _requestInterceptors, 'onFulfilled');
 
     _pending_requests.push(requestConfig);
+
+    if (typeof _requestHandler === "function") {
+        _requestHandler(requestConfig);
+    }
+
     return promise;
 };
 
@@ -339,6 +347,10 @@ MockAxios.reset = () => {
     MockAxios.request.mockClear();
     MockAxios.all.mockClear();
 };
+
+MockAxios.useRequestHandler = (handler: RequestHandler) => {
+    _requestHandler = handler;
+}
 
 MockAxios.Cancel = Cancel;
 MockAxios.CancelToken = CancelToken;

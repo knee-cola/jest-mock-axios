@@ -23,6 +23,8 @@ export interface InterceptorsStack {
     onRejected?(error: any): any;
 }
 
+export type RequestHandler = (req: AxiosMockQueueItem) => void;
+
 interface AxiosDefaults {
     headers: any;
 }
@@ -183,6 +185,14 @@ export interface AxiosMockAPI {
      * Clears all of the queued requests
      */
     reset: () => void;
+
+    /**
+     * Set a request handler that gets invoked every time a new request comes in
+     *   The handler is invoked with the new request item
+     * 
+     * @param handler the function to invoke with the new request item every time a new request comes in
+     */
+    useRequestHandler: (handler: RequestHandler) => void;
 
     Cancel: CancelStatic;
     CancelToken: CancelTokenStatic;
