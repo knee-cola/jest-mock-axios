@@ -4,13 +4,13 @@
 
 ### Added
 
-- `useRequestHandler` allows you to dynamically handle every invoked request
+- `useRequestHandler` allows you to dynamically handle every invoked request (#95) - by @rubenduiveman (#95)
 
 ## [4.6.3] - 2023-03-15
 
 ### Added
 
-- `useRequestHandler` allows you to dynamically handle every invoked request
+- `useRequestHandler` allows you to dynamically handle every invoked request (#95) - by @rubenduiveman (#95)
 
 ## [4.7.0] (Beta 2) - 2022-11-12
 
