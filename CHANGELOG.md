@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.7.1] - 2023-03-15
+
+### Added
+
+- `useRequestHandler` allows you to dynamically handle every invoked request
+
+## [4.6.3] - 2023-03-15
+
+### Added
+
+- `useRequestHandler` allows you to dynamically handle every invoked request
+
 ## [4.7.0] (Beta 2) - 2022-11-12
 
 ### Added
