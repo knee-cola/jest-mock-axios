@@ -22,6 +22,7 @@ However, if you look at the [source code](https://github.com/knee-cola/jest-mock
   * [axios.getReqByRegex](#axiosgetreqbyregexopts)
   * [axios.lastPromiseGet](#axioslastpromiseget)
   * [axios.reset](#axiosreset)
+  * [axios.useRequestHandler](#axiosuserequesthandler)
 * [Additional examples](#additional-examples)
   * [Values returned by `lastReqGet` and `lastPromiseGet` methods](#values-returned-by-lastreqget-and-lastpromiseget-methods)
   * [Resolving requests out of order](#resolving-requests-out-of-order)
@@ -310,6 +311,15 @@ The promise object returned by this function corresponds to the one returned by 
 
 ## axios.reset()
 `reset` method clears state of the Axios mock to initial values. It should be called after each test, so that we can start fresh with our next test (i.e. from `afterEach` method).
+
+## axios.useRequestHandler()
+`useRequestHandler` method allows setting a request handler that gets invoked every time a new request comes in. The handler method is invoked with the new request item.
+
+```ts
+mockAxios.useRequestHandler((req: AxiosMockQueueItem) => {
+    // do something with req...
+}))
+```
 
 # Additional examples
 Since AxiosMock is relatively simple, most of its functionality was covered in [basic example](#basic-example) at the beginning of this document. In this section we'll explore features not covered by that initial example.
