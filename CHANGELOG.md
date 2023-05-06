@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.7.2] - 2023-05-06
+
+### Fixed
+
+- Fixed missing type exports (#97)
+
 ## [4.7.1] - 2023-03-15
 
 ### Added
