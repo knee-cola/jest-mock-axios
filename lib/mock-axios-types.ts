@@ -1,5 +1,8 @@
-import {jest} from '@jest/globals';
-import { SynchronousPromise, UnresolvedSynchronousPromise  } from "synchronous-promise";
+import { jest } from "@jest/globals";
+import {
+    SynchronousPromise,
+    UnresolvedSynchronousPromise,
+} from "synchronous-promise";
 
 export interface HttpResponse {
     data: any;
@@ -10,7 +13,12 @@ export interface HttpResponse {
 }
 
 interface Interceptor {
-    use: jest.Mock<(onFulfilled?: (value: any) => any | Promise<any>, onRejected?: (error: any) => any) => number>;
+    use: jest.Mock<
+        (
+            onFulfilled?: (value: any) => any | Promise<any>,
+            onRejected?: (error: any) => any
+        ) => number
+    >;
     eject: jest.Mock<(index: number) => void>;
     clear: jest.Mock<() => void>;
 }
@@ -31,8 +39,15 @@ interface AxiosDefaults {
     headers: any;
 }
 
-type MockUnresolvedPromise = (url?: string, options?: any) => UnresolvedSynchronousPromise<any>;
-type MockUnresolvedPromiseBody = (url?: string, body?: any, options?: any) => UnresolvedSynchronousPromise<any>;
+type MockUnresolvedPromise = (
+    url?: string,
+    options?: any
+) => UnresolvedSynchronousPromise<any>;
+type MockUnresolvedPromiseBody = (
+    url?: string,
+    body?: any,
+    options?: any
+) => UnresolvedSynchronousPromise<any>;
 
 export interface AxiosAPI {
     // mocking Axios methods
@@ -82,7 +97,7 @@ export interface AxiosMockAPI {
     mockResponse: (
         response?: HttpResponse,
         queueItem?: Promise<any> | AxiosMockQueueItem,
-        silentMode?: boolean,
+        silentMode?: boolean
     ) => void;
 
     /**
@@ -96,7 +111,7 @@ export interface AxiosMockAPI {
     mockResponseFor: (
         criteria: string | AxiosMockRequestCriteria,
         response?: HttpResponse,
-        silentMode?: boolean,
+        silentMode?: boolean
     ) => void;
 
     /**
@@ -109,7 +124,7 @@ export interface AxiosMockAPI {
     mockError: (
         error?: any,
         queueItem?: Promise<any> | AxiosMockQueueItem,
-        silentMode?: boolean,
+        silentMode?: boolean
     ) => void;
 
     /**
@@ -122,7 +137,9 @@ export interface AxiosMockAPI {
      * @param promise
      */
 
-    popPromise: (promise?: UnresolvedSynchronousPromise<any>) => UnresolvedSynchronousPromise<any>;
+    popPromise: (
+        promise?: UnresolvedSynchronousPromise<any>
+    ) => UnresolvedSynchronousPromise<any>;
 
     /**
      * Returns request item of the most recent request
@@ -173,7 +190,9 @@ export interface AxiosMockAPI {
      *          key_x: The key of the request to be found
      *          RegExp_x: The RegExp to be tested against that key
      */
-    getReqByRegex: (opts: {[key in keyof AxiosMockQueueItem]+?: RegExp}) => AxiosMockQueueItem;
+    getReqByRegex: (opts: {
+        [key in keyof AxiosMockQueueItem]+?: RegExp;
+    }) => AxiosMockQueueItem;
 
     /**
      * Removes the give request from the queue
@@ -194,7 +213,7 @@ export interface AxiosMockAPI {
     /**
      * Set a request handler that gets invoked every time a new request comes in
      *   The handler is invoked with the new request item
-     * 
+     *
      * @param handler the function to invoke with the new request item every time a new request comes in
      */
     useRequestHandler: (handler: RequestHandler) => void;
@@ -222,4 +241,6 @@ export interface AxiosMockRequestCriteria {
  * Axios object can be called like a function,
  * that's why we're defining it as a spy
  */
-export type AxiosMockType = AxiosAPI & AxiosMockAPI & jest.Mock<(options?: any) => any>;
+export type AxiosMockType = AxiosAPI &
+    AxiosMockAPI &
+    jest.Mock<(options?: any) => any>;

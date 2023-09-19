@@ -1,4 +1,4 @@
-import {afterEach, expect, it, jest} from '@jest/globals';
+import { afterEach, expect, it, jest } from "@jest/globals";
 
 import mockAxios from "../lib/index";
 import UppercaseProxy from "./UppercaseProxy";
@@ -16,9 +16,7 @@ it("UppercaseProxy should get data from the server and convert it to UPPERCASE",
     // using the component, which should make a server response
     const clientMessage = "client is saying hello!";
 
-    UppercaseProxy(clientMessage)
-        .then(thenFn)
-        .catch(catchFn);
+    UppercaseProxy(clientMessage).then(thenFn).catch(catchFn);
 
     // since `post` method is a spy, we can check if the server request was correct
     // a) the correct method was used (post)
@@ -26,7 +24,7 @@ it("UppercaseProxy should get data from the server and convert it to UPPERCASE",
     // c) if the payload was correct ('client is saying hello!')
     expect(mockAxios.post).toHaveBeenCalledWith("/web-service-url/", {
         data: clientMessage,
-        cancelToken: expect.any(CancelToken)
+        cancelToken: expect.any(CancelToken),
     });
 
     // simulating a server response

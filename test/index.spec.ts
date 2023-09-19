@@ -1,8 +1,15 @@
-import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
+import {
+    afterEach,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    jest,
+} from "@jest/globals";
 
 import { SynchronousPromise } from "synchronous-promise";
 import MockAxios from "../lib/index";
-import { AxiosMockQueueItem } from '../lib/mock-axios-types';
+import { AxiosMockQueueItem } from "../lib/mock-axios-types";
 
 describe("MockAxios", () => {
     afterEach(() => {
@@ -134,13 +141,13 @@ describe("MockAxios", () => {
 
         it("`mockResponse` should throw a specific error if no request can be resolved", () => {
             expect(() => MockAxios.mockResponse()).toThrowError(
-                "No request to respond to!",
+                "No request to respond to!"
             );
         });
 
         it("`mockResponse` should not throw a specific error if silentMode is true", () => {
             expect(() =>
-                MockAxios.mockResponse(undefined, undefined, true),
+                MockAxios.mockResponse(undefined, undefined, true)
             ).not.toThrow();
         });
 
@@ -186,16 +193,22 @@ describe("MockAxios", () => {
 
         it("`mockResponseFor` should throw an error if no matching request can be found and !silentMode", () => {
             const url = "url";
-            expect(() => MockAxios.mockResponseFor({ url, method: "post" })).toThrowError(
-                "No request to respond to!",
-            );
+            expect(() =>
+                MockAxios.mockResponseFor({ url, method: "post" })
+            ).toThrowError("No request to respond to!");
         });
 
         it("`mockResponseFor` should not throw an error if no matching request can be found but silentMode", () => {
             const url = "url";
             const thenFn = jest.fn();
             MockAxios.post("otherurl").then(thenFn);
-            expect(() => MockAxios.mockResponseFor({ url, method: "post" }, { data: {} }, true)).not.toThrow();
+            expect(() =>
+                MockAxios.mockResponseFor(
+                    { url, method: "post" },
+                    { data: {} },
+                    true
+                )
+            ).not.toThrow();
             expect(thenFn).not.toHaveBeenCalled();
         });
     });
@@ -224,7 +237,7 @@ describe("MockAxios", () => {
             const errorObj = { n: "this is an error" };
 
             MockAxios.mockError(errorObj, promise);
-            expect(MockAxios.isAxiosError(errorObj)).toBe(true)
+            expect(MockAxios.isAxiosError(errorObj)).toBe(true);
         });
 
         it("`mockError` should remove the promise from the queue", () => {
@@ -286,18 +299,18 @@ describe("MockAxios", () => {
 
         it("`mockError` should throw a specific error if no request can be resolved", () => {
             expect(() => MockAxios.mockError()).toThrowError(
-                "No request to respond to!",
+                "No request to respond to!"
             );
         });
 
         it("`mockError` should not throw a specific error if no request can be resolved but silentMode is true", () => {
             expect(() =>
-                MockAxios.mockError(undefined, undefined, true),
+                MockAxios.mockError(undefined, undefined, true)
             ).not.toThrow();
         });
 
         it("`mockError` should pass down the error object", () => {
-            class CustomError extends Error { }
+            class CustomError extends Error {}
             const promise = MockAxios.post();
             const catchFn = jest.fn();
             promise.catch(catchFn);
@@ -348,14 +361,15 @@ describe("MockAxios", () => {
     });
 
     describe("getReqMatching", () => {
-
         it("`getReqMatching` should return the most recent request matching the criteria", () => {
             const url = "url";
             MockAxios.delete(url);
             const promise = MockAxios.delete(url);
             MockAxios.get(url);
 
-            expect(MockAxios.getReqMatching({ url, method: "delete" }).promise).toBe(promise);
+            expect(
+                MockAxios.getReqMatching({ url, method: "delete" }).promise
+            ).toBe(promise);
         });
 
         it("`getReqMatching` should return undefined if no matching request can be found", () => {
@@ -369,7 +383,9 @@ describe("MockAxios", () => {
             const url = "url";
             MockAxios.get(url, { params: { a: "b", c: "d" } });
 
-            const matchingReq = MockAxios.getReqMatching({ params: { a: "b" } });
+            const matchingReq = MockAxios.getReqMatching({
+                params: { a: "b" },
+            });
             expect(matchingReq).toBeDefined();
             expect(matchingReq.url).toEqual(url);
         });
@@ -378,7 +394,9 @@ describe("MockAxios", () => {
             const url = "url";
             MockAxios.get(url, { params: { a: "b", c: "d" } });
 
-            const matchingReq = MockAxios.getReqMatching({ params: { a: "b", e: "f" } });
+            const matchingReq = MockAxios.getReqMatching({
+                params: { a: "b", e: "f" },
+            });
             expect(matchingReq).toBeUndefined();
         });
 
@@ -386,7 +404,9 @@ describe("MockAxios", () => {
             const url = "url";
             MockAxios.get(url);
 
-            const matchingReq = MockAxios.getReqMatching({ params: { a: "b" } });
+            const matchingReq = MockAxios.getReqMatching({
+                params: { a: "b" },
+            });
             expect(matchingReq).toBeUndefined();
         });
     });
@@ -499,7 +519,9 @@ describe("MockAxios", () => {
         const firstReq = MockAxios.lastReqGet();
         MockAxios.post("wrong_url");
 
-        expect(MockAxios.getReqByMatchUrl(new RegExp('right'))).toStrictEqual(firstReq);
+        expect(MockAxios.getReqByMatchUrl(new RegExp("right"))).toStrictEqual(
+            firstReq
+        );
     });
 
     // getReqByRegex - return the most recent request matching any key with the regex (e.g.: url, data, config)
@@ -518,30 +540,45 @@ describe("MockAxios", () => {
 
             MockAxios.delete("wrong_url");
             deleteReq = MockAxios.lastReqGet();
-        })
+        });
 
         it("should return the request matching url", () => {
-            expect(MockAxios.getReqByRegex({ url: new RegExp('right') })).toStrictEqual(firstReq);
+            expect(
+                MockAxios.getReqByRegex({ url: new RegExp("right") })
+            ).toStrictEqual(firstReq);
         });
 
         it("should return the request matching data", () => {
-            expect(MockAxios.getReqByRegex({ data: new RegExp('my_data') })).toStrictEqual(firstReq);
+            expect(
+                MockAxios.getReqByRegex({ data: new RegExp("my_data") })
+            ).toStrictEqual(firstReq);
         });
 
         it("should return the request matching config", () => {
-            expect(MockAxios.getReqByRegex({ config: new RegExp('my_config') })).toStrictEqual(firstReq);
+            expect(
+                MockAxios.getReqByRegex({ config: new RegExp("my_config") })
+            ).toStrictEqual(firstReq);
         });
 
         it("should return the request matching method", () => {
-            expect(MockAxios.getReqByRegex({ method: new RegExp('delete') })).toStrictEqual(deleteReq);
+            expect(
+                MockAxios.getReqByRegex({ method: new RegExp("delete") })
+            ).toStrictEqual(deleteReq);
         });
 
         it("should return the request matching url and data", () => {
-            expect(MockAxios.getReqByRegex({ url: new RegExp('right'), data: new RegExp('my_data') })).toStrictEqual(firstReq);
+            expect(
+                MockAxios.getReqByRegex({
+                    url: new RegExp("right"),
+                    data: new RegExp("my_data"),
+                })
+            ).toStrictEqual(firstReq);
         });
 
         it("should return undefined matching unexistent value", () => {
-            expect(MockAxios.getReqByRegex({ url: new RegExp('undefined') })).toBeUndefined();
+            expect(
+                MockAxios.getReqByRegex({ url: new RegExp("undefined") })
+            ).toBeUndefined();
         });
     });
 
@@ -549,16 +586,16 @@ describe("MockAxios", () => {
         beforeEach(() => {
             MockAxios.reset();
         });
-    
+
         it("executes interceptors on request", () => {
-            const interceptor = jest.fn(c => c);
+            const interceptor = jest.fn((c) => c);
             MockAxios.interceptors.request.use(interceptor);
             MockAxios.post();
             expect(interceptor).toHaveBeenCalled();
         });
 
         it("executes interceptors on response", () => {
-            const interceptor = jest.fn(r => r);
+            const interceptor = jest.fn((r) => r);
             MockAxios.interceptors.response.use(interceptor);
             MockAxios.post();
             MockAxios.mockResponse({ data: "my_data" });
@@ -574,7 +611,7 @@ describe("MockAxios", () => {
             expect(errorInterceptor).toHaveBeenCalled();
             expect(errorHandler).toHaveBeenCalled();
         });
-    })
+    });
 
     describe("provides cancel interfaces", () => {
         it("provides axios.Cancel", () => {
@@ -631,5 +668,5 @@ describe("MockAxios", () => {
             const lastPromise = MockAxios.post();
             expect(lastRequestHanderRequest.promise).toBe(lastPromise);
         });
-    })
+    });
 });
