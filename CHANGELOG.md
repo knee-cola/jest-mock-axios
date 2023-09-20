@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.7.3] - 2023-09-20
+
+### Other
+
+- Dependency updates (#98, #99) 
+
 ## [4.7.2] - 2023-05-06
 
 ### Fixed
