@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.8.0] - 2024-11-05
+
+### Fixed
+
+- Matching params now considers (almost all cases of) deep equality (#102)
+
 ## [4.7.3] - 2023-09-20
 
 ### Other
