@@ -348,7 +348,6 @@ describe("MockAxios", () => {
     });
 
     describe("getReqMatching", () => {
-
         it("`getReqMatching` should return the most recent request matching the criteria", () => {
             const url = "url";
             MockAxios.delete(url);
@@ -370,6 +369,15 @@ describe("MockAxios", () => {
             MockAxios.get(url, { params: { a: "b", c: "d" } });
 
             const matchingReq = MockAxios.getReqMatching({ params: { a: "b" } });
+            expect(matchingReq).toBeDefined();
+            expect(matchingReq.url).toEqual(url);
+        });
+
+        it("`getReqMatching` should match when params match (nested)", () => {
+            const url = "url";
+            MockAxios.get(url, { params: { a: ["b", "c"] } });
+
+            const matchingReq = MockAxios.getReqMatching({ params: { a: ["b", "c"] } });
             expect(matchingReq).toBeDefined();
             expect(matchingReq.url).toEqual(url);
         });
