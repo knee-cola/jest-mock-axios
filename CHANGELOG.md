@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.9.0] - 2025-09-04
+
+### Other
+
+- Bump jest dependency from 29 -> 30 (#105)
+
 ## [4.8.0] - 2024-11-05
 
 ### Fixed
