@@ -133,7 +133,7 @@ describe("MockAxios", () => {
         });
 
         it("`mockResponse` should throw a specific error if no request can be resolved", () => {
-            expect(() => MockAxios.mockResponse()).toThrowError(
+            expect(() => MockAxios.mockResponse()).toThrow(
                 "No request to respond to!",
             );
         });
@@ -186,7 +186,7 @@ describe("MockAxios", () => {
 
         it("`mockResponseFor` should throw an error if no matching request can be found and !silentMode", () => {
             const url = "url";
-            expect(() => MockAxios.mockResponseFor({ url, method: "post" })).toThrowError(
+            expect(() => MockAxios.mockResponseFor({ url, method: "post" })).toThrow(
                 "No request to respond to!",
             );
         });
@@ -285,7 +285,7 @@ describe("MockAxios", () => {
         });
 
         it("`mockError` should throw a specific error if no request can be resolved", () => {
-            expect(() => MockAxios.mockError()).toThrowError(
+            expect(() => MockAxios.mockError()).toThrow(
                 "No request to respond to!",
             );
         });
