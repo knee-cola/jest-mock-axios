@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.9.1] - 2026-09-07
+
+### Other
+
+- Loosen jest dependency to allow for future, non-breaking versions (#115)
+
 ## [4.9.0] - 2025-09-04
 
 ### Other
