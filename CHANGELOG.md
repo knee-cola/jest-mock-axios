@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.10.0]
+
+### Fixed
+
+- Proper handling of falsy data in post / put / patch (#119) - thanks to @trackoor
+- Keep interceptor ids stable when using eject (#119) - thanks to @trackoor
+
 ## [4.9.1] - 2026-09-07
 
 ### Other
