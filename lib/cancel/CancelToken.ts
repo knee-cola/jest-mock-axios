@@ -24,19 +24,17 @@ export default class CancelToken {
   public promise: Promise<Cancel>;
 
   constructor(executor: (cancel: Canceler) => void) {
-    const token = this;
-
     this.promise = new Promise((resolve) => {
-        token.resolvePromise = resolve;
+        this.resolvePromise = resolve;
     });
 
-    executor(function cancel(message) {
-        if(token.reason || !token.resolvePromise) {
+    executor((message) => {
+        if(this.reason || !this.resolvePromise) {
             return;
         }
 
-        token.reason = new Cancel(message)
-        token.resolvePromise(token.reason)
+        this.reason = new Cancel(message)
+        this.resolvePromise(this.reason)
     });
   }
 

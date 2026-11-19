@@ -602,7 +602,7 @@ describe("MockAxios", () => {
             const calls = [];
             const a = MockAxios.interceptors.response.use((r) => { calls.push('a'); return r; });
             const b = MockAxios.interceptors.response.use((r) => { calls.push('b'); return r; });
-            const c = MockAxios.interceptors.response.use((r) => { calls.push('c'); return r; });
+            MockAxios.interceptors.response.use((r) => { calls.push('c'); return r; });
 
             MockAxios.interceptors.response.eject(a);
             MockAxios.interceptors.response.eject(b);

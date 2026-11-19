@@ -1,5 +1,6 @@
 /lib
 test
+.oxlintrc.json
 .idea/
 .vscode/
 coverage/

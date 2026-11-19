@@ -42,7 +42,7 @@ it("UppercaseProxy should get data from the server and convert it to UPPERCASE",
 });
 
 it("UppercaseProxy should catch errors", () => {
-    console.log = jest.fn(); // tslint:disable-line
+    console.log = jest.fn(); // eslint-disable-line no-console
 
     // using the component, which should make a server response
     const clientMessage = "client is saying hello!";
@@ -54,5 +54,5 @@ it("UppercaseProxy should catch errors", () => {
     mockAxios.mockError(error);
 
     // catch should have been called
-    expect(console.log).toHaveBeenCalled(); // tslint:disable-line
+    expect(console.log).toHaveBeenCalled(); // eslint-disable-line no-console
 });
