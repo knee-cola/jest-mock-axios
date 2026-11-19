@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals';
+import { jest } from "@jest/globals";
 import { SynchronousPromise, UnresolvedSynchronousPromise } from "synchronous-promise";
 
 export interface HttpResponse {
@@ -67,7 +67,7 @@ interface CancelTokenSource {
     cancel: Canceler;
 }
 interface CancelTokenStatic {
-    new(executor: (cancel: Canceler) => void): CancelToken;
+    new (executor: (cancel: Canceler) => void): CancelToken;
     source(): CancelTokenSource;
 }
 
@@ -82,7 +82,7 @@ export interface AxiosMockAPI {
     mockResponse: (
         response?: HttpResponse,
         queueItem?: Promise<any> | AxiosMockQueueItem,
-        silentMode?: boolean,
+        silentMode?: boolean
     ) => void;
 
     /**
@@ -96,7 +96,7 @@ export interface AxiosMockAPI {
     mockResponseFor: (
         criteria: string | AxiosMockRequestCriteria,
         response?: HttpResponse,
-        silentMode?: boolean,
+        silentMode?: boolean
     ) => void;
 
     /**
@@ -106,11 +106,7 @@ export interface AxiosMockAPI {
      * @param silentMode (optional) specifies whether the call should throw an error or
      *   only fail quietly if no matching request is found.
      */
-    mockError: (
-        error?: any,
-        queueItem?: Promise<any> | AxiosMockQueueItem,
-        silentMode?: boolean,
-    ) => void;
+    mockError: (error?: any, queueItem?: Promise<any> | AxiosMockQueueItem, silentMode?: boolean) => void;
 
     /**
      * Returns promise of the most recent request
@@ -173,7 +169,9 @@ export interface AxiosMockAPI {
      *          key_x: The key of the request to be found
      *          RegExp_x: The RegExp to be tested against that key
      */
-    getReqByRegex: (opts: { [key in keyof AxiosMockQueueItem]+?: RegExp }) => AxiosMockQueueItem;
+    getReqByRegex: (opts: {
+        [key in keyof AxiosMockQueueItem]+?: RegExp;
+    }) => AxiosMockQueueItem;
 
     /**
      * Removes the give request from the queue

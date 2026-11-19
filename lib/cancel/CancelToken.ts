@@ -7,40 +7,40 @@ type Canceler = (message?: string) => void;
  * Copyright (c) 2014-present Matt Zabriskie (MIT License)
  */
 export default class CancelToken {
-  public static source() {
-    let cancel: Canceler;
-    const token = new CancelToken((c) => (cancel = c));
+    public static source() {
+        let cancel: Canceler;
+        const token = new CancelToken((c) => (cancel = c));
 
-    return {
-      cancel,
-      token,
-    };
-  }
+        return {
+            cancel,
+            token,
+        };
+    }
 
-  private resolvePromise: (string) => void;
+    private resolvePromise: (string) => void;
 
-  public reason: Cancel;
+    public reason: Cancel;
 
-  public promise: Promise<Cancel>;
+    public promise: Promise<Cancel>;
 
-  constructor(executor: (cancel: Canceler) => void) {
-    this.promise = new Promise((resolve) => {
-        this.resolvePromise = resolve;
-    });
+    constructor(executor: (cancel: Canceler) => void) {
+        this.promise = new Promise((resolve) => {
+            this.resolvePromise = resolve;
+        });
 
-    executor((message) => {
-        if(this.reason || !this.resolvePromise) {
-            return;
+        executor((message) => {
+            if (this.reason || !this.resolvePromise) {
+                return;
+            }
+
+            this.reason = new Cancel(message);
+            this.resolvePromise(this.reason);
+        });
+    }
+
+    public throwIfRequested() {
+        if (this.reason) {
+            throw this.reason;
         }
-
-        this.reason = new Cancel(message)
-        this.resolvePromise(this.reason)
-    });
-  }
-
-  public throwIfRequested() {
-      if(this.reason) {
-          throw this.reason;
-      }
-  }
+    }
 }

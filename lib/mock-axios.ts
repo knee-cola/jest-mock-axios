@@ -6,7 +6,7 @@
  * @license  @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
-import {jest} from '@jest/globals';
+import { jest } from "@jest/globals";
 
 import { SynchronousPromise, UnresolvedSynchronousPromise } from "synchronous-promise";
 import Cancel from "./cancel/Cancel";
@@ -28,15 +28,16 @@ const _requestInterceptors: (InterceptorsStack | null)[] = [];
 let _requestHandler: RequestHandler;
 
 const processInterceptors = (data: any, stack: InterceptorsStack[], type: keyof InterceptorsStack) => {
-    return stack.map(({[type]: interceptor}) => interceptor)
+    return stack
+        .map(({ [type]: interceptor }) => interceptor)
         .filter((interceptor) => !!interceptor)
         .reduce((_result, next) => {
             return next(_result);
         }, data);
-}
+};
 
 const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: any = {}, actualConfig: any = {}) => {
-    if(typeof config === 'string') {
+    if (typeof config === "string") {
         // Allow for axios('example/url'[, config])
         actualConfig.url = config;
         config = actualConfig;
@@ -47,22 +48,26 @@ const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: an
     const data: any = config.data;
     const promise: UnresolvedSynchronousPromise<any> = SynchronousPromise.unresolved();
 
-    if(config.cancelToken) {
+    if (config.cancelToken) {
         config.cancelToken.promise.then((cancel: any) => {
             // check if promise is still waiting for an answer
-            if(_pending_requests.find(x => x.promise === promise)) {
-                MockAxios.mockError(cancel, promise)
+            if (_pending_requests.find((x) => x.promise === promise)) {
+                MockAxios.mockError(cancel, promise);
             }
-        })
+        });
     }
 
-    const requestConfig = processInterceptors({
-        config,
-        data,
-        method,
-        promise,
-        url
-    }, _requestInterceptors.filter(x => x !== null), 'onFulfilled');
+    const requestConfig = processInterceptors(
+        {
+            config,
+            data,
+            method,
+            promise,
+            url,
+        },
+        _requestInterceptors.filter((x) => x !== null),
+        "onFulfilled"
+    );
 
     _pending_requests.push(requestConfig);
 
@@ -84,10 +89,10 @@ const _helperReq = (method: string, url: string, data?: any, config?: any) => {
 };
 
 const _helperReqNoData = (method: string, url: string, config?: any) => {
-    return _helperReq(method, url, {}, config)
-}
+    return _helperReq(method, url, {}, config);
+};
 
-const MockAxios: AxiosMockType = (jest.fn(_newReq) as unknown) as AxiosMockType;
+const MockAxios: AxiosMockType = jest.fn(_newReq) as unknown as AxiosMockType;
 
 // mocking Axios methods
 // @ts-ignore
@@ -115,7 +120,7 @@ MockAxios.interceptors = {
     request: {
         // @ts-ignore
         use: jest.fn((onFulfilled, onRejected) => {
-            return _requestInterceptors.push({ onFulfilled, onRejected })
+            return _requestInterceptors.push({ onFulfilled, onRejected });
         }),
         // @ts-ignore
         eject: jest.fn((position: number) => {
@@ -130,7 +135,7 @@ MockAxios.interceptors = {
     response: {
         // @ts-ignore
         use: jest.fn((onFulfilled, onRejected) => {
-            return _responseInterceptors.push({onFulfilled, onRejected});
+            return _responseInterceptors.push({ onFulfilled, onRejected });
         }),
         // @ts-ignore
         eject: jest.fn((position: number) => {
@@ -151,7 +156,7 @@ MockAxios.defaults = {
         delete: {},
         put: {},
         patch: {},
-        head: {}
+        head: {},
     },
 };
 
@@ -193,9 +198,7 @@ MockAxios.popRequest = (request?: AxiosMockQueueItem) => {
  */
 const popQueueItem = (queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null) => {
     // first let's pretend the param is a queue item
-    const request: AxiosMockQueueItem = MockAxios.popRequest(
-        queueItem as AxiosMockQueueItem,
-    );
+    const request: AxiosMockQueueItem = MockAxios.popRequest(queueItem as AxiosMockQueueItem);
 
     if (request) {
         // IF the request was found
@@ -210,7 +213,7 @@ const popQueueItem = (queueItem: SynchronousPromise<any> | AxiosMockQueueItem = 
 MockAxios.mockResponse = (
     response?: HttpResponse,
     queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null,
-    silentMode: boolean = false,
+    silentMode: boolean = false
 ): void => {
     // replacing missing data with default values
     response = Object.assign(
@@ -221,7 +224,7 @@ MockAxios.mockResponse = (
             status: 200,
             statusText: "OK",
         },
-        response,
+        response
     );
 
     let promise = popQueueItem(queueItem);
@@ -233,7 +236,7 @@ MockAxios.mockResponse = (
     }
 
     for (const interceptor of _responseInterceptors) {
-        if(interceptor === null) continue;
+        if (interceptor === null) continue;
         promise = promise.then(interceptor.onFulfilled, interceptor.onRejected) as UnresolvedSynchronousPromise<any>;
     }
 
@@ -244,10 +247,10 @@ MockAxios.mockResponse = (
 MockAxios.mockResponseFor = (
     criteria: string | AxiosMockRequestCriteria,
     response?: HttpResponse,
-    silentMode: boolean = false,
+    silentMode: boolean = false
 ): void => {
     if (typeof criteria === "string") {
-        criteria = {url: criteria};
+        criteria = { url: criteria };
     }
     const queueItem = MockAxios.getReqMatching(criteria);
 
@@ -263,7 +266,7 @@ MockAxios.mockResponseFor = (
 MockAxios.mockError = (
     error: any = {},
     queueItem: SynchronousPromise<any> | AxiosMockQueueItem = null,
-    silentMode: boolean = false,
+    silentMode: boolean = false
 ) => {
     let promise = popQueueItem(queueItem);
 
@@ -273,19 +276,19 @@ MockAxios.mockError = (
         return;
     }
 
-    if (error && typeof error === 'object' && error.isAxiosError === void 0) {
+    if (error && typeof error === "object" && error.isAxiosError === void 0) {
         error.isAxiosError = true;
     }
 
     for (const interceptor of _responseInterceptors) {
-        promise = promise.then(interceptor.onFulfilled, interceptor.onRejected) as UnresolvedSynchronousPromise<any>;;
+        promise = promise.then(interceptor.onFulfilled, interceptor.onRejected) as UnresolvedSynchronousPromise<any>;
     }
 
     // resolving the Promise with the given error
     promise.reject(error);
 };
 
-MockAxios.isAxiosError = (payload) => (typeof payload === 'object') && (payload.isAxiosError === true);
+MockAxios.isAxiosError = (payload) => typeof payload === "object" && payload.isAxiosError === true;
 
 MockAxios.lastReqGet = () => {
     return _pending_requests[_pending_requests.length - 1];
@@ -298,37 +301,61 @@ MockAxios.lastPromiseGet = () => {
 
 const _findReqByPredicate = (predicate: (item: AxiosMockQueueItem) => boolean) => {
     return _pending_requests
-    .slice()
-    .reverse() // reverse cloned array to return most recent req
-    .find(predicate);
-}
+        .slice()
+        .reverse() // reverse cloned array to return most recent req
+        .find(predicate);
+};
 
 const deepEqual = (x: any, y: any): boolean => {
     // adapted from https://stackoverflow.com/a/16788517
     // should handle most relevant edge cases (except for circular references etc.)
 
-    if (x === null || x === undefined || y === null || y === undefined) { return x === y; }
+    if (x === null || x === undefined || y === null || y === undefined) {
+        return x === y;
+    }
     // after this just checking type of one would be enough
-    if (x.constructor !== y.constructor) { return false; }
+    if (x.constructor !== y.constructor) {
+        return false;
+    }
     // if they are functions, they should exactly refer to same one (because of closures)
-    if (x instanceof Function) { return x === y; }
+    if (x instanceof Function) {
+        return x === y;
+    }
     // if they are regexps, they should exactly refer to same one (it is hard to better equality check on current ES)
-    if (x instanceof RegExp) { return x === y; }
-    if (x === y || x.valueOf() === y.valueOf()) { return true; }
-    if (Array.isArray(x) && x.length !== y.length) { return false; }
+    if (x instanceof RegExp) {
+        return x === y;
+    }
+    if (x === y || x.valueOf() === y.valueOf()) {
+        return true;
+    }
+    if (Array.isArray(x) && x.length !== y.length) {
+        return false;
+    }
 
     // if they are dates, they must had equal valueOf
-    if (x instanceof Date) { return false; }
+    if (x instanceof Date) {
+        return false;
+    }
 
     // if they are strictly equal, they both need to be object at least
-    if (!(x instanceof Object)) { return false; }
-    if (!(y instanceof Object)) { return false; }
+    if (!(x instanceof Object)) {
+        return false;
+    }
+    if (!(y instanceof Object)) {
+        return false;
+    }
 
     // recursive object equality check
     const p = Object.keys(x);
-    return Object.keys(y).every((i) => { return p.indexOf(i) !== -1; }) &&
-        p.every((i) => { return deepEqual(x[i], y[i]); });
-}
+    return (
+        Object.keys(y).every((i) => {
+            return p.indexOf(i) !== -1;
+        }) &&
+        p.every((i) => {
+            return deepEqual(x[i], y[i]);
+        })
+    );
+};
 
 const _checkCriteria = (item: AxiosMockQueueItem, criteria: AxiosMockRequestCriteria) => {
     if (criteria.method !== undefined && criteria.method.toLowerCase() !== item.method.toLowerCase()) {
@@ -339,13 +366,15 @@ const _checkCriteria = (item: AxiosMockQueueItem, criteria: AxiosMockRequestCrit
         return false;
     }
 
-    if(criteria.params !== undefined) {
-        if(item.config === undefined || !item.config.params || (typeof item.config.params !== 'object') ) {
-          return false;
+    if (criteria.params !== undefined) {
+        if (item.config === undefined || !item.config.params || typeof item.config.params !== "object") {
+            return false;
         }
 
-        const paramsMatching = Object.entries(criteria.params).every(([key, value]) => deepEqual(item.config.params[key], value));
-        if(!paramsMatching) {
+        const paramsMatching = Object.entries(criteria.params).every(([key, value]) =>
+            deepEqual(item.config.params[key], value)
+        );
+        if (!paramsMatching) {
             return false;
         }
     }
@@ -358,15 +387,17 @@ MockAxios.getReqMatching = (criteria: AxiosMockRequestCriteria) => {
 };
 
 MockAxios.getReqByUrl = (url: string) => {
-    return MockAxios.getReqMatching({url});
+    return MockAxios.getReqMatching({ url });
 };
 
 MockAxios.getReqByMatchUrl = (url: RegExp) => {
     return _findReqByPredicate((x) => url.test(x.url));
 };
 
-MockAxios.getReqByRegex = (opts: {[key in keyof AxiosMockQueueItem]+?: RegExp}) => {
-  return _findReqByPredicate(x => Object.entries(opts).every(([key, value]) => value.test(JSON.stringify(x[key]))));
+MockAxios.getReqByRegex = (opts: {
+    [key in keyof AxiosMockQueueItem]+?: RegExp;
+}) => {
+    return _findReqByPredicate((x) => Object.entries(opts).every(([key, value]) => value.test(JSON.stringify(x[key]))));
 };
 
 MockAxios.queue = () => {
@@ -388,14 +419,13 @@ MockAxios.reset = () => {
     MockAxios.request.mockClear();
     MockAxios.all.mockClear();
 
-
     MockAxios.interceptors.request.clear();
     MockAxios.interceptors.response.clear();
 };
 
 MockAxios.useRequestHandler = (handler: RequestHandler) => {
     _requestHandler = handler;
-}
+};
 
 MockAxios.Cancel = Cancel;
 MockAxios.CancelToken = CancelToken;

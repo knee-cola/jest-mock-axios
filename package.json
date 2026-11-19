@@ -13,6 +13,9 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "lint": "oxlint lib test",
+    "format": "oxfmt lib test",
+    "format:check": "oxfmt --check lib test",
+    "prepare": "husky",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
     "build": "tsdown lib/index.ts --format cjs,esm --dts --clean",
@@ -38,6 +41,8 @@
   "devDependencies": {
     "@types/jest": "~30.0.0",
     "cross-env": "^10.0.0",
+    "husky": "^9.1.7",
+    "oxfmt": "^0.79.0",
     "oxlint": "^1.94.0",
     "rimraf": "^6.0.1",
     "ts-jest": "^29.4.15",

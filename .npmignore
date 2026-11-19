@@ -1,6 +1,8 @@
 /lib
 test
 .oxlintrc.json
+.oxfmtrc.json
+.husky/
 .idea/
 .vscode/
 coverage/

@@ -1,4 +1,4 @@
-import {describe, expect, it, jest} from '@jest/globals';
+import { describe, expect, it, jest } from "@jest/globals";
 
 import MockAxios from "../lib/index";
 import { getData } from "./cancel";
@@ -8,28 +8,28 @@ describe("cancel", () => {
     it("cancels request (shouldCancel = true)", (done) => {
         const thenFn = jest.fn();
         const catchFn = jest.fn();
-        const promise = getData(true).then(thenFn).catch(catchFn)
+        const promise = getData(true).then(thenFn).catch(catchFn);
 
         setTimeout(async () => {
-            MockAxios.mockResponse({data: "example response"}, undefined, true);
+            MockAxios.mockResponse({ data: "example response" }, undefined, true);
             await promise;
-            expect(thenFn).not.toHaveBeenCalled()
-            expect(catchFn).toHaveBeenCalledWith(expect.any(Cancel))
-            done()
-        })
-    })
+            expect(thenFn).not.toHaveBeenCalled();
+            expect(catchFn).toHaveBeenCalledWith(expect.any(Cancel));
+            done();
+        });
+    });
 
     it("does not cancel request (shouldCancel = false)", (done) => {
         const thenFn = jest.fn();
         const catchFn = jest.fn();
-        const promise = getData(false).then(thenFn).catch(catchFn)
+        const promise = getData(false).then(thenFn).catch(catchFn);
 
         setTimeout(async () => {
-            MockAxios.mockResponse({data: "example response"}, undefined, true);
+            MockAxios.mockResponse({ data: "example response" }, undefined, true);
             await promise;
-            expect(thenFn).toHaveBeenCalled()
-            expect(catchFn).not.toHaveBeenCalled()
-            done()
-        })
-    })
-})
+            expect(thenFn).toHaveBeenCalled();
+            expect(catchFn).not.toHaveBeenCalled();
+            done();
+        });
+    });
+});
