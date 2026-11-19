@@ -1,4 +1,4 @@
-import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
 import { SynchronousPromise } from "synchronous-promise";
 import MockAxios from "../lib/index";
@@ -397,6 +397,21 @@ describe("MockAxios", () => {
             const matchingReq = MockAxios.getReqMatching({ params: { a: "b" } });
             expect(matchingReq).toBeUndefined();
         });
+
+
+        it("`getReqMatching` should handle falsey arguments in data properly", () => {
+            MockAxios.post('/users', null, { params: { page: 2 }, headers: { 'X-Token': 'abc' } });
+            MockAxios.put('/u/1', '', { params: { force: true } });
+            MockAxios.post('/users', { a: 1 }, { params: { page: 4 } });
+            MockAxios.post('/no-data', {params: { page: 1 } });
+            MockAxios.get('/no-data', { params: { page: 5 } });
+
+            expect(MockAxios.getReqMatching({ params: { page: 2 } })).toBeDefined();
+            expect(MockAxios.getReqMatching({ params: { force: true } })).toBeDefined();
+            expect(MockAxios.getReqMatching({ params: { page: 4 } })).toBeDefined();
+            expect(MockAxios.getReqMatching({ params: { page: 1 } })).toBeUndefined();
+            expect(MockAxios.getReqMatching({ params: { page: 5 } })).toBeDefined();
+        });
     });
 
     it("`getReqByUrl` should return the most recent request matching the url", () => {
@@ -557,7 +572,7 @@ describe("MockAxios", () => {
         beforeEach(() => {
             MockAxios.reset();
         });
-    
+
         it("executes interceptors on request", () => {
             const interceptor = jest.fn(c => c);
             MockAxios.interceptors.request.use(interceptor);

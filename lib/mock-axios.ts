@@ -74,7 +74,7 @@ const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: an
 };
 
 const _helperReq = (method: string, url: string, data?: any, config?: any) => {
-    const conf = data && config ? config : {};
+    const conf = config ? config : {};
     return _newReq({
         ...conf,
         data,
