@@ -403,7 +403,7 @@ describe("MockAxios", () => {
             MockAxios.post('/users', null, { params: { page: 2 }, headers: { 'X-Token': 'abc' } });
             MockAxios.put('/u/1', '', { params: { force: true } });
             MockAxios.post('/users', { a: 1 }, { params: { page: 4 } });
-            MockAxios.post('/no-data', {params: { page: 1 } });
+            MockAxios.post('/no-data', { params: { page: 1 } });
             MockAxios.get('/no-data', { params: { page: 5 } });
 
             expect(MockAxios.getReqMatching({ params: { page: 2 } })).toBeDefined();
@@ -596,6 +596,21 @@ describe("MockAxios", () => {
             MockAxios.mockError({ data: "my_data" });
             expect(errorInterceptor).toHaveBeenCalled();
             expect(errorHandler).toHaveBeenCalled();
+        });
+
+        it('interceptors.*.eject shifts remaining ids', () => {
+            const calls = [];
+            const a = MockAxios.interceptors.response.use((r) => { calls.push('a'); return r; });
+            const b = MockAxios.interceptors.response.use((r) => { calls.push('b'); return r; });
+            const c = MockAxios.interceptors.response.use((r) => { calls.push('c'); return r; });
+
+            MockAxios.interceptors.response.eject(a);
+            MockAxios.interceptors.response.eject(b);
+
+            MockAxios.get('/x');
+            MockAxios.mockResponse({ data: 1 });
+
+            expect(calls).toStrictEqual(['c']);
         });
     })
 

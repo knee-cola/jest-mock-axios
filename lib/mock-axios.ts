@@ -22,8 +22,8 @@ import {
 
 /** a FIFO queue of pending request */
 const _pending_requests: AxiosMockQueueItem[] = [];
-const _responseInterceptors: InterceptorsStack[] = [];
-const _requestInterceptors: InterceptorsStack[] = [];
+const _responseInterceptors: (InterceptorsStack | null)[] = [];
+const _requestInterceptors: (InterceptorsStack | null)[] = [];
 
 let _requestHandler: RequestHandler;
 
@@ -62,7 +62,7 @@ const _newReq: (config?: any) => UnresolvedSynchronousPromise<any> = (config: an
         method,
         promise,
         url
-    }, _requestInterceptors, 'onFulfilled');
+    }, _requestInterceptors.filter(x => x !== null), 'onFulfilled');
 
     _pending_requests.push(requestConfig);
 
@@ -119,7 +119,8 @@ MockAxios.interceptors = {
         }),
         // @ts-ignore
         eject: jest.fn((position: number) => {
-            _requestInterceptors.splice(position - 1, 1);
+            // keep position indices stable, .push returns one-based indices
+            _requestInterceptors[position - 1] = null;
         }),
         // @ts-ignore
         clear: jest.fn(() => {
@@ -133,7 +134,7 @@ MockAxios.interceptors = {
         }),
         // @ts-ignore
         eject: jest.fn((position: number) => {
-            _responseInterceptors.splice(position - 1, 1);
+            _responseInterceptors[position - 1] = null;
         }),
         // @ts-ignore
         clear: jest.fn(() => {
@@ -232,6 +233,7 @@ MockAxios.mockResponse = (
     }
 
     for (const interceptor of _responseInterceptors) {
+        if(interceptor === null) continue;
         promise = promise.then(interceptor.onFulfilled, interceptor.onRejected) as UnresolvedSynchronousPromise<any>;
     }
 
