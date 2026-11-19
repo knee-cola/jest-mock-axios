@@ -325,9 +325,9 @@ const deepEqual = (x: any, y: any): boolean => {
     if (!(y instanceof Object)) { return false; }
 
     // recursive object equality check
-    var p = Object.keys(x);
-    return Object.keys(y).every(function (i) { return p.indexOf(i) !== -1; }) &&
-        p.every(function (i) { return deepEqual(x[i], y[i]); });
+    const p = Object.keys(x);
+    return Object.keys(y).every((i) => { return p.indexOf(i) !== -1; }) &&
+        p.every((i) => { return deepEqual(x[i], y[i]); });
 }
 
 const _checkCriteria = (item: AxiosMockQueueItem, criteria: AxiosMockRequestCriteria) => {

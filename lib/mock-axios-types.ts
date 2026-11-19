@@ -1,5 +1,5 @@
-import {jest} from '@jest/globals';
-import { SynchronousPromise, UnresolvedSynchronousPromise  } from "synchronous-promise";
+import { jest } from '@jest/globals';
+import { SynchronousPromise, UnresolvedSynchronousPromise } from "synchronous-promise";
 
 export interface HttpResponse {
     data: any;
@@ -67,7 +67,7 @@ interface CancelTokenSource {
     cancel: Canceler;
 }
 interface CancelTokenStatic {
-    new (executor: (cancel: Canceler) => void): CancelToken;
+    new(executor: (cancel: Canceler) => void): CancelToken;
     source(): CancelTokenSource;
 }
 
@@ -173,7 +173,7 @@ export interface AxiosMockAPI {
      *          key_x: The key of the request to be found
      *          RegExp_x: The RegExp to be tested against that key
      */
-    getReqByRegex: (opts: {[key in keyof AxiosMockQueueItem]+?: RegExp}) => AxiosMockQueueItem;
+    getReqByRegex: (opts: { [key in keyof AxiosMockQueueItem]+?: RegExp }) => AxiosMockQueueItem;
 
     /**
      * Removes the give request from the queue
@@ -194,7 +194,7 @@ export interface AxiosMockAPI {
     /**
      * Set a request handler that gets invoked every time a new request comes in
      *   The handler is invoked with the new request item
-     * 
+     *
      * @param handler the function to invoke with the new request item every time a new request comes in
      */
     useRequestHandler: (handler: RequestHandler) => void;
