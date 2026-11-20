@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.10.1]
+
+### Fixed
+
+- fix: skip ejected interceptors in mockError (#120) - by @Cherry7593
+
 ## [4.10.0]
 
 ### Fixed
