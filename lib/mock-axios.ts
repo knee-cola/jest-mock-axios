@@ -281,6 +281,7 @@ MockAxios.mockError = (
     }
 
     for (const interceptor of _responseInterceptors) {
+        if (interceptor === null) continue;
         promise = promise.then(interceptor.onFulfilled, interceptor.onRejected) as UnresolvedSynchronousPromise<any>;
     }
 
