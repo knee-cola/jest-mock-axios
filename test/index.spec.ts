@@ -626,6 +626,32 @@ describe("MockAxios", () => {
 
             expect(calls).toStrictEqual(["c"]);
         });
+
+        it("mockError skips ejected response interceptors", () => {
+            const calls = [];
+            const a = MockAxios.interceptors.response.use(
+                (r) => r,
+                (e) => {
+                    calls.push("a");
+                    return Promise.reject(e);
+                }
+            );
+            MockAxios.interceptors.response.use(
+                (r) => r,
+                (e) => {
+                    calls.push("c");
+                    return Promise.reject(e);
+                }
+            );
+
+            MockAxios.interceptors.response.eject(a);
+
+            const errorHandler = jest.fn();
+            MockAxios.get("/x").catch(errorHandler);
+            expect(() => MockAxios.mockError({ status: 500 })).not.toThrow();
+            expect(calls).toStrictEqual(["c"]);
+            expect(errorHandler).toHaveBeenCalled();
+        });
     });
 
     describe("provides cancel interfaces", () => {
