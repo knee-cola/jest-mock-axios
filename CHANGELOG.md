@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.10.2]
+
+### Fixed
+
+- fix: proper entrypoints in package.json
+
 ## [4.10.1]
 
 ### Fixed

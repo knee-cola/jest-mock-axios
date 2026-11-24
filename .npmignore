@@ -8,3 +8,4 @@ test
 coverage/
 .tool-versions
 tsconfig.json
+tsdown.config.ts
